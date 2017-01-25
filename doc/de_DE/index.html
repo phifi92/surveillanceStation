@@ -417,24 +417,24 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <ul class="sectlevel1">
 <li><a href="#_surveillance_station">1. Surveillance Station</a>
 <ul class="sectlevel2">
-<li><a href="#_présentation">1.1. Présentation</a>
+<li><a href="#_präsentation">1.1. Präsentation</a>
 <ul class="sectlevel3">
-<li><a href="#_compatibilité">1.1.1. Compatibilité :</a></li>
+<li><a href="#_kompatibilität">1.1.1. Kompatibilität :</a></li>
 <li><a href="#_données_visibles_sur_le_dashboard">1.1.2. Données visibles sur le Dashboard :</a></li>
-<li><a href="#_scénario">1.1.3. Scénario :</a></li>
+<li><a href="#_szenario">1.1.3. Szenario :</a></li>
 </ul>
 </li>
-<li><a href="#_installation_configuration">1.2. Installation/Configuration</a>
+<li><a href="#_installation_konfiguration">1.2. Installation/Konfiguration</a>
 <ul class="sectlevel3">
 <li><a href="#_installation">1.2.1. Installation</a></li>
-<li><a href="#_configuration">1.2.2. Configuration</a></li>
+<li><a href="#_konfiguration">1.2.2. Konfiguration</a></li>
 <li><a href="#_configuration_email_smtp">1.2.3. Configuration Email (smtp)</a></li>
 <li><a href="#_configuration_dropbox">1.2.4. Configuration Dropbox</a></li>
 </ul>
 </li>
 <li><a href="#_alerter_jeedom_d_une_détection_de_surveillance_station">1.3. Alerter Jeedom d&#8217;une détection de Surveillance Station</a></li>
 <li><a href="#_faq">1.4. FAQ</a></li>
-<li><a href="#_changelog">1.5. Changelog</a></li>
+<li><a href="#_Änderungsprotokoll">1.5. Änderungsprotokoll</a></li>
 </ul>
 </li>
 </ul>
@@ -445,12 +445,12 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <h2 id="_surveillance_station">1. Surveillance Station</h2>
 <div class="sectionbody">
 <div class="sect2">
-<h3 id="_présentation">1.1. Présentation</h3>
+<h3 id="_präsentation">1.1. Präsentation</h3>
 <div class="paragraph">
 <p>Le plugin Surveillance Station permet de commander Surveillance Station en utilisant l’API officielle de Synology. Et d’afficher la caméra en direct dans un widget dédié.</p>
 </div>
 <div class="sect3">
-<h4 id="_compatibilité">1.1.1. Compatibilité :</h4>
+<h4 id="_kompatibilität">1.1.1. Kompatibilität :</h4>
 <div class="ulist">
 <ul>
 <li>
@@ -508,7 +508,7 @@ Pour avoir le Live et l&#8217;accès aux commandes sur le Dashboard, il faut cr�
 </div>
 </div>
 <div class="sect3">
-<h4 id="_scénario">1.1.3. Scénario :</h4>
+<h4 id="_szenario">1.1.3. Szenario :</h4>
 <div class="paragraph">
 <p>Les commandes sont disponibles lors de la création d’un scénario. Voici des exemples d’utilisations :</p>
 </div>
@@ -525,7 +525,7 @@ Pour avoir le Live et l&#8217;accès aux commandes sur le Dashboard, il faut cr�
 </div>
 </div>
 <div class="sect2">
-<h3 id="_installation_configuration">1.2. Installation/Configuration</h3>
+<h3 id="_installation_konfiguration">1.2. Installation/Konfiguration</h3>
 <div class="sect3">
 <h4 id="_installation">1.2.1. Installation</h4>
 <div class="paragraph">
@@ -539,13 +539,13 @@ Pour avoir le Live et l&#8217;accès aux commandes sur le Dashboard, il faut cr�
 <div class="ulist">
 <ul>
 <li>
-<p>Cliquer sur le bouton "Activer"</p>
+<p>Klicken Sie auf die Schaltfläche "Aktivieren"</p>
 </li>
 </ul>
 </div>
 </div>
 <div class="sect3">
-<h4 id="_configuration">1.2.2. Configuration</h4>
+<h4 id="_konfiguration">1.2.2. Konfiguration</h4>
 <div class="paragraph">
 <p>Nous allons maintenant paramétrer un équipement. Pour se faire, cliquer sur Plugins / Sécurité / Surveillance Station</p>
 </div>
@@ -574,7 +574,7 @@ Pour avoir le Live et l&#8217;accès aux commandes sur le Dashboard, il faut cr�
 <p>Objet parent</p>
 </li>
 <li>
-<p>Catégorie (optionnelle)</p>
+<p>Kategorie (optional)</p>
 </li>
 <li>
 <p>Activer (Oui, sinon l’équipement ne sera pas utilisable)</p>
@@ -719,7 +719,7 @@ Pour avoir le Live et l&#8217;accès aux commandes sur le Dashboard, il faut cr�
 <div class="ulist">
 <ul>
 <li>
-<p>l’adresse IP ou l’url (DNS)</p>
+<p>IP-Adresse oder URL (DNS)</p>
 </li>
 <li>
 <p>le protocole pour construire l’url complète (http ou https)</p>
@@ -809,11 +809,11 @@ Pour avoir le Live et l&#8217;accès aux commandes sur le Dashboard, il faut cr�
 <hr>
 </div>
 <div class="sect2">
-<h3 id="_changelog">1.5. Changelog</h3>
+<h3 id="_Änderungsprotokoll">1.5. Änderungsprotokoll</h3>
 <div class="paragraph">
 <p>2016-11-20 : ajout de quelques commandes PTZ (en attendant une refonte)
-2016-10-16 : ajout de l&#8217;affichage avancé
-2.7 : correction des dépendances pour Debian Wheezy
+2016-10-16 : erweiterte Anzeige hinzugefügt
+2.7 : Korrektur der Abhängigkeiten für Debian Wheezy
 2.6 : correction de la compatibilité avec mot de passe complexe (caractères spéciaux). Automatisation de l’installation des dépendances
 2.5 : ajout activation ou désactivation détection de mouvement
 2.4 : Amélioration redimensionnement widget Dashboard + correction widget mobile
@@ -822,9 +822,9 @@ Pour avoir le Live et l&#8217;accès aux commandes sur le Dashboard, il faut cr�
 2.1 : Correction d’un bug avec les caméras qui ont un nom accentué.
 2 : Ajout fonctionnalité : Live des caméras, possibilité de demander un enregistrement pour x minutes, corrections bug
 1.6 : Ajout fonctionnalité : Possibilité de spécifier une durée d’enregistrement.Ajout du statut d’enregistrement dans la liste des caméras refresh des caméras toutes les 10 secondes sur la vue équipement.
-1.5.1 : Correction de bugs, ajout de logs
+1.5.1 : Fehler-Korrektur, Ergänzung von Protokollen
 1.5 : Correction de bugs: -Encoding du mail (problème accents) -Problème empéchant le teste du token dropbox -Problème lors du changement de nom d’une caméra dans dropbox -Problème d’affichage dans la liste des caméras
-1.4 : ajout de la documentation
+1.4 : Dokumentation hinzugefügt
 1.3 : migration du code envoi de mail, de Ruby vers PHP + ajout historique statut + classement sur le Dashboard
 1.2 : 1ère version rendue public</p>
 </div>

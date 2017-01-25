@@ -7,7 +7,7 @@ Le plugin actualise les informations toutes les 5 minutes (modifiable dans le "M
 [panel,primary]
 .J’obtiens l’erreur "Vérifier l’adresse ip, le port, le protocole http / https.". Vérifiez bien :
 --
-- l’adresse IP ou l’url (DNS)
+- IP-Adresse oder URL (DNS)
 - le protocole pour construire l’url complète (http ou https)
 - le port qui est associé au procole
 - que l’IP de votre Jeedom ne soit pas bloqué dans DSM (panneau de configuration / Sécurité / blocage auto)

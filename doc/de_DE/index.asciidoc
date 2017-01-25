@@ -1,9 +1,9 @@
 == Surveillance Station
 
-=== Présentation
+=== Präsentation
 Le plugin Surveillance Station permet de commander Surveillance Station en utilisant l’API officielle de Synology. Et d’afficher la caméra en direct dans un widget dédié.
 
-==== Compatibilité :
+==== Kompatibilität :
 
 - DSM 5
 - Surveillance Station 6.2 et ultérieur
@@ -24,20 +24,20 @@ Pour avoir le Live et l'accès aux commandes sur le Dashboard, il faut créer de
 - Live : en cochant dans la config "Cet équipement sera utilisé pour visualiser le live d'une caméra"
 - Commandes : en laissant décoché dans la config "Cet équipement sera utilisé pour visualiser le live d'une caméra"
 
-==== Scénario :
+==== Szenario :
 Les commandes sont disponibles lors de la création d’un scénario. Voici des exemples d’utilisations :
 
 - Lors de l’activation/désactivation de votre alarme, il est possible d’active/désactive automatiquement les caméras de Surveillance Station.
 - Lors d’une détection d’intrusion, quand l’alarme se déclenche. Il est possible de créer un scénario pour forcer l’enregistrement. Et/Ou de prendre un ou plusieurs snapshot avec envoi sur Dropbox et par mail.
 
-=== Installation/Configuration
+=== Installation/Konfiguration
 ==== Installation
 Après avoir installé le plugin via le Market (il est conseillé de prendre la version Stable). Vous arrivez automatiquement sur cette page :
 
 image::../images/ss1.png[align="center"]
-- Cliquer sur le bouton "Activer"
+- Klicken Sie auf die Schaltfläche "Aktivieren"
 
-==== Configuration
+==== Konfiguration
 Nous allons maintenant paramétrer un équipement. Pour se faire, cliquer sur Plugins / Sécurité / Surveillance Station
 
 Puis cliquer sur le logo "Ajouter" ou "Ajouter un équipement"
@@ -51,7 +51,7 @@ image::../images/ss3.png[align="center"]
 Puis définir :
 
 - Objet parent
-- Catégorie (optionnelle)
+- Kategorie (optional)
 - Activer (Oui, sinon l’équipement ne sera pas utilisable)
 - Visible (optionel si vous ne désirez pas le rendre visible sur le Dashboard. Toutefois, il sera utilisable dans un scénario)
 
@@ -117,5 +117,5 @@ Puis de renseigner l'url de la commande que vous voulez lancer en cas de détect
 === FAQ
 include::faq.asciidoc[]
 '''
-=== Changelog
+=== Änderungsprotokoll
 include::changelog.asciidoc[]
