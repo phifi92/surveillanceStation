@@ -590,12 +590,26 @@ Pour avoir le Live et l&#8217;accès aux commandes sur le Dashboard, il faut cr�
 </div>
 </div>
 <div class="paragraph">
-<p>Dans la zone "Configuration Synology" (à gauche) vous devez définir les adresses interne et externe et votre identifiant.
-- <strong>Accès interne</strong> : il faut renseigner le procole et l’adresse IP interne (local/LAN) du NAS Synology (exemple "Adresse : <a href="http://192.168.1.10"" class="bare">http://192.168.1.10"</a> et "Port : 5000")
-- <strong>Accès externe</strong> : il faut renseigner le procole et l’adresse IP fixe ou DNS (Wan/par Internet) du NAS Synology (exemple "Adresse : <a href="https://MonNomDomaine.tld"" class="bare">https://MonNomDomaine.tld"</a> et "Port : 5001")
-- <strong>Identifiant</strong> : il faut renseigner un identifiant connu du NAS Synology avec les droits "users" et le mot de passe qui est associé. Pensez à vérifier aussi les droits dans Surveillance Station.
-- <strong>A cocher si Surveillance Station version 6</strong> : à cocher seulement si vous êtes encore sur la version 6.x de Surveillance Station (pas de DSM)
-- <strong>Cet équipement sera utilisé pour visualiser le live d’une caméra</strong> : à cocher pour créer un widget permettant de voir la caméra en live (attention : il faut créer un autre équipement pour les commandes)</p>
+<p>Dans la zone "Configuration Synology" (à gauche) vous devez définir les adresses interne et externe et votre identifiant.</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><strong>Accès interne</strong> : il faut renseigner le procole et l’adresse IP interne (local/LAN) du NAS Synology (exemple "Adresse : <a href="http://192.168.1.10"" class="bare">http://192.168.1.10"</a> et "Port : 5000")</p>
+</li>
+<li>
+<p><strong>Accès externe</strong> : il faut renseigner le procole et l’adresse IP fixe ou DNS (Wan/par Internet) du NAS Synology (exemple "Adresse : <a href="https://MonNomDomaine.tld"" class="bare">https://MonNomDomaine.tld"</a> et "Port : 5001")</p>
+</li>
+<li>
+<p><strong>Identifiant</strong> : il faut renseigner un identifiant connu du NAS Synology avec les droits "users" et le mot de passe qui est associé. Pensez à vérifier aussi les droits dans Surveillance Station.</p>
+</li>
+<li>
+<p><strong>A cocher si Surveillance Station version 6</strong> : à cocher seulement si vous êtes encore sur la version 6.x de Surveillance Station (pas de DSM)</p>
+</li>
+<li>
+<p><strong>Cet équipement sera utilisé pour visualiser le live d’une caméra</strong> : à cocher pour créer un widget permettant de voir la caméra en live (attention : il faut créer un autre équipement pour les commandes)</p>
+</li>
+</ul>
 </div>
 <div class="imageblock" style="text-align: center">
 <div class="content">
@@ -617,15 +631,35 @@ Pour avoir le Live et l&#8217;accès aux commandes sur le Dashboard, il faut cr�
 <div class="sect3">
 <h4 id="_configuration_email_smtp">1.2.3. Configuration Email (smtp)</h4>
 <div class="paragraph">
-<p>Il s’agit de définir les paramètres qui seront utilisés pour envoyer le mail (expéditeur).
-- <strong>Serveur</strong> : renseigner le serveur SMTP de votre messagerie (ex : smtp.orange.fr)
-- <strong>Port</strong> : renseigner le port du serveur SMTP, 25 par défaut pour du non sécurisé
-- <strong>Utilisateur</strong> : renseigner l’identifiant (login) de votre messagerie. Pas nécessaire si vous utilisez le serveur SMTP de votre FAI
-- <strong>Mot de passe</strong> : renseigner le mot de passe associé à votre login de messagerie. Pas nécessaire si vous utilisez le serveur SMTP de votre FAI
-- <strong>Sécurité</strong> : laisser "Aucune" si vous utilisez le port 25. Sinon, faite un choix suivant la sécurité associé au port
-- <strong>Mail expéditeur</strong> : l’adresse messagerie correspondant à l’expéditeur
-- <strong>Nom expéditeur</strong> : le nom qui sera affiché à la réception du mail (ex :Jeedom)
-- <strong>Sujet du mail</strong> : l’objet/sujet du mail qui sera affiché à la réception du mail (ex : [Jeedom] Alerte caméra)</p>
+<p>Il s’agit de définir les paramètres qui seront utilisés pour envoyer le mail (expéditeur).</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><strong>Serveur</strong> : renseigner le serveur SMTP de votre messagerie (ex : smtp.orange.fr)</p>
+</li>
+<li>
+<p><strong>Port</strong> : renseigner le port du serveur SMTP, 25 par défaut pour du non sécurisé</p>
+</li>
+<li>
+<p><strong>Utilisateur</strong> : renseigner l’identifiant (login) de votre messagerie. Pas nécessaire si vous utilisez le serveur SMTP de votre FAI</p>
+</li>
+<li>
+<p><strong>Mot de passe</strong> : renseigner le mot de passe associé à votre login de messagerie. Pas nécessaire si vous utilisez le serveur SMTP de votre FAI</p>
+</li>
+<li>
+<p><strong>Sécurité</strong> : laisser "Aucune" si vous utilisez le port 25. Sinon, faite un choix suivant la sécurité associé au port</p>
+</li>
+<li>
+<p><strong>Mail expéditeur</strong> : l’adresse messagerie correspondant à l’expéditeur</p>
+</li>
+<li>
+<p><strong>Nom expéditeur</strong> : le nom qui sera affiché à la réception du mail (ex :Jeedom)</p>
+</li>
+<li>
+<p><strong>Sujet du mail</strong> : l’objet/sujet du mail qui sera affiché à la réception du mail (ex : [Jeedom] Alerte caméra)</p>
+</li>
+</ul>
 </div>
 <div class="paragraph">
 <p>Une fois les différents paramètres renseignés, faite un enregistrement. Cliquer sur le bouton "Tester", et vérifier si un mail de test est arrivé dans la messagerie correspondant à l’expéditeur</p>
@@ -810,23 +844,57 @@ Pour avoir le Live et l&#8217;accès aux commandes sur le Dashboard, il faut cr�
 </div>
 <div class="sect2">
 <h3 id="_Änderungsprotokoll">1.5. Änderungsprotokoll</h3>
-<div class="paragraph">
-<p>2016-11-20 : ajout de quelques commandes PTZ (en attendant une refonte)
-2016-10-16 : erweiterte Anzeige hinzugefügt
-2.7 : Korrektur der Abhängigkeiten für Debian Wheezy
-2.6 : correction de la compatibilité avec mot de passe complexe (caractères spéciaux). Automatisation de l’installation des dépendances
-2.5 : ajout activation ou désactivation détection de mouvement
-2.4 : Amélioration redimensionnement widget Dashboard + correction widget mobile
-2.3 : Nouveau logo (merci Aloïs), refonte de la documentation et bug fix
-2.2 : Séparation protocole http/https réseau Interne/Externe. Widget caméra Live redimmentionnable. Nouveaux switchs sur les boutons activer/visible/historiser dans la config
-2.1 : Correction d’un bug avec les caméras qui ont un nom accentué.
-2 : Ajout fonctionnalité : Live des caméras, possibilité de demander un enregistrement pour x minutes, corrections bug
-1.6 : Ajout fonctionnalité : Possibilité de spécifier une durée d’enregistrement.Ajout du statut d’enregistrement dans la liste des caméras refresh des caméras toutes les 10 secondes sur la vue équipement.
-1.5.1 : Fehler-Korrektur, Ergänzung von Protokollen
-1.5 : Correction de bugs: -Encoding du mail (problème accents) -Problème empéchant le teste du token dropbox -Problème lors du changement de nom d’une caméra dans dropbox -Problème d’affichage dans la liste des caméras
-1.4 : Dokumentation hinzugefügt
-1.3 : migration du code envoi de mail, de Ruby vers PHP + ajout historique statut + classement sur le Dashboard
-1.2 : 1ère version rendue public</p>
+<div class="ulist">
+<ul>
+<li>
+<p>2016-11-20 : ajout de quelques commandes PTZ (en attendant une refonte)</p>
+</li>
+<li>
+<p>2016-10-16 : ajout de l&#8217;affichage avancé</p>
+</li>
+<li>
+<p>2.7 : correction des dépendances pour Debian Wheezy</p>
+</li>
+<li>
+<p>2.6 : correction de la compatibilité avec mot de passe complexe (caractères spéciaux). Automatisation de l’installation des dépendances</p>
+</li>
+<li>
+<p>2.5 : ajout activation ou désactivation détection de mouvement</p>
+</li>
+<li>
+<p>2.4 : Amélioration redimensionnement widget Dashboard + correction widget mobile</p>
+</li>
+<li>
+<p>2.3 : Nouveau logo (merci Aloïs), refonte de la documentation et bug fix</p>
+</li>
+<li>
+<p>2.2 : Séparation protocole http/https réseau Interne/Externe. Widget caméra Live redimmentionnable. Nouveaux switchs sur les boutons activer/visible/historiser dans la config</p>
+</li>
+<li>
+<p>2.1 : Correction d’un bug avec les caméras qui ont un nom accentué.</p>
+</li>
+<li>
+<p>2 : Ajout fonctionnalité : Live des caméras, possibilité de demander un enregistrement pour x minutes, corrections bug</p>
+</li>
+<li>
+<p>1.6 : Ajout fonctionnalité : Possibilité de spécifier une durée d’enregistrement.Ajout du statut d’enregistrement dans la liste des caméras refresh des caméras toutes les 10 secondes sur la vue équipement.</p>
+</li>
+<li>
+<p>1.5.1 : Correction de bugs, ajout de logs</p>
+</li>
+<li>
+<p>1.5 : Correction de bugs: -Encoding du mail (problème accents) -Problème empéchant le teste du token dropbox -Problème lors du changement de nom d’une caméra dans dropbox -Problème d’affichage dans la liste des caméras</p>
+</li>
+<li>
+<p>1.4 : ajout de la documentation</p>
+</li>
+<li>
+<p>1.3 : migration du code envoi de mail, de Ruby vers PHP + ajout historique statut + classement sur le Dashboard</p>
+</li>
+<li>
+<p>1.2 : 1ère version rendue public</p>
+</li>
+</ul>
 </div>
 </div>
 </div>

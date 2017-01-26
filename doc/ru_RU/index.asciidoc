@@ -58,6 +58,7 @@ Puis définir :
 image::../images/ss4.png[align="center"]
 
 Dans la zone "Configuration Synology" (à gauche) vous devez définir les adresses interne et externe et votre identifiant.
+
 - *Accès interne* : il faut renseigner le procole et l’adresse IP interne (local/LAN) du NAS Synology (exemple "Adresse : http://192.168.1.10" et "Port : 5000")
 - *Accès externe* : il faut renseigner le procole et l’adresse IP fixe ou DNS (Wan/par Internet) du NAS Synology (exemple "Adresse : https://MonNomDomaine.tld" et "Port : 5001")
 - *Identifiant* : il faut renseigner un identifiant connu du NAS Synology avec les droits "users" et le mot de passe qui est associé. Pensez à vérifier aussi les droits dans Surveillance Station.
@@ -74,6 +75,7 @@ image::../images/ss6.png[align="center"]
 
 ==== Configuration Email (smtp)
 Il s’agit de définir les paramètres qui seront utilisés pour envoyer le mail (expéditeur).
+
 - *Serveur* : renseigner le serveur SMTP de votre messagerie (ex : smtp.orange.fr)
 - *Port* : renseigner le port du serveur SMTP, 25 par défaut pour du non sécurisé
 - *Utilisateur* : renseigner l’identifiant (login) de votre messagerie. Pas nécessaire si vous utilisez le serveur SMTP de votre FAI
