@@ -1,4 +1,4 @@
-== Surveillance Station
+== Stationsüberwachung
 
 === Präsentation
 Le plugin Surveillance Station permet de commander Surveillance Station en utilisant l’API officielle de Synology. Et d’afficher la caméra en direct dans un widget dédié.
@@ -48,9 +48,9 @@ Puis saisir le nom de l’équipement (ex. Caméra Salon)
 
 image::../images/ss3.png[align="center"]
 
-Puis définir :
+Dann definieren :
 
-- Objet parent
+- Eltern Objekt
 - Kategorie (optional)
 - Activer (Oui, sinon l’équipement ne sera pas utilisable)
 - Visible (optionel si vous ne désirez pas le rendre visible sur le Dashboard. Toutefois, il sera utilisable dans un scénario)

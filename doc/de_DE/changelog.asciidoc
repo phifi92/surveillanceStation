@@ -1,5 +1,5 @@
 - 2016-11-20 : ajout de quelques commandes PTZ (en attendant une refonte)
-- 2016-10-16 : ajout de l'affichage avancé
+- 2016-10-16 : erweiterte Anzeige hinzugefügt
 - 2.7 : correction des dépendances pour Debian Wheezy
 - 2.6 : correction de la compatibilité avec mot de passe complexe (caractères spéciaux). Automatisation de l’installation des dépendances
 - 2.5 : ajout activation ou désactivation détection de mouvement
