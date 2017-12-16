@@ -32,7 +32,7 @@ Les commandes sont disponibles lors de la création d’un scénario. Voici des 
 
 === Installation/Konfiguration
 ==== Installation
-Après avoir installé le plugin via le Market (il est conseillé de prendre la version Stable). Vous arrivez automatiquement sur cette page :
+Nachdem Sie das Plugin über den Markt installiert haben (ist es ratsam, die stabile Version zu nehmen). Sie kommen automatisch auf diese Seite :
 
 image::../images/ss1.png[align="center"]
 - Klicken Sie auf die Schaltfläche "Aktivieren"
