@@ -90,7 +90,7 @@ Une fois les différents paramètres renseignés, faite un enregistrement. Cliqu
 image::../images/ss7.png[align="center"]
 image::../images/ss8.png[align="center"]
 
-==== Configuration Dropbox
+==== Dropbox Konfiguration
 Permet de définir un token pour envoyer automatiquement vos instantanés (snapshot/images) dans votre compte Dropbox.
 
 Comment créer un token pour Dropbox :
