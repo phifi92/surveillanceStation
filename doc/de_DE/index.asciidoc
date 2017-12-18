@@ -96,7 +96,7 @@ Permet de définir un token pour envoyer automatiquement vos instantanés (snaps
 Comment créer un token pour Dropbox :
 
 - s’identifier sur le site Dropbox avec votre compte
-- se rendre ici https://www.dropbox.com/developers-v1/
+- auf diese Seite gehen https://www.dropbox.com/developers-v1/
 - cliquer sur "App console"
 - Cliquer sur "Create app" en haut à droite
 - sélectionner "Dropbox API app"
