@@ -1,4 +1,4 @@
-- 09-2017 : supprime info.xml
+- 09-2017 : info.xml gelöscht
 - 05-2017 : ajout du fichier plugin info en json
 - 11-2016 : Hinzufügen einiger PTZ-Befehle (bis zu einem Redesign)
 - 10-2016 : erweiterte Anzeige hinzugefügt
