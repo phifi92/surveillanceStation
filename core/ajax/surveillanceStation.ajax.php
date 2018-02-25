@@ -17,46 +17,21 @@
  */
 
 try {
-    require_once dirname(__FILE__) . '/../../../../core/php/core.inc.php';
-    include_file('core', 'authentification', 'php');
+	require_once dirname(__FILE__) . '/../../../../core/php/core.inc.php';
+	include_file('core', 'authentification', 'php');
 
-    if (!isConnect('admin')) {
-        throw new Exception(__('401 - Accès non autorisé', __FILE__));
-    }
-
-    $return = array();
-    if (init('action') == 'checkDropbox') {
-        $info = surveillanceStation::checkDropbox();
-        $return['dropbox'] = $info;
-        ajax::success($return);
-    }else if (init('action') == 'getCameras') {
-        $cameras = surveillanceStation::getCameras(init('eqId'));
-        $return['cmd'] = array();
-		$return['cmd'] = $cameras;
-        ajax::success($return);
-    }else if (init('action') == 'mailTester') {
-        $contact = surveillanceStation::mailTester(init('eqId'));
-		$return['cmd'] = array();
-		$return['cmd'] = $contact;
-		ajax::success('ok');
-}
-    else if (init('action') == 'checkSynoSid') {
-        $sid = surveillanceStation::getSidFromCache(init('host'));
-        ajax::success($sid);
-    }
-    else if (init('action') == 'synoTester') {
-        $sid = surveillanceStation::checkAuth(init('host'),init('port'),init('login'),init('password'));
-        ajax::success($sid);
-    }
-
-	if (init('action') == 'updateRuby') {
-		surveillanceStation::updateRuby();
-		ajax::success();
+	if (!isConnect('admin')) {
+		throw new Exception(__('401 - Accès non autorisé', __FILE__));
 	}
-	
-    throw new Exception(__('Aucune methode correspondante à : ', __FILE__) . init('action'));
-    /*     * *********Catch exeption*************** */
+
+	ajax::init();
+
+	if (init('action') == 'discover') {
+		ajax::success(surveillanceStation::discover());
+	}
+
+	throw new Exception(__('Aucune méthode correspondante à : ', __FILE__) . init('action'));
+	/*     * *********Catch exeption*************** */
 } catch (Exception $e) {
-    ajax::error(displayExeption($e), $e->getCode());
+	ajax::error(displayExeption($e), $e->getCode());
 }
-?>

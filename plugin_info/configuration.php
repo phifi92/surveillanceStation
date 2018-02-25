@@ -22,3 +22,41 @@ if (!isConnect()) {
 	die();
 }
 ?>
+<form class="form-horizontal">
+	<fieldset>
+		<div class="form-group">
+			<label class="col-sm-4 control-label">{{Adresse DNS de votre Synolgy}}</label>
+			<div class="col-sm-3">
+				<input type="text" class="configKey form-control" data-l1key="ip" placeholder="NomDomaineDeMonSynology.tld"/>
+			</div>
+		</div>
+		<div class="alert alert-info">
+			Pour que le live soit accessible de l'extérieur, il est important de renseigner l'adresse DNS de votre Synology (MonSynology.tld).
+			Cette même adresse doit aussi fonctionner de votre réseau local.<br>
+			A contrario, avec un IP LAN, le Live sera accessible seulement de votre réseau local.</div>
+		<div class="form-group">
+			<label class="col-sm-4 control-label">{{N° de Port}}</label>
+			<div class="col-sm-3">
+				<input type="text" class="configKey form-control" data-l1key="port" placeholder="443"/>
+			</div>
+		</div>
+		<div class="form-group">
+			<label class="col-sm-4 control-label">{{Connexion sécurisée}}</label>
+			<div class="col-sm-1">
+				<input type="checkbox" class="configKey" data-l1key="https" />
+			</div>
+		</div>
+		<div class="form-group">
+			<label class="col-sm-4 control-label">{{Identifiant Surveillance Station}}</label>
+			<div class="col-sm-3">
+				<input type="text" class="configKey form-control" data-l1key="user" placeholder="Nom d'utilisateur"/>
+			</div>
+		</div>
+		<div class="form-group">
+			<label class="col-sm-4 control-label">{{Mot de passe Surveillance Station}}</label>
+			<div class="col-sm-3">
+				<input type="password" class="configKey form-control" data-l1key="password" placeholder="Mot de passe de l'utilisateur"/>
+			</div>
+		</div>
+	</fieldset>
+</form>
