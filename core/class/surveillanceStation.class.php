@@ -339,6 +339,8 @@ class surveillanceStation extends eqLogic {
 				return __('Connection time out', __FILE__);
 			case 107;
 				return __('Multiple login detected', __FILE__);
+			case 117;
+				return __('Vérifier vos droits, certaines fonctions demandent le privilège Directeur', __FILE__);
 			case 400;
 				return __('Invalid password or Execution failed', __FILE__);
 			case 401;
