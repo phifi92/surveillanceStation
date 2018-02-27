@@ -47,58 +47,60 @@
       });
     </script>
   </span>-->
-  <span class="cmd cmd-widget" data-type="action" data-subtype="other" data-cmd_id="#ptzleftid#">
-    <a class="actionptzleft btn btn-default btn-sm" style="background-color:#cmd-background-color# !important;border-color : transparent !important;"><i class="fa fa-arrow-left"></i></a>
-    <script>
-      $('.cmd[data-cmd_id=#ptzleftid#] .actionptzleft').off();
-      $('.cmd[data-cmd_id=#ptzleftid#] .actionptzleft').on('mousedown touchstart', function () {
-        jeedom.cmd.execute({id: '#ptzleftid#', notify: false});
-      });
-    </script>
-  </span>
-  <span class="cmd cmd-widget" data-type="action" data-subtype="other" data-cmd_id="#ptzupid#">
-    <a class="actionptzup btn btn-default btn-sm" style="background-color:#cmd-background-color# !important;border-color : transparent !important;"><i class="fa fa-arrow-up"></i></a>
-    <script>
-      $('.cmd[data-cmd_id=#ptzupid#] .actionptzup').off();
-      $('.cmd[data-cmd_id=#ptzupid#] .actionptzup').on('mousedown touchstart', function () {
-        jeedom.cmd.execute({id: '#ptzupid#', notify: false});
-      });
-    </script>
-  </span>
-  <span class="cmd cmd-widget" data-type="action" data-subtype="other" data-cmd_id="#ptzhomeid#">
-    <a class="actionptzhome btn btn-default btn-sm" style="background-color:#cmd-background-color# !important;border-color : transparent !important;"><i class="fa fa-crosshairs"></i></a>
-    <script>
-      $('.cmd[data-cmd_id=#ptzhomeid#] .actionptzhome').off();
-      $('.cmd[data-cmd_id=#ptzhomeid#] .actionptzhome').on('mousedown touchstart', function () {
-        jeedom.cmd.execute({id: '#ptzhomeid#', notify: false});
-      });
-    </script>
-  </span>
-  <span class="cmd cmd-widget" data-type="action" data-subtype="other" data-cmd_id="#ptzstopid#">
-    <a class="actionptzstop btn btn-default btn-sm" style="background-color:#cmd-background-color# !important;border-color : transparent !important;"><i class="fa fa-stop"></i></a>
-    <script>
-      $('.cmd[data-cmd_id=#ptzstopid#] .actionptzstop').off();
-      $('.cmd[data-cmd_id=#ptzstopid#] .actionptzstop').on('mousedown touchstart', function () {
-        jeedom.cmd.execute({id: '#ptzstopid#', notify: false});
-      });
-    </script>
-  </span>
-  <span class="cmd cmd-widget" data-type="action" data-subtype="other" data-cmd_id="#ptzdownid#">
-    <a class="actionptzdown btn btn-default btn-sm" style="background-color:#cmd-background-color# !important;border-color : transparent !important;"><i class="fa fa-arrow-down"></i></a>
-    <script>
-      $('.cmd[data-cmd_id=#ptzdownid#] .actionptzdown').off();
-      $('.cmd[data-cmd_id=#ptzdownid#] .actionptzdown').on('mousedown touchstart', function () {
-        jeedom.cmd.execute({id: '#ptzdownid#', notify: false});
-      });
-    </script>
-  </span>
-  <span class="cmd cmd-widget" data-type="action" data-subtype="other" data-cmd_id="#ptzrightid#">
-    <a class="actionptzright btn btn-default btn-sm" style="background-color:#cmd-background-color# !important;border-color : transparent !important;"><i class="fa fa-arrow-right"></i></a>
-    <script>
-      $('.cmd[data-cmd_id=#ptzrightid#] .actionptzright').off();
-      $('.cmd[data-cmd_id=#ptzrightid#] .actionptzright').on('mousedown touchstart', function () {
-        jeedom.cmd.execute({id: '#ptzrightid#', notify: false});
-      });
-    </script>
+  <span style="display: #ptz_display#;">
+      <span class="cmd cmd-widget" data-type="action" data-subtype="other" data-cmd_id="#ptzleftid#">
+      <a class="actionptzleft btn btn-default btn-sm" style="background-color:#cmd-background-color# !important;border-color : transparent !important;"><i class="fa fa-arrow-left"></i></a>
+      <script>
+        $('.cmd[data-cmd_id=#ptzleftid#] .actionptzleft').off();
+        $('.cmd[data-cmd_id=#ptzleftid#] .actionptzleft').on('mousedown touchstart', function () {
+          jeedom.cmd.execute({id: '#ptzleftid#', notify: false});
+        });
+      </script>
+    </span>
+    <span class="cmd cmd-widget" data-type="action" data-subtype="other" data-cmd_id="#ptzupid#">
+      <a class="actionptzup btn btn-default btn-sm" style="background-color:#cmd-background-color# !important;border-color : transparent !important;"><i class="fa fa-arrow-up"></i></a>
+      <script>
+        $('.cmd[data-cmd_id=#ptzupid#] .actionptzup').off();
+        $('.cmd[data-cmd_id=#ptzupid#] .actionptzup').on('mousedown touchstart', function () {
+          jeedom.cmd.execute({id: '#ptzupid#', notify: false});
+        });
+      </script>
+    </span>
+    <span class="cmd cmd-widget" data-type="action" data-subtype="other" data-cmd_id="#ptzhomeid#" style="display: #ptzhome_display#;">
+      <a class="actionptzhome btn btn-default btn-sm" style="background-color:#cmd-background-color# !important;border-color : transparent !important;"><i class="fa fa-crosshairs"></i></a>
+      <script>
+        $('.cmd[data-cmd_id=#ptzhomeid#] .actionptzhome').off();
+        $('.cmd[data-cmd_id=#ptzhomeid#] .actionptzhome').on('mousedown touchstart', function () {
+          jeedom.cmd.execute({id: '#ptzhomeid#', notify: false});
+        });
+      </script>
+    </span>
+    <span class="cmd cmd-widget" data-type="action" data-subtype="other" data-cmd_id="#ptzstopid#">
+      <a class="actionptzstop btn btn-default btn-sm" style="background-color:#cmd-background-color# !important;border-color : transparent !important;"><i class="fa fa-stop"></i></a>
+      <script>
+        $('.cmd[data-cmd_id=#ptzstopid#] .actionptzstop').off();
+        $('.cmd[data-cmd_id=#ptzstopid#] .actionptzstop').on('mousedown touchstart', function () {
+          jeedom.cmd.execute({id: '#ptzstopid#', notify: false});
+        });
+      </script>
+    </span>
+    <span class="cmd cmd-widget" data-type="action" data-subtype="other" data-cmd_id="#ptzdownid#">
+      <a class="actionptzdown btn btn-default btn-sm" style="background-color:#cmd-background-color# !important;border-color : transparent !important;"><i class="fa fa-arrow-down"></i></a>
+      <script>
+        $('.cmd[data-cmd_id=#ptzdownid#] .actionptzdown').off();
+        $('.cmd[data-cmd_id=#ptzdownid#] .actionptzdown').on('mousedown touchstart', function () {
+          jeedom.cmd.execute({id: '#ptzdownid#', notify: false});
+        });
+      </script>
+    </span>
+    <span class="cmd cmd-widget" data-type="action" data-subtype="other" data-cmd_id="#ptzrightid#">
+      <a class="actionptzright btn btn-default btn-sm" style="background-color:#cmd-background-color# !important;border-color : transparent !important;"><i class="fa fa-arrow-right"></i></a>
+      <script>
+        $('.cmd[data-cmd_id=#ptzrightid#] .actionptzright').off();
+        $('.cmd[data-cmd_id=#ptzrightid#] .actionptzright').on('mousedown touchstart', function () {
+          jeedom.cmd.execute({id: '#ptzrightid#', notify: false});
+        });
+      </script>
+    </span>
   </span>
 </span>

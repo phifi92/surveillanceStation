@@ -156,19 +156,55 @@ $eqLogics = eqLogic::byType($plugin->getId());
 						<div class="form-group">
 							<label class="col-sm-2 control-label">{{Compatible PTZ Home}}</label>
 							<div class="col-sm-2">
-								<span class="eqLogicAttr label" data-l1key="configuration" data-l2key="ptzhome" style="font-size : 1em"></span>
+								<span class="eqLogicAttr label" data-l1key="configuration" data-l2key="ptzHome" style="font-size : 1em"></span>
 							</div>
 						</div>
 						<div class="form-group">
 							<label class="col-sm-2 control-label">{{Compatible PTZ Speed}}</label>
 							<div class="col-sm-2">
-								<span class="eqLogicAttr label" data-l1key="configuration" data-l2key="ptzspeed" style="font-size : 1em"></span>
+								<span class="eqLogicAttr label" data-l1key="configuration" data-l2key="ptzSpeed" style="font-size : 1em"></span>
+							</div>
+						</div>
+						<div class="form-group">
+							<label class="col-sm-2 control-label">{{Compatible PTZ Pan}}</label>
+							<div class="col-sm-2">
+								<span class="eqLogicAttr label" data-l1key="configuration" data-l2key="ptzPan" style="font-size : 1em"></span>
+							</div>
+						</div>
+						<div class="form-group">
+							<label class="col-sm-2 control-label">{{Compatible PTZ Tilt}}</label>
+							<div class="col-sm-2">
+								<span class="eqLogicAttr label" data-l1key="configuration" data-l2key="ptzTilt" style="font-size : 1em"></span>
+							</div>
+						</div>
+						<div class="form-group">
+							<label class="col-sm-2 control-label">{{Compatible PTZ Zoom}}</label>
+							<div class="col-sm-2">
+								<span class="eqLogicAttr label" data-l1key="configuration" data-l2key="ptzZoom" style="font-size : 1em"></span>
+							</div>
+						</div>
+						<div class="form-group">
+							<label class="col-sm-2 control-label">{{Compatible PTZ Abs}}</label>
+							<div class="col-sm-2">
+								<span class="eqLogicAttr label" data-l1key="configuration" data-l2key="ptzAbs" style="font-size : 1em"></span>
+							</div>
+						</div>
+						<div class="form-group">
+							<label class="col-sm-2 control-label">{{Compatible PTZ AutoFocus}}</label>
+							<div class="col-sm-2">
+								<span class="eqLogicAttr label" data-l1key="configuration" data-l2key="ptzAutoFocus" style="font-size : 1em"></span>
 							</div>
 						</div>
 					</fieldset>
 				</form>
 				<form class="form-horizontal"><fieldset>
 						<legend>{{Configuration}}</legend>
+						<div class="form-group">
+							<label class="col-sm-2 control-label">{{Activation du Live}}</label>
+							<div class="col-sm-3">
+								<input type="checkbox" class="eqLogicAttr" data-l1key="configuration" data-l2key="choixlive" checked/>
+							</div>
+						</div>
 						<div class="form-group">
 							<label class="col-sm-2 control-label">{{Vitesse PTZ}}</label>
 							<div class="col-sm-3">
@@ -179,12 +215,6 @@ $eqLogics = eqLogic::byType($plugin->getId());
 									<option value="4">{{4}}</option>
 									<option value="5">{{5}}</option>
 								</select>
-							</div>
-						</div>
-						<div class="form-group">
-							<label class="col-sm-2 control-label">{{Activation du Live}}</label>
-							<div class="col-sm-3">
-								<input type="checkbox" class="eqLogicAttr" data-l1key="configuration" data-l2key="choixlive" checked/>
 							</div>
 						</div>
 					</fieldset>

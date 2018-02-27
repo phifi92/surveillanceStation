@@ -180,10 +180,31 @@ class surveillanceStation extends eqLogic {
 			$url = self::getUrl() . '/webapi/entry.cgi?api=SYNO.SurveillanceStation.Camera&version=8&method=GetCapabilityByCamId&cameraId='.$camera['id'].'&_sid='.$eqLogic->getSid();
 			$http = new com_http($url);
 			$data = json_decode($http->exec(15), true);
-			$PTZCompatible = $data['data']['ptzDirection'];
-			log::add('surveillanceStation', 'debug', 'résultat PTZ Nb direction '.$eqLogic->getName(). '(id:'.$eqLogic->getConfiguration('id').') -> ' .$PTZCompatible);
-			if ($PTZCompatible > '0'){$eqLogic->setConfiguration('ptzdirection', 'Oui');}
-			if ($PTZCompatible == '0'){$eqLogic->setConfiguration('ptzdirection', 'Non');}
+			$PTZDirCompatible = $data['data']['ptzDirection'];
+			$PTZHomeCompatible = $data['data']['ptzHome'];
+			$PTZSpeedCompatible = $data['data']['ptzSpeed'];
+			$PTZPanCompatible = $data['data']['ptzPan'];
+			$PTZTiltCompatible = $data['data']['ptzTilt'];
+			$PTZZoomCompatible = $data['data']['ptzZoom'];
+			$PTZAbsCompatible = $data['data']['ptzAbs'];
+			$PTZAutoFocusCompatible = $data['data']['ptzAutoFocus'];
+			log::add('surveillanceStation', 'debug', 'résultat PTZ Compatible direction '.$eqLogic->getName(). '(id:'.$eqLogic->getConfiguration('id').') -> ' .$PTZDirCompatible);
+			log::add('surveillanceStation', 'debug', 'résultat PTZ Compatible Home '.$eqLogic->getName(). '(id:'.$eqLogic->getConfiguration('id').') -> ' .$PTZHomeCompatible);
+			log::add('surveillanceStation', 'debug', 'résultat PTZ Compatible Speed '.$eqLogic->getName(). '(id:'.$eqLogic->getConfiguration('id').') -> ' .$PTZSpeedCompatible);
+			log::add('surveillanceStation', 'debug', 'résultat PTZ Compatible Pan '.$eqLogic->getName(). '(id:'.$eqLogic->getConfiguration('id').') -> ' .$PTZPanCompatible);
+			log::add('surveillanceStation', 'debug', 'résultat PTZ Compatible Tilt '.$eqLogic->getName(). '(id:'.$eqLogic->getConfiguration('id').') -> ' .$PTZTiltCompatible);
+			log::add('surveillanceStation', 'debug', 'résultat PTZ Compatible Zoom '.$eqLogic->getName(). '(id:'.$eqLogic->getConfiguration('id').') -> ' .$PTZZoomCompatible);
+			log::add('surveillanceStation', 'debug', 'résultat PTZ Compatible Abs '.$eqLogic->getName(). '(id:'.$eqLogic->getConfiguration('id').') -> ' .$PTZAbsCompatible);
+			log::add('surveillanceStation', 'debug', 'résultat PTZ Compatible AutoFocus '.$eqLogic->getName(). '(id:'.$eqLogic->getConfiguration('id').') -> ' .$PTZAutoFocusCompatible);
+			if ($PTZDirCompatible > '0'){$eqLogic->setConfiguration('ptzdirection', 'Oui');} else {$eqLogic->setConfiguration('ptzdirection', 'Non');}
+			if ($PTZHomeCompatible > '0'){$eqLogic->setConfiguration('ptzHome', 'Oui');} else {$eqLogic->setConfiguration('ptzHome', 'Non');}
+			if ($PTZSpeedCompatible > '0'){$eqLogic->setConfiguration('ptzSpeed', 'Oui');} else {$eqLogic->setConfiguration('ptzSpeed', 'Non');}
+			if ($PTZPanCompatible > '0'){$eqLogic->setConfiguration('ptzPan', 'Oui');} else {$eqLogic->setConfiguration('ptzPan', 'Non');}
+			if ($PTZTiltCompatible > '0'){$eqLogic->setConfiguration('ptzTilt', 'Oui');} else {$eqLogic->setConfiguration('ptzTilt', 'Non');}
+			if ($PTZZoomCompatible > '0'){$eqLogic->setConfiguration('ptzZoom', 'Oui');} else {$eqLogic->setConfiguration('ptzZoom', 'Non');}
+			if ($PTZAbsCompatible > '0'){$eqLogic->setConfiguration('ptzAbs', 'Oui');} else {$eqLogic->setConfiguration('ptzAbs', 'Non');}
+			if ($PTZAutoFocusCompatible > '0'){$eqLogic->setConfiguration('ptzAutoFocus', 'Oui');} else {$eqLogic->setConfiguration('ptzAutoFocus', 'Non');}
+
 			$eqLogic->setConfiguration('ptzhome', '?');
 			$eqLogic->setConfiguration('ptzspeed', '?');
 			$eqLogic->save();
@@ -427,11 +448,10 @@ class surveillanceStation extends eqLogic {
 
 			$activecam = $this->getCmd('action', 'enable');
 			$replace['#activecamid#'] = is_object($activecam) ? $activecam->getId() : '';
-			$replace['#activecam_display#'] = (is_object($activecam) && $activecam->getIsVisible()) ? "#activecam_display#" : "none";
 
 			$desactivecam = $this->getCmd('action', 'disable');
 			$replace['#desactivecamid#'] = is_object($desactivecam) ? $desactivecam->getId() : '';
-			$replace['#desactivecam_display#'] = (is_object($desactivecam) && $desactivecam->getIsVisible()) ? "#desactivecam_display#" : "none";
+			//$replace['#desactivecam_display#'] = (is_object($desactivecam) && $desactivecam->getIsVisible()) ? "#desactivecam_display#" : "none";
 
 			$recordstart = $this->getCmd('action', 'record_start');
 			$replace['#recordstartid#'] = is_object($recordstart) ? $recordstart->getId() : '';
@@ -465,6 +485,7 @@ class surveillanceStation extends eqLogic {
 
 			$ptzhome = $this->getCmd('action', 'ptz_home');
 			$replace['#ptzhomeid#'] = is_object($ptzhome) ? $ptzhome->getId() : '';
+			$replace['#ptzhome_display#'] = (is_object($ptzhome) && $ptzhome->getIsVisible()) ? "#ptzhome_display#" : "none";
 
 			$ptzstop = $this->getCmd('action', 'ptz_stop');
 			$replace['#ptzstopid#'] = is_object($ptzstop) ? $ptzstop->getId() : '';
@@ -476,6 +497,8 @@ class surveillanceStation extends eqLogic {
 			$urllive = $this->getCmd(null, 'path_url_live');
 			$replace['#urllive#'] = (is_object($urllive)) ? $urllive->execCmd() : '';
 			$replace['#urlliveid#'] = is_object($urllive) ? $urllive->getId() : '';
+
+			$replace['#ptz_display#'] = ($this->getConfiguration('ptzdirection') == 'Oui') ? "#ptz_display#" : "none";
 
 			$commandes .= template_replace($replace, getTemplate('core', jeedom::versionAlias($_version), 'surveillanceStation_action', 'surveillanceStation'));
 			$replace['#action#'] = $commandes;
@@ -597,18 +620,20 @@ class surveillanceStation extends eqLogic {
 		$cmd->save();
 
 		if($this->getConfiguration('ptzdirection') == 'Oui'){
-			$cmd = $this->getCmd('action', 'ptz_home');
-			if (!is_object($cmd)) {
-				$cmd = new surveillanceStationCmd();
-				$cmd->setName(__('PTZ Home', __FILE__));
-				$cmd->setOrder(10);
+			if($this->getConfiguration('ptzHome') == 'Oui'){
+				$cmd = $this->getCmd('action', 'ptz_home');
+				if (!is_object($cmd)) {
+					$cmd = new surveillanceStationCmd();
+					$cmd->setName(__('PTZ Home', __FILE__));
+					$cmd->setOrder(10);
+				}
+				$cmd->setEqLogic_id($this->getId());
+				$cmd->setLogicalId('ptz_home');
+				$cmd->setType('action');
+				$cmd->setSubtype('other');
+				$cmd->setIsVisible(1);
+				$cmd->save();
 			}
-			$cmd->setEqLogic_id($this->getId());
-			$cmd->setLogicalId('ptz_home');
-			$cmd->setType('action');
-			$cmd->setSubtype('other');
-			$cmd->setIsVisible(1);
-			$cmd->save();
 
 			$cmd = $this->getCmd('action', 'ptz_left');
 			if (!is_object($cmd)) {
@@ -761,13 +786,10 @@ class surveillanceStationCmd extends cmd {
 			sleep(5);
 			$eqLogic->GetStatusCam();
 			$eqLogic->GetUrlLive();
-			//sleep(5);
-			//$eqLogic->refreshWidget();
 		}
 		if ($this->getLogicalId() == 'disable') {
 			log::add('surveillanceStation', 'debug', 'lancement de l\'action  disable caméra '.$eqLogic->getName(). '(id:'.$eqLogic->getConfiguration('id').')');
 			$eqLogic->callUrl(array('api' => 'SYNO.SurveillanceStation.Camera', 'method' => 'Disable', 'idList' => $eqLogic->getConfiguration('id')));
-			//sleep(5);
 			$eqLogic->GetStatusCam();
 			$eqLogic->GetUrlLive();
 		}
