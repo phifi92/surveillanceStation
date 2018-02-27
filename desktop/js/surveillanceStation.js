@@ -36,12 +36,18 @@ function addCmdToTable(_cmd) {
     tr += '<span class="subType" subType="' + init(_cmd.subType) + '"></span>';
     tr += '</td>';
     tr += '<td>';
-    tr += '<span><label class="checkbox-inline"><input type="checkbox" class="cmdAttr checkbox-inline" data-l1key="isVisible" checked/>{{Afficher}}</label><span> ';
+    if (_cmd.logicalId != 'motion_start_ss' && _cmd.logicalId != 'enable' && _cmd.logicalId != 'disable' && _cmd.logicalId != 'motion_stop' && _cmd.logicalId != 'motion_status' && _cmd.logicalId != 'motion_start_cam' && _cmd.logicalId != 'ptz_preset_start' && _cmd.logicalId != 'ptz_patrol_start' && _cmd.logicalId != 'refresh' && _cmd.logicalId != 'state' && _cmd.logicalId != 'path_url_live') {
+      tr += '<span><label class="checkbox-inline"><input type="checkbox" class="cmdAttr checkbox-inline" data-l1key="isVisible" checked/>{{Afficher}}</label><span> ';
+    } else {
+      tr += '<span><label class="checkbox-inline"><input type="checkbox" disabled="disabled">{{Afficher}}</label><span> ';
+    }
     tr += '</td>';
     tr += '<td>';
     if (is_numeric(_cmd.id)) {
         tr += '<a class="btn btn-default btn-xs cmdAction" data-action="configure"><i class="fa fa-cogs"></i></a> ';
-        tr += '<a class="btn btn-default btn-xs cmdAction" data-action="test"><i class="fa fa-rss"></i> {{Tester}}</a>';
+        if (_cmd.logicalId != 'ptz_preset_start' && _cmd.logicalId != 'ptz_patrol_start') {
+          tr += '<a class="btn btn-default btn-xs cmdAction" data-action="test"><i class="fa fa-rss"></i> {{Tester}}</a>';
+        }
     }
     tr += '</td>';
     tr += '</tr>';

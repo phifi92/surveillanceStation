@@ -208,8 +208,8 @@ $eqLogics = eqLogic::byType($plugin->getId());
 						<div class="form-group">
 							<label class="col-sm-2 control-label">{{Vitesse PTZ}}</label>
 							<div class="col-sm-3">
-								<select id="sel_object" class="eqLogicAttr form-control" data-l1key="configuration" data-l2key="speedptz">
-									<option value="1">{{1 (Défaut)}}</option>
+								<select class="eqLogicAttr form-control" data-l1key="configuration" data-l2key="speedptz">
+									<option value="1" selected>{{1 (Défaut)}}</option>
 									<option value="2">{{2}}</option>
 									<option value="3">{{3}}</option>
 									<option value="4">{{4}}</option>
