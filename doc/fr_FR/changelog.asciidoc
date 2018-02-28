@@ -1,3 +1,4 @@
+- 02-2018 : réécriture/refonte complète du plugin
 - 09-2017 : supprime info.xml
 - 05-2017 : ajout du fichier plugin info en json
 - 11-2016 : ajout de quelques commandes PTZ (en attendant une refonte)

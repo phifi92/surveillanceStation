@@ -427,11 +427,21 @@ class surveillanceStation extends eqLogic {
 		return __('Inconnu', __FILE__);
 	}
 
+	public static $_widgetPossibility = array('custom' => array(
+		'visibility' => false,
+		'displayName' => true,
+		'displayObjectName' => true,
+		'optionalParameters' => false,
+		'background-color' => true,
+		'text-color' => true,
+		'border' => true,
+		'border-radius' => true,
+		'background-opacity' => true,
+	));
+
 	public function toHtml($_version = 'dashboard') {
 		$version = jeedom::versionAlias($_version);
 		$replace = $this->preToHtml($_version, array(), true);
-
-		$_version = jeedom::versionAlias($_version);
 
 		if ($this->getIsVisible() == 1) {
 			$statecam = $this->getCmd(null,'state');
@@ -499,10 +509,10 @@ class surveillanceStation extends eqLogic {
 
 			$replace['#ptz_display#'] = ($this->getConfiguration('ptzdirection') == 'Oui') ? "#ptz_display#" : "none";
 
-			$commandes .= template_replace($replace, getTemplate('core', jeedom::versionAlias($_version), 'surveillanceStation_action', 'surveillanceStation'));
+			$commandes .= template_replace($replace, getTemplate('core', jeedom::versionAlias($version), 'surveillanceStation_action', 'surveillanceStation'));
 			$replace['#action#'] = $commandes;
 		}
-		return $this->postToHtml($_version, template_replace($replace, getTemplate('core', jeedom::versionAlias($version), 'surveillanceStation', 'surveillanceStation')));
+		return $this->postToHtml($version, template_replace($replace, getTemplate('core', jeedom::versionAlias($version), 'surveillanceStation', 'surveillanceStation')));
 	}
 
 	/*     * *********************Méthodes d'instance************************* */
@@ -763,7 +773,7 @@ class surveillanceStation extends eqLogic {
 
 class surveillanceStationCmd extends cmd {
 	/*     * *************************Attributs****************************** */
-
+	public static $_widgetPossibility = array('custom' => false);
 	/*     * ***********************Methode static*************************** */
 
 	/*     * *********************Methode d'instance************************* */
