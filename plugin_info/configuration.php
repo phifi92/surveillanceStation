@@ -31,7 +31,7 @@ if (!isConnect()) {
 			</div>
 		</div>
 		<div class="alert alert-info">
-			Pour que le live soit accessible de l'extérieur, il est important de renseigner l'adresse DNS de votre Synology (MonSynology.tld).
+			Pour que le live soit accessible de l'extérieur, il est important de renseigner l'adresse DNS de votre Synology DSM (MonSynology.tld) et non celle de Surveillance Station.
 			Cette même adresse doit aussi fonctionner de votre réseau local.<br>
 			A contrario, avec un IP LAN, le Live sera accessible seulement de votre réseau local.</div>
 		<div class="form-group">

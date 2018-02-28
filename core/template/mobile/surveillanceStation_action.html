@@ -21,7 +21,7 @@
           }
       </script>
   </span>
-  <span class="cmd" data-type="action" data-subtype="other" data-cmd_id="#recordstartid#">
+  <span class="cmd" data-type="action" data-subtype="other" data-cmd_id="#recordstartid#" style="display: #recordstart_display#;">
     <a class="actionrecordstart ui-btn-raised" style="border-color : transparent !important;"><i class="fa fa-circle" style="color : #ff0a0a"></i></a>
   </span>
   <script>
@@ -30,7 +30,7 @@
         jeedom.cmd.execute({id: '#recordstartid#', notify: false});
       });
   </script>
-  <span class="cmd" data-type="action" data-subtype="other" data-cmd_id="#recordstopid#">
+  <span class="cmd" data-type="action" data-subtype="other" data-cmd_id="#recordstopid#" style="display: #recordstop_display#;">
     <a class="actionrecordstop" style="border-color : transparent !important;"><i class="fa fa-stop"></i></a>
     <script>
       $('.cmd[data-cmd_id=#recordstopid#] .actionrecordstop').off();
@@ -39,7 +39,7 @@
       });
     </script>
   </span>
-  <!--<span class="cmd" data-type="action" data-subtype="other" data-cmd_id="#snapshotid#">
+  <span class="cmd" data-type="action" data-subtype="other" data-cmd_id="#snapshotid#" style="display: #snapshot_display#;">
     <a class="actionsnapshot" style="border-color : transparent !important;"><i class="fa fa-camera"></i></a>
     <script>
       $('.cmd[data-cmd_id=#snapshotid#] .actionsnapshot').off();
@@ -47,8 +47,8 @@
         jeedom.cmd.execute({id: '#snapshotid#', notify: false});
       });
     </script>
-  </span>-->
-  <span class="cmd" data-type="action" data-subtype="other" data-cmd_id="#ptzleftid#">
+  </span>
+  <span class="cmd" data-type="action" data-subtype="other" data-cmd_id="#ptzleftid#" style="display: #ptzleft_display#;">
     <a class="actionptzleft" style="border-color : transparent !important;"><i class="fa fa-arrow-left"></i></a>
     <script>
       $('.cmd[data-cmd_id=#ptzleftid#] .actionptzleft').off();
@@ -57,7 +57,7 @@
       });
     </script>
   </span>
-  <span class="cmd" data-type="action" data-subtype="other" data-cmd_id="#ptzupid#">
+  <span class="cmd" data-type="action" data-subtype="other" data-cmd_id="#ptzupid#" style="display: #ptzup_display#;">
     <a class="actionptzup" style="border-color : transparent !important;"><i class="fa fa-arrow-up"></i></a>
     <script>
       $('.cmd[data-cmd_id=#ptzupid#] .actionptzup').off();
@@ -66,7 +66,7 @@
       });
     </script>
   </span>
-  <span class="cmd" data-type="action" data-subtype="other" data-cmd_id="#ptzhomeid#">
+  <span class="cmd" data-type="action" data-subtype="other" data-cmd_id="#ptzhomeid#" style="display: #ptzhome_display#;">
     <a class="actionptzhome" style="border-color : transparent !important;"><i class="fa fa-crosshairs"></i></a>
     <script>
       $('.cmd[data-cmd_id=#ptzhomeid#] .actionptzhome').off();
@@ -75,7 +75,7 @@
       });
     </script>
   </span>
-  <span class="cmd" data-type="action" data-subtype="other" data-cmd_id="#ptzstopid#">
+  <span class="cmd" data-type="action" data-subtype="other" data-cmd_id="#ptzstopid#" style="display: #ptzstop_display#;">
     <a class="actionptzstop" style="border-color : transparent !important;"><i class="fa fa-stop"></i></a>
     <script>
       $('.cmd[data-cmd_id=#ptzstopid#] .actionptzstop').off();
@@ -84,7 +84,7 @@
       });
     </script>
   </span>
-  <span class="cmd" data-type="action" data-subtype="other" data-cmd_id="#ptzdownid#">
+  <span class="cmd" data-type="action" data-subtype="other" data-cmd_id="#ptzdownid#" style="display: #ptzdown_display#;">
     <a class="actionptzdown" style="border-color : transparent !important;"><i class="fa fa-arrow-down"></i></a>
     <script>
       $('.cmd[data-cmd_id=#ptzdownid#] .actionptzdown').off();
@@ -93,7 +93,7 @@
       });
     </script>
   </span>
-  <span class="cmd" data-type="action" data-subtype="other" data-cmd_id="#ptzrightid#">
+  <span class="cmd" data-type="action" data-subtype="other" data-cmd_id="#ptzrightid#" style="display: #ptzright_display#;">
     <a class="actionptzright" style="border-color : transparent !important;"><i class="fa fa-arrow-right"></i></a>
     <script>
       $('.cmd[data-cmd_id=#ptzrightid#] .actionptzright').off();

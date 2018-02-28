@@ -99,7 +99,7 @@ $eqLogics = eqLogic::byType($plugin->getId());
 				</form>
 			</div>
 			<div role="tabpanel" class="tab-pane" id="commandtab"><br>
-				<div class="alert alert-info">Exemple d’URL à appeler : <?php echo network::getNetworkAccess('external') ?>/core/api/jeeApi.php?api=<?php echo jeedom::getApiKey('surveillanceStation'); ?>&type=surveillancestation&id=#ID_CMD#&value=#VALEUR#</div>
+				<div class="alert alert-info">Exemple d’URL à appeler : <?php echo network::getNetworkAccess('external') ?>/core/api/jeeApi.php?api=<?php echo jeedom::getApiKey('surveillanceStation'); ?>&type=surveillancestation&type=cmd&id=#ID_CMD</div>
 				<table id="table_cmd" class="table table-bordered table-condensed">
 					<thead>
 						<tr>
@@ -115,104 +115,121 @@ $eqLogics = eqLogic::byType($plugin->getId());
 				</table>
 			</div>
 			<div role="tabpanel" class="tab-pane" id="infoconfigtab"><br/>
-				<form class="form-horizontal"><fieldset>
-						<legend>{{Informations de la caméra}}</legend>
-						<div class="form-group">
-							<label class="col-sm-2 control-label">{{adresse IP}}</label>
-							<div class="col-sm-2">
-								<span class="eqLogicAttr label" data-l1key="configuration" data-l2key="ip" style="font-size : 1em"></span>
-							</div>
-						</div>
-						<div class="form-group">
-							<label class="col-sm-2 control-label">{{ID Surveillance Station}}</label>
-							<div class="col-sm-2">
-								<span class="eqLogicAttr label" data-l1key="configuration" data-l2key="id" style="font-size : 1em"></span>
-							</div>
-						</div>
-						<div class="form-group">
-							<label class="col-sm-2 control-label">{{Fabricant}}</label>
-							<div class="col-sm-2">
-								<span class="eqLogicAttr label" data-l1key="configuration" data-l2key="vendor" style="font-size : 1em"></span>
-							</div>
-						</div>
-						<div class="form-group">
-							<label class="col-sm-2 control-label">{{Modele}}</label>
-							<div class="col-sm-2">
-								<span class="eqLogicAttr label" data-l1key="configuration" data-l2key="model" style="font-size : 1em"></span>
-							</div>
-						</div>
-						<div class="form-group">
-							<label class="col-sm-2 control-label">{{Compatible PTZ Direction}}</label>
-							<div class="col-sm-2">
-								<span class="eqLogicAttr label" data-l1key="configuration" data-l2key="ptzdirection" style="font-size : 1em"></span>
-							</div>
-						</div>
-						<div class="form-group">
-							<label class="col-sm-2 control-label">{{Compatible PTZ Home}}</label>
-							<div class="col-sm-2">
-								<span class="eqLogicAttr label" data-l1key="configuration" data-l2key="ptzHome" style="font-size : 1em"></span>
-							</div>
-						</div>
-						<div class="form-group">
-							<label class="col-sm-2 control-label">{{Compatible PTZ Speed}}</label>
-							<div class="col-sm-2">
-								<span class="eqLogicAttr label" data-l1key="configuration" data-l2key="ptzSpeed" style="font-size : 1em"></span>
-							</div>
-						</div>
-						<div class="form-group">
-							<label class="col-sm-2 control-label">{{Compatible PTZ Pan}}</label>
-							<div class="col-sm-2">
-								<span class="eqLogicAttr label" data-l1key="configuration" data-l2key="ptzPan" style="font-size : 1em"></span>
-							</div>
-						</div>
-						<div class="form-group">
-							<label class="col-sm-2 control-label">{{Compatible PTZ Tilt}}</label>
-							<div class="col-sm-2">
-								<span class="eqLogicAttr label" data-l1key="configuration" data-l2key="ptzTilt" style="font-size : 1em"></span>
-							</div>
-						</div>
-						<div class="form-group">
-							<label class="col-sm-2 control-label">{{Compatible PTZ Zoom}}</label>
-							<div class="col-sm-2">
-								<span class="eqLogicAttr label" data-l1key="configuration" data-l2key="ptzZoom" style="font-size : 1em"></span>
-							</div>
-						</div>
-						<div class="form-group">
-							<label class="col-sm-2 control-label">{{Compatible PTZ Abs}}</label>
-							<div class="col-sm-2">
-								<span class="eqLogicAttr label" data-l1key="configuration" data-l2key="ptzAbs" style="font-size : 1em"></span>
-							</div>
-						</div>
-						<div class="form-group">
-							<label class="col-sm-2 control-label">{{Compatible PTZ AutoFocus}}</label>
-							<div class="col-sm-2">
-								<span class="eqLogicAttr label" data-l1key="configuration" data-l2key="ptzAutoFocus" style="font-size : 1em"></span>
-							</div>
-						</div>
-					</fieldset>
-				</form>
-				<form class="form-horizontal"><fieldset>
-						<legend>{{Configuration}}</legend>
-						<div class="form-group">
-							<label class="col-sm-2 control-label">{{Activation du Live}}</label>
-							<div class="col-sm-3">
-								<input type="checkbox" class="eqLogicAttr" data-l1key="configuration" data-l2key="choixlive" checked/>
-							</div>
-						</div>
-						<div class="form-group">
-							<label class="col-sm-2 control-label">{{Vitesse PTZ}}</label>
-							<div class="col-sm-3">
-								<select class="eqLogicAttr form-control" data-l1key="configuration" data-l2key="speedptz">
-									<option value="1" selected>{{1 (Défaut)}}</option>
-									<option value="2">{{2}}</option>
-									<option value="3">{{3}}</option>
-									<option value="4">{{4}}</option>
-									<option value="5">{{5}}</option>
-								</select>
-							</div>
-						</div>
-					</fieldset>
-				</form>
+				<div class="row">
+					<div class="col-sm-6">
+						<form class="form-horizontal">
+							<fieldset>
+								<legend>{{Informations de la caméra}}</legend>
+								<div class="form-group">
+									<label class="col-sm-4 control-label" style="padding-top: 0px;">{{adresse IP}}</label>
+									<div class="col-sm-2">
+										<span class="eqLogicAttr label" data-l1key="configuration" data-l2key="ip" style="font-size : 1em"></span>
+									</div>
+								</div>
+								<div class="form-group">
+									<label class="col-sm-4 control-label" style="padding-top: 0px;">{{ID Surveillance Station}}</label>
+									<div class="col-sm-2">
+										<span class="eqLogicAttr label" data-l1key="configuration" data-l2key="id" style="font-size : 1em"></span>
+									</div>
+								</div>
+								<div class="form-group">
+									<label class="col-sm-4 control-label" style="padding-top: 0px;">{{Fabricant}}</label>
+									<div class="col-sm-2">
+										<span class="eqLogicAttr label" data-l1key="configuration" data-l2key="vendor" style="font-size : 1em"></span>
+									</div>
+								</div>
+								<div class="form-group">
+									<label class="col-sm-4 control-label" style="padding-top: 0px;">{{Modele}}</label>
+									<div class="col-sm-2">
+										<span class="eqLogicAttr label" data-l1key="configuration" data-l2key="model" style="font-size : 1em"></span>
+									</div>
+								</div>
+							</fieldset>
+						</form>
+					</div>
+				<div class="col-sm-6">
+					<form class="form-horizontal">
+						<fieldset>
+							<legend>{{Compatibilités PTZ de la caméra}}</legend>
+								<div class="form-group">
+									<label class="col-sm-4 control-label" style="padding-top: 0px;">{{Direction}}</label>
+									<div class="col-sm-2">
+										<span class="eqLogicAttr label" data-l1key="configuration" data-l2key="ptzdirection" style="font-size : 1em"></span>
+									</div>
+								</div>
+								<div class="form-group">
+									<label class="col-sm-4 control-label" style="padding-top: 0px;">{{Home}}</label>
+									<div class="col-sm-2">
+										<span class="eqLogicAttr label" data-l1key="configuration" data-l2key="ptzHome" style="font-size : 1em"></span>
+									</div>
+								</div>
+								<div class="form-group">
+									<label class="col-sm-4 control-label" style="padding-top: 0px;">{{Vitesse (Speed)}}</label>
+									<div class="col-sm-2">
+										<span class="eqLogicAttr label" data-l1key="configuration" data-l2key="ptzSpeed" style="font-size : 1em"></span>
+									</div>
+								</div>
+								<div class="form-group">
+									<label class="col-sm-4 control-label" style="padding-top: 0px;">{{Panoramique}}</label>
+									<div class="col-sm-2">
+										<span class="eqLogicAttr label" data-l1key="configuration" data-l2key="ptzPan" style="font-size : 1em"></span>
+									</div>
+								</div>
+								<div class="form-group">
+									<label class="col-sm-4 control-label" style="padding-top: 0px;">{{Inclinaison}}</label>
+									<div class="col-sm-2">
+										<span class="eqLogicAttr label" data-l1key="configuration" data-l2key="ptzTilt" style="font-size : 1em"></span>
+									</div>
+								</div>
+								<div class="form-group">
+									<label class="col-sm-4 control-label" style="padding-top: 0px;">{{Zoom}}</label>
+									<div class="col-sm-2">
+										<span class="eqLogicAttr label" data-l1key="configuration" data-l2key="ptzZoom" style="font-size : 1em"></span>
+									</div>
+								</div>
+								<div class="form-group">
+									<label class="col-sm-4 control-label" style="padding-top: 0px;">{{Absolute}}</label>
+									<div class="col-sm-2">
+										<span class="eqLogicAttr label" data-l1key="configuration" data-l2key="ptzAbs" style="font-size : 1em"></span>
+									</div>
+								</div>
+								<div class="form-group">
+									<label class="col-sm-4 control-label" style="padding-top: 0px;">{{AutoFocus}}</label>
+									<div class="col-sm-2">
+										<span class="eqLogicAttr label" data-l1key="configuration" data-l2key="ptzAutoFocus" style="font-size : 1em"></span>
+									</div>
+								</div>
+							</fieldset>
+						</form>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-lg-12">
+						<form class="form-horizontal">
+							<fieldset>
+								<legend>{{Configurations}}</legend>
+								<div class="form-group">
+									<label class="col-sm-2 control-label">{{Activation du Live}}</label>
+									<div class="col-sm-3">
+										<input type="checkbox" class="eqLogicAttr" data-l1key="configuration" data-l2key="choixlive" checked/>
+									</div>
+								</div>
+								<div class="form-group">
+									<label class="col-sm-2 control-label">{{Vitesse PTZ}}</label>
+									<div class="col-sm-3">
+										<select class="eqLogicAttr form-control" data-l1key="configuration" data-l2key="speedptz">
+											<option value="1" selected>{{1 (Défaut)}}</option>
+											<option value="2">{{2}}</option>
+											<option value="3">{{3}}</option>
+											<option value="4">{{4}}</option>
+											<option value="5">{{5}}</option>
+										</select>
+									</div>
+								</div>
+							</fieldset>
+						</form>
+					</div>
+				</div>
 			</div>
 		</div>
 	</div>
