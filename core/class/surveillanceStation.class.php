@@ -791,6 +791,8 @@ class surveillanceStationCmd extends cmd {
 			return;
 		}
 		$eqLogic = $this->getEqLogic();
+		$statecam = $eqLogic->getCmd(null,'state')->execCmd();
+		
 		if ($this->getLogicalId() == 'enable') {
 			log::add('surveillanceStation', 'debug', 'lancement de l\'action  enable caméra '.$eqLogic->getName(). '(id:'.$eqLogic->getConfiguration('id').')');
 			$eqLogic->callUrl(array('api' => 'SYNO.SurveillanceStation.Camera', 'method' => 'Enable', 'idList' => $eqLogic->getConfiguration('id')));
@@ -805,66 +807,125 @@ class surveillanceStationCmd extends cmd {
 			$eqLogic->GetUrlLive();
 		}
 		if ($this->getLogicalId() == 'record_start') {
-			log::add('surveillanceStation', 'debug', 'lancement de l\'action  Record Start '.$eqLogic->getName(). '(id:'.$eqLogic->getConfiguration('id').')');
-			$eqLogic->callUrl(array('api' => 'SYNO.SurveillanceStation.ExternalRecording', 'method' => 'Record', 'action' => 'start', 'cameraId' => $eqLogic->getConfiguration('id')));
+			if ($statecam == 'Activée'){
+				log::add('surveillanceStation', 'debug', 'lancement de l\'action  Record Start '.$eqLogic->getName(). '(id:'.$eqLogic->getConfiguration('id').')');
+				$eqLogic->callUrl(array('api' => 'SYNO.SurveillanceStation.ExternalRecording', 'method' => 'Record', 'action' => 'start', 'cameraId' => $eqLogic->getConfiguration('id')));
+			} else {
+				throw new Exception('Commande impossible, la caméra est désactivée');
+			}
 		}
 		if ($this->getLogicalId() == 'record_stop') {
-			log::add('surveillanceStation', 'debug', 'lancement de l\'action  Record Stop '.$eqLogic->getName(). '(id:'.$eqLogic->getConfiguration('id').')');
-			$eqLogic->callUrl(array('api' => 'SYNO.SurveillanceStation.ExternalRecording', 'method' => 'Record', 'action' => 'stop', 'cameraId' => $eqLogic->getConfiguration('id')));
+			if ($statecam == 'Activée'){
+				log::add('surveillanceStation', 'debug', 'lancement de l\'action  Record Stop '.$eqLogic->getName(). '(id:'.$eqLogic->getConfiguration('id').')');
+				$eqLogic->callUrl(array('api' => 'SYNO.SurveillanceStation.ExternalRecording', 'method' => 'Record', 'action' => 'stop', 'cameraId' => $eqLogic->getConfiguration('id')));
+			} else {
+				throw new Exception('Commande impossible, la caméra est désactivée');
+			}
 		}
 		if ($this->getLogicalId() == 'motion_start_ss') {
-			log::add('surveillanceStation', 'debug', 'lancement de l\'action  Motion Start par SS '.$eqLogic->getName(). '(id:'.$eqLogic->getConfiguration('id').')');
-			$eqLogic->callUrl(array('api' => 'SYNO.SurveillanceStation.Camera.Event', 'source' => '1', 'method' => 'MDParamSave', 'keep' => 'true', 'camId' => $eqLogic->getConfiguration('id')));
-			sleep(5);
-			$eqLogic->GetStatusDetecMouv();
+			if ($statecam == 'Activée'){
+				log::add('surveillanceStation', 'debug', 'lancement de l\'action  Motion Start par SS '.$eqLogic->getName(). '(id:'.$eqLogic->getConfiguration('id').')');
+				$eqLogic->callUrl(array('api' => 'SYNO.SurveillanceStation.Camera.Event', 'source' => '1', 'method' => 'MDParamSave', 'keep' => 'true', 'camId' => $eqLogic->getConfiguration('id')));
+				sleep(5);
+				$eqLogic->GetStatusDetecMouv();
+				$eqLogic->refreshWidget();
+			} else {
+				throw new Exception('Commande impossible, la caméra est désactivée');
+			}
 		}
 		if ($this->getLogicalId() == 'motion_start_cam') {
-			log::add('surveillanceStation', 'debug', 'lancement de l\'action  Motion Start par Caméra '.$eqLogic->getName(). '(id:'.$eqLogic->getConfiguration('id').')');
-			surveillanceStation::callUrl(array('api' => 'SYNO.SurveillanceStation.Camera.Event', 'source' => '0', 'method' => 'MDParamSave', 'keep' => 'true', 'camId' => $eqLogic->getConfiguration('id')));
-			sleep(5);
-			$eqLogic->GetStatusDetecMouv();
+			if ($statecam == 'Activée'){
+				log::add('surveillanceStation', 'debug', 'lancement de l\'action  Motion Start par Caméra '.$eqLogic->getName(). '(id:'.$eqLogic->getConfiguration('id').')');
+				surveillanceStation::callUrl(array('api' => 'SYNO.SurveillanceStation.Camera.Event', 'source' => '0', 'method' => 'MDParamSave', 'keep' => 'true', 'camId' => $eqLogic->getConfiguration('id')));
+				sleep(5);
+				$eqLogic->GetStatusDetecMouv();
+				$eqLogic->refreshWidget();
+			} else {
+				throw new Exception('Commande impossible, la caméra est désactivée');
+			}
 		}
 		if ($this->getLogicalId() == 'motion_stop') {
-			log::add('surveillanceStation', 'debug', 'lancement de l\'action  Motion Stop '.$eqLogic->getName(). '(id:'.$eqLogic->getConfiguration('id').')');
-			surveillanceStation::callUrl(array('api' => 'SYNO.SurveillanceStation.Camera.Event', 'source' => '-1', 'method' => 'MDParamSave', 'keep' => 'false', 'camId' => $eqLogic->getConfiguration('id')));
-			sleep(5);
-			$eqLogic->GetStatusDetecMouv();
+			if ($statecam == 'Activée'){
+				log::add('surveillanceStation', 'debug', 'lancement de l\'action  Motion Stop '.$eqLogic->getName(). '(id:'.$eqLogic->getConfiguration('id').')');
+				surveillanceStation::callUrl(array('api' => 'SYNO.SurveillanceStation.Camera.Event', 'source' => '-1', 'method' => 'MDParamSave', 'keep' => 'false', 'camId' => $eqLogic->getConfiguration('id')));
+				sleep(5);
+				$eqLogic->GetStatusDetecMouv();
+				$eqLogic->refreshWidget();
+			} else {
+				throw new Exception('Commande impossible, la caméra est désactivée');
+			}
 		}
 		if ($this->getLogicalId() == 'ptz_home') {
-			log::add('surveillanceStation', 'debug', 'lancement de l\'action  PTZ Home caméra '.$eqLogic->getName(). '(id:'.$eqLogic->getConfiguration('id').') -> speed -> ' .$eqLogic->getConfiguration('speedptz'));
-			$eqLogic->callUrl(array('api' => 'SYNO.SurveillanceStation.PTZ', 'method' => 'Home', 'cameraId' => $eqLogic->getConfiguration('id')));
+			if ($statecam == 'Activée'){
+				log::add('surveillanceStation', 'debug', 'lancement de l\'action  PTZ Home caméra '.$eqLogic->getName(). '(id:'.$eqLogic->getConfiguration('id').') -> speed -> ' .$eqLogic->getConfiguration('speedptz'));
+				$eqLogic->callUrl(array('api' => 'SYNO.SurveillanceStation.PTZ', 'method' => 'Home', 'cameraId' => $eqLogic->getConfiguration('id')));
+			} else {
+				throw new Exception('Commande impossible, la caméra est désactivée');
+			}
 		}
 		if ($this->getLogicalId() == 'ptz_left') {
-			log::add('surveillanceStation', 'debug', 'lancement de l\'action  PTZ Left caméra '.$eqLogic->getName(). '(id:'.$eqLogic->getConfiguration('id').') -> speed -> ' .$eqLogic->getConfiguration('speedptz'));
-			$eqLogic->callUrl(array('api' => 'SYNO.SurveillanceStation.PTZ', 'method' => 'Move', 'direction' => 'left', 'moveType' => 'Start', 'speed' => $eqLogic->getConfiguration('speedptz'), 'cameraId' => $eqLogic->getConfiguration('id')));
+			if ($statecam == 'Activée'){
+				log::add('surveillanceStation', 'debug', 'lancement de l\'action  PTZ Left caméra '.$eqLogic->getName(). '(id:'.$eqLogic->getConfiguration('id').') -> speed -> ' .$eqLogic->getConfiguration('speedptz'));
+				$eqLogic->callUrl(array('api' => 'SYNO.SurveillanceStation.PTZ', 'method' => 'Move', 'direction' => 'left', 'moveType' => 'Start', 'speed' => $eqLogic->getConfiguration('speedptz'), 'cameraId' => $eqLogic->getConfiguration('id')));
+			} else {
+				throw new Exception('Commande impossible, la caméra est désactivée');
+			}
 		}
 		if ($this->getLogicalId() == 'ptz_up') {
-			log::add('surveillanceStation', 'debug', 'lancement de l\'action  PTZ Up caméra '.$eqLogic->getName(). '(id:'.$eqLogic->getConfiguration('id').') -> speed -> ' .$eqLogic->getConfiguration('speedptz'));
-			$eqLogic->callUrl(array('api' => 'SYNO.SurveillanceStation.PTZ', 'method' => 'Move', 'direction' => 'up', 'moveType' => 'Start', 'speed' => $eqLogic->getConfiguration('speedptz'), 'cameraId' => $eqLogic->getConfiguration('id')));
+			if ($statecam == 'Activée'){
+				log::add('surveillanceStation', 'debug', 'lancement de l\'action  PTZ Up caméra '.$eqLogic->getName(). '(id:'.$eqLogic->getConfiguration('id').') -> speed -> ' .$eqLogic->getConfiguration('speedptz'));
+				$eqLogic->callUrl(array('api' => 'SYNO.SurveillanceStation.PTZ', 'method' => 'Move', 'direction' => 'up', 'moveType' => 'Start', 'speed' => $eqLogic->getConfiguration('speedptz'), 'cameraId' => $eqLogic->getConfiguration('id')));
+			} else {
+				throw new Exception('Commande impossible, la caméra est désactivée');
+			}
 		}
 		if ($this->getLogicalId() == 'ptz_down') {
-			log::add('surveillanceStation', 'debug', 'lancement de l\'action  PTZ Down caméra '.$eqLogic->getName(). '(id:'.$eqLogic->getConfiguration('id').') -> speed -> ' .$eqLogic->getConfiguration('speedptz'));
-			$eqLogic->callUrl(array('api' => 'SYNO.SurveillanceStation.PTZ', 'method' => 'Move', 'direction' => 'down', 'moveType' => 'Start', 'speed' => $eqLogic->getConfiguration('speedptz'), 'cameraId' => $eqLogic->getConfiguration('id')));
+			if ($statecam == 'Activée'){
+				log::add('surveillanceStation', 'debug', 'lancement de l\'action  PTZ Down caméra '.$eqLogic->getName(). '(id:'.$eqLogic->getConfiguration('id').') -> speed -> ' .$eqLogic->getConfiguration('speedptz'));
+				$eqLogic->callUrl(array('api' => 'SYNO.SurveillanceStation.PTZ', 'method' => 'Move', 'direction' => 'down', 'moveType' => 'Start', 'speed' => $eqLogic->getConfiguration('speedptz'), 'cameraId' => $eqLogic->getConfiguration('id')));
+			} else {
+				throw new Exception('Commande impossible, la caméra est désactivée');
+			}
 		}
 		if ($this->getLogicalId() == 'ptz_right') {
+			if ($statecam == 'Activée'){
 			log::add('surveillanceStation', 'debug', 'lancement de l\'action  PTZ Right caméra '.$eqLogic->getName(). '(id:'.$eqLogic->getConfiguration('id').') -> speed -> ' .$eqLogic->getConfiguration('speedptz'));
 			$eqLogic->callUrl(array('api' => 'SYNO.SurveillanceStation.PTZ', 'method' => 'Move', 'direction' => 'right', 'moveType' => 'Start', 'speed' => $eqLogic->getConfiguration('speedptz'), 'cameraId' => $eqLogic->getConfiguration('id')));
+		} else {
+			throw new Exception('Commande impossible, la caméra est désactivée');
+		}
 		}
 		if ($this->getLogicalId() == 'ptz_stop') {
-			log::add('surveillanceStation', 'debug', 'lancement de l\'action  PTZ Stop caméra '.$eqLogic->getName(). '(id:'.$eqLogic->getConfiguration('id').') -> speed -> ' .$eqLogic->getConfiguration('speedptz'));
-			$eqLogic->callUrl(array('api' => 'SYNO.SurveillanceStation.PTZ', 'method' => 'Move', 'direction' => 'right', 'moveType' => 'Stop', 'speed' => $eqLogic->getConfiguration('speedptz'), 'cameraId' => $eqLogic->getConfiguration('id')));
+			if ($statecam == 'Activée'){
+				log::add('surveillanceStation', 'debug', 'lancement de l\'action  PTZ Stop caméra '.$eqLogic->getName(). '(id:'.$eqLogic->getConfiguration('id').') -> speed -> ' .$eqLogic->getConfiguration('speedptz'));
+				$eqLogic->callUrl(array('api' => 'SYNO.SurveillanceStation.PTZ', 'method' => 'Move', 'direction' => 'right', 'moveType' => 'Stop', 'speed' => $eqLogic->getConfiguration('speedptz'), 'cameraId' => $eqLogic->getConfiguration('id')));
+			} else {
+				throw new Exception('Commande impossible, la caméra est désactivée');
+			}
 		}
 		if ($this->getLogicalId() == 'ptz_patrol_start') {
-			log::add('surveillanceStation', 'debug', 'lancement de l\'action  Patrouille caméra '.$eqLogic->getName(). '(id:'.$eqLogic->getConfiguration('id').') -> preset ID -> ' .$_options['select']);
-			$eqLogic->callUrl(array('api' => 'SYNO.SurveillanceStation.PTZ', 'method' => 'RunPatrol', 'patrolId' => $_options['select'], 'cameraId' => $eqLogic->getConfiguration('id')));
+			if ($statecam == 'Activée'){
+				log::add('surveillanceStation', 'debug', 'lancement de l\'action  Patrouille caméra '.$eqLogic->getName(). '(id:'.$eqLogic->getConfiguration('id').') -> preset ID -> ' .$_options['select']);
+				$eqLogic->callUrl(array('api' => 'SYNO.SurveillanceStation.PTZ', 'method' => 'RunPatrol', 'patrolId' => $_options['select'], 'cameraId' => $eqLogic->getConfiguration('id')));
+			} else {
+				throw new Exception('Commande impossible, la caméra est désactivée');
+			}
 		}
 		if ($this->getLogicalId() == 'ptz_preset_start') {
-			log::add('surveillanceStation', 'debug', 'lancement de l\'action  Position prédéfinie caméra '.$eqLogic->getName(). '(id:'.$eqLogic->getConfiguration('id').') -> preset ID -> ' .$_options['select']);
-			$eqLogic->callUrl(array('api' => 'SYNO.SurveillanceStation.PTZ', 'method' => 'GoPreset', 'presetId' => $_options['select'], 'cameraId' => $eqLogic->getConfiguration('id')));
+			if ($statecam == 'Activée'){
+				log::add('surveillanceStation', 'debug', 'lancement de l\'action  Position prédéfinie caméra '.$eqLogic->getName(). '(id:'.$eqLogic->getConfiguration('id').') -> preset ID -> ' .$_options['select']);
+				$eqLogic->callUrl(array('api' => 'SYNO.SurveillanceStation.PTZ', 'method' => 'GoPreset', 'presetId' => $_options['select'], 'cameraId' => $eqLogic->getConfiguration('id')));
+			} else {
+				throw new Exception('Commande impossible, la caméra est désactivée');
+			}
 		}
 		if ($this->getLogicalId() == 'snapshot') {
-			log::add('surveillanceStation', 'debug', 'lancement de l\'action Instantané caméra '.$eqLogic->getName(). '(id:'.$eqLogic->getConfiguration('id').')');
-			$eqLogic->callUrl(array('api' => 'SYNO.SurveillanceStation.SnapShot', 'method' => 'TakeSnapshot', 'dsId' => '0', 'camId' => $eqLogic->getConfiguration('id')));
+			if ($statecam == 'Activée'){
+				log::add('surveillanceStation', 'debug', 'lancement de l\'action Instantané caméra '.$eqLogic->getName(). '(id:'.$eqLogic->getConfiguration('id').')');
+				$eqLogic->callUrl(array('api' => 'SYNO.SurveillanceStation.SnapShot', 'method' => 'TakeSnapshot', 'dsId' => '0', 'camId' => $eqLogic->getConfiguration('id')));
+			} else {
+				throw new Exception('Commande impossible, la caméra est désactivée');
+			}
 		}
 		if ($this->getLogicalId() == 'refresh') {
 			$eqLogic->GetStatusCam();
