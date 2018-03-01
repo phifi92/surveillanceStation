@@ -291,7 +291,8 @@ class surveillanceStation extends eqLogic {
 				log::add('surveillanceStation', 'debug', 'résultat API liste URL Live '.$eqLogic->getName(). '(id:'.$eqLogic->getConfiguration('id').') -> ' .print_r($data['data'], true));
 				$urlL = $data['data']['0']['mjpegHttpPath'].'&cameraId='.$eqLogic->getConfiguration('id');
 				parse_str($urlL);
-				$urlLive = $eqLogic->getUrl() . '/webapi/entry.cgi?api=SYNO.SurveillanceStation.Stream.VideoStreaming&version='.$version."&method=".$method."&format=".$format."&StmKey=".$StmKey."&cameraId=".$cameraId;
+				$StmKey2 = str_replace('"', '', $StmKey);
+				$urlLive = $eqLogic->getUrl() . '/webapi/entry.cgi?api=SYNO.SurveillanceStation.Stream.VideoStreaming&version='.$version."&method=".$method."&format=".$format."&StmKey=".$StmKey2."&cameraId=".$cameraId;
 				log::add('surveillanceStation', 'debug', 'URL Live final '.$eqLogic->getName(). '(id:'.$eqLogic->getConfiguration('id').') -> ' .print_r($urlLive, true));
 				$eqLogic->checkAndUpdateCmd('path_url_live', $urlLive);
 				$eqLogic->refreshWidget();
