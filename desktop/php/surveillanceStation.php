@@ -123,25 +123,25 @@ $eqLogics = eqLogic::byType($plugin->getId());
 								<div class="form-group">
 									<label class="col-sm-4 control-label" style="padding-top: 0px;">{{adresse IP}}</label>
 									<div class="col-sm-2">
-										<span class="eqLogicAttr label" data-l1key="configuration" data-l2key="ip" style="font-size : 1em"></span>
+										<span class="eqLogicAttr" data-l1key="configuration" data-l2key="ip" style="font-size : 1em"></span>
 									</div>
 								</div>
 								<div class="form-group">
 									<label class="col-sm-4 control-label" style="padding-top: 0px;">{{ID Surveillance Station}}</label>
 									<div class="col-sm-2">
-										<span class="eqLogicAttr label" data-l1key="configuration" data-l2key="id" style="font-size : 1em"></span>
+										<span class="eqLogicAttr" data-l1key="configuration" data-l2key="id" style="font-size : 1em"></span>
 									</div>
 								</div>
 								<div class="form-group">
 									<label class="col-sm-4 control-label" style="padding-top: 0px;">{{Fabricant}}</label>
 									<div class="col-sm-2">
-										<span class="eqLogicAttr label" data-l1key="configuration" data-l2key="vendor" style="font-size : 1em"></span>
+										<span class="eqLogicAttr" data-l1key="configuration" data-l2key="vendor" style="font-size : 1em"></span>
 									</div>
 								</div>
 								<div class="form-group">
 									<label class="col-sm-4 control-label" style="padding-top: 0px;">{{Modele}}</label>
 									<div class="col-sm-2">
-										<span class="eqLogicAttr label" data-l1key="configuration" data-l2key="model" style="font-size : 1em"></span>
+										<span class="eqLogicAttr" data-l1key="configuration" data-l2key="model" style="font-size : 1em"></span>
 									</div>
 								</div>
 							</fieldset>
@@ -154,49 +154,49 @@ $eqLogics = eqLogic::byType($plugin->getId());
 								<div class="form-group">
 									<label class="col-sm-4 control-label" style="padding-top: 0px;">{{Direction}}</label>
 									<div class="col-sm-2">
-										<span class="eqLogicAttr label" data-l1key="configuration" data-l2key="ptzdirection" style="font-size : 1em"></span>
+										<span class="eqLogicAttr" data-l1key="configuration" data-l2key="ptzdirection" style="font-size : 1em"></span>
 									</div>
 								</div>
 								<div class="form-group">
 									<label class="col-sm-4 control-label" style="padding-top: 0px;">{{Home}}</label>
 									<div class="col-sm-2">
-										<span class="eqLogicAttr label" data-l1key="configuration" data-l2key="ptzHome" style="font-size : 1em"></span>
+										<span class="eqLogicAttr" data-l1key="configuration" data-l2key="ptzHome" style="font-size : 1em"></span>
 									</div>
 								</div>
 								<div class="form-group">
 									<label class="col-sm-4 control-label" style="padding-top: 0px;">{{Vitesse (Speed)}}</label>
 									<div class="col-sm-2">
-										<span class="eqLogicAttr label" data-l1key="configuration" data-l2key="ptzSpeed" style="font-size : 1em"></span>
+										<span class="eqLogicAttr" data-l1key="configuration" data-l2key="ptzSpeed" style="font-size : 1em"></span>
 									</div>
 								</div>
 								<div class="form-group">
 									<label class="col-sm-4 control-label" style="padding-top: 0px;">{{Panoramique}}</label>
 									<div class="col-sm-2">
-										<span class="eqLogicAttr label" data-l1key="configuration" data-l2key="ptzPan" style="font-size : 1em"></span>
+										<span class="eqLogicAttr" data-l1key="configuration" data-l2key="ptzPan" style="font-size : 1em"></span>
 									</div>
 								</div>
 								<div class="form-group">
 									<label class="col-sm-4 control-label" style="padding-top: 0px;">{{Inclinaison}}</label>
 									<div class="col-sm-2">
-										<span class="eqLogicAttr label" data-l1key="configuration" data-l2key="ptzTilt" style="font-size : 1em"></span>
+										<span class="eqLogicAttr" data-l1key="configuration" data-l2key="ptzTilt" style="font-size : 1em"></span>
 									</div>
 								</div>
 								<div class="form-group">
 									<label class="col-sm-4 control-label" style="padding-top: 0px;">{{Zoom}}</label>
 									<div class="col-sm-2">
-										<span class="eqLogicAttr label" data-l1key="configuration" data-l2key="ptzZoom" style="font-size : 1em"></span>
+										<span class="eqLogicAttr" data-l1key="configuration" data-l2key="ptzZoom" style="font-size : 1em"></span>
 									</div>
 								</div>
 								<div class="form-group">
 									<label class="col-sm-4 control-label" style="padding-top: 0px;">{{Absolute}}</label>
 									<div class="col-sm-2">
-										<span class="eqLogicAttr label" data-l1key="configuration" data-l2key="ptzAbs" style="font-size : 1em"></span>
+										<span class="eqLogicAttr" data-l1key="configuration" data-l2key="ptzAbs" style="font-size : 1em"></span>
 									</div>
 								</div>
 								<div class="form-group">
 									<label class="col-sm-4 control-label" style="padding-top: 0px;">{{AutoFocus}}</label>
 									<div class="col-sm-2">
-										<span class="eqLogicAttr label" data-l1key="configuration" data-l2key="ptzAutoFocus" style="font-size : 1em"></span>
+										<span class="eqLogicAttr" data-l1key="configuration" data-l2key="ptzAutoFocus" style="font-size : 1em"></span>
 									</div>
 								</div>
 							</fieldset>
