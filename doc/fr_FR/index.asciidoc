@@ -13,12 +13,12 @@ image::../images/ss2.png[align="center"]
 
 ==== Données visibles sur le Dashboard :
 [horizontal]
-- *Live* : permet d’afficher la caméra en direct (redimensionnable avec le crayon, voir FAQ)
+- *Live* : permet d’afficher la caméra en direct (widget redimensionnable avec le crayon, voir FAQ)
 - *Activer ou Désactiver* : permet d’activer ou de désactiver une caméra de Surveillance Station (une ou plusieurs caméras)
 - *Afficher le statut* : permet d’afficher le statut de la caméra (Désactivée ou Activée)
-- *Démarrer et arrêter un enregistrement* : permet de forcer un enregistrement (automatiquement stocké dans Surveillance Station)
-- *instantané (Snapshot)* : permet de prendre une capture de la caméra au moment de la demande (automatiquement stocké dans Surveillance Station)
-- *Activer ou Désactiver la détection mouvement* : permet d’activer ou de désactiver la détection de mouvement (par Surveillance Station ou par Caméra) SEULEMENT quand la caméra est activée
+- *Démarrer et arrêter un enregistrement* : permet de forcer un enregistrement (automatiquement stocker dans Surveillance Station)
+- *instantané (Snapshot)* : permet de prendre une capture de la caméra au moment de la demande (automatiquement stocker dans Surveillance Station)
+- *Activer ou Désactiver la détection de mouvement* : permet d’activer ou de désactiver la détection de mouvement (par Surveillance Station ou par Caméra) SEULEMENT quand la caméra est activée
 - *PTZ* : permet de contrôler la caméra si celle-ci est compatible. "Patrouille" et "Position prédéfinie" sont aussi disponiblent par scénario
 
 ==== Scénario :
@@ -44,9 +44,10 @@ Nous allons maintenant paramétrer le plugin.
 - *Mot de passe Surveillance Station* : mot de passe associé à votre identifiant
 
 [IMPORTANT]
-Connexion sécurisée doit être utilisée seulement si votre certificat a été émis et vérifiés par une Autorité de Certification. Le plugin n'est pas compatible avec le certificat auto-signé par défaut.
+Connexion sécurisée doit être utilisée seulement si votre certificat a été émis et vérifié par une Autorité de Certification. Le plugin n'est pas compatible avec le certificat auto-signé par défaut.
 
-Puis, il suffit de se rendre sur la page d'accueil de configuration du plugin, et de cliquer sur : Synchronisation
+Puis, il suffit de se rendre sur la page d'accueil de configuration du plugin, et de cliquer sur : Synchronisation.
+
 Une fois la synchronisation terminée, vos caméras doivent s'afficher dans la zone "Mes caméras de Surveillance Station"
 
 Puis définir pour chaque caméra :
@@ -54,7 +55,7 @@ Puis définir pour chaque caméra :
 - Objet parent
 - Catégorie (optionnelle)
 - Activer (Oui, sinon l’équipement ne sera pas utilisable)
-- Visible (optionnel si vous ne désirez pas le rendre visible sur le Dashboard. Toutefois, il sera utilisable dans un scénario)
+- Visible (optionnel si vous ne désirez pas le rendre visible sur le Dashboard. Toutefois, il sera utilisable dans un scénario et visible dans le panel)
 
 === Astuce
 ==== Alerter Jeedom d'une détection provenant Surveillance Station
@@ -62,7 +63,7 @@ Il est possible de paramètrer dans Surveillance Station de Synology l'appel d'u
 
 image::../images/ss10.png[align="center"]
 
-Puis de renseigner l'url de la commande que vous voulez lancer en cas de détection (exemple pour commande avec l'id 915 : http://dns_de_votre_jeedom/core/api/jeeApi.php?apikey=b8F......Hb7&type=cmd&id=915
+Puis de renseigner l'url de la commande que vous voulez lancer en cas de détection (exemple pour une commande avec l'id 915 : http://dns_de_votre_jeedom/core/api/jeeApi.php?apikey=b8F......Hb7&type=cmd&id=915
 
 '''
 === FAQ
