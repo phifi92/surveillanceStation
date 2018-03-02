@@ -2,7 +2,13 @@
     "plugins\/surveillanceStation\/core\/class\/surveillanceStation.class.php": {
         "Activée": "Activée",
         "Désactivée": "Désactivée",
-        "Rafraîchir": "Rafraîchir"
+        "Rafraîchir": "Rafraîchir",
+        "Active Home Mode": "Active Home Mode",
+        "Désactive Home Mode": "Désactive Home Mode",
+        "Invalid parameters or The account parameter is not specified": "Invalid parameters or The account parameter is not specified",
+        "Appel api : ": "Appel api : ",
+        ",url : ": ",url : ",
+        ",code erreur : ": ",code erreur : "
     },
     "plugins\/surveillanceStation\/desktop\/php\/panel.php": {
         "Rechercher": "Rechercher",

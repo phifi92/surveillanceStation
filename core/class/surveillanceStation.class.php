@@ -129,6 +129,7 @@ class surveillanceStation extends eqLogic {
 			'SYNO.SurveillanceStation.Camera',
 			'SYNO.SurveillanceStation.Camera.Event',
 			'SYNO.SurveillanceStation.SnapShot',
+			'SYNO.SurveillanceStation.HomeMode'
 			//'SYNO.SurveillanceStation.PTZ', (retourne une mauvaise version de l'API : 5 au lieu de 4 qui bug), donc 3)
 			//'SYNO.SurveillanceStation.ExternalRecording', (retourne une mauvaise version de l'API : 3 au lieu de 2)
 		);
@@ -747,6 +748,32 @@ class surveillanceStation extends eqLogic {
 		$cmd->setIsVisible(1);
 		$cmd->save();
 
+		$cmd = $this->getCmd('action', 'homemode_start');
+		if (!is_object($cmd)) {
+			$cmd = new surveillanceStationCmd();
+			$cmd->setName(__('Active Home Mode', __FILE__));
+			$cmd->setOrder(17);
+		}
+		$cmd->setEqLogic_id($this->getId());
+		$cmd->setLogicalId('homemode_start');
+		$cmd->setType('action');
+		$cmd->setSubtype('other');
+		$cmd->setIsVisible(0);
+		$cmd->save();
+
+		$cmd = $this->getCmd('action', 'homemode_stop');
+		if (!is_object($cmd)) {
+			$cmd = new surveillanceStationCmd();
+			$cmd->setName(__('Désactive Home Mode', __FILE__));
+			$cmd->setOrder(18);
+		}
+		$cmd->setEqLogic_id($this->getId());
+		$cmd->setLogicalId('homemode_stop');
+		$cmd->setType('action');
+		$cmd->setSubtype('other');
+		$cmd->setIsVisible(0);
+		$cmd->save();
+
 		$cmd = $this->getCmd(null, 'motion_status');
 		if (!is_object($cmd)) {
 			$cmd = new surveillanceStationCmd();
@@ -949,6 +976,14 @@ class surveillanceStationCmd extends cmd {
 			} else {
 				throw new Exception('Commande impossible, la caméra est désactivée');
 			}
+		}
+		if ($this->getLogicalId() == 'homemode_start') {
+				log::add('surveillanceStation', 'debug', 'lancement de l\'action Home Mode');
+				$eqLogic->callUrl(array('api' => 'SYNO.SurveillanceStation.HomeMode', 'method' => 'Switch', 'on' => 'true'));
+		}
+		if ($this->getLogicalId() == 'homemode_stop') {
+				log::add('surveillanceStation', 'debug', 'lancement de l\'action Home Mode');
+				$eqLogic->callUrl(array('api' => 'SYNO.SurveillanceStation.HomeMode', 'method' => 'Switch', 'on' => 'false'));
 		}
 		if ($this->getLogicalId() == 'refresh') {
 			$eqLogic->GetStatusCam();

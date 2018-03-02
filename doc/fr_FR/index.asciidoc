@@ -18,13 +18,14 @@ image::../images/ss2.png[align="center"]
 - *Afficher le statut* : permet d’afficher le statut de la caméra (Désactivée ou Activée)
 - *Démarrer et arrêter un enregistrement* : permet de forcer un enregistrement (automatiquement stocker dans Surveillance Station)
 - *instantané (Snapshot)* : permet de prendre une capture de la caméra au moment de la demande (automatiquement stocker dans Surveillance Station)
-- *Activer ou Désactiver la détection de mouvement* : permet d’activer ou de désactiver la détection de mouvement (par Surveillance Station ou par Caméra) SEULEMENT quand la caméra est activée
+- *Activer ou Désactiver la détection de mouvement* : permet d’activer ou de désactiver la détection de mouvement par scénario (par Surveillance Station ou par Caméra) SEULEMENT quand la caméra est activée
 - *PTZ* : permet de contrôler la caméra si celle-ci est compatible. "Patrouille" et "Position prédéfinie" sont aussi disponiblent par scénario
+- *Home Mode* : permet d'activer ou de désactiver le Home Mode (mode Accueil) par scénario
 
 ==== Scénario :
 Les commandes sont disponibles lors de la création d’un scénario. Voici des exemples d’utilisations :
 
-- Lors de l’activation/désactivation de votre alarme, il est possible d’activer/désactiver automatiquement les caméras de Surveillance Station.
+- Lors de l’activation/désactivation de votre alarme, il est possible d’activer/désactiver automatiquement les caméras de Surveillance Station et le Home Mode (mode Accueil).
 - Lors d’une détection d’intrusion, quand l’alarme se déclenche. Il est possible de créer un scénario pour forcer l’enregistrement. Et/Ou de prendre un ou plusieurs instantanés.
 
 === Installation/Configuration
