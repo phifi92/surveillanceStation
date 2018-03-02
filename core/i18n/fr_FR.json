@@ -1,27 +1,11 @@
 {
-    "plugins\/surveillanceStation\/plugin_info\/configuration.php": {
-        "Adresse DNS de votre Synolgy": "Adresse DNS de votre Synolgy",
-        "N° de Port": "N° de Port",
-        "Connexion sécurisée": "Connexion sécurisée",
-        "Identifiant Surveillance Station": "Identifiant Surveillance Station",
-        "Mot de passe Surveillance Station": "Mot de passe Surveillance Station"
+    "plugins\/surveillanceStation\/core\/class\/surveillanceStation.class.php": {
+        "Activée": "Activée",
+        "Désactivée": "Désactivée",
+        "Rafraîchir": "Rafraîchir"
     },
     "plugins\/surveillanceStation\/desktop\/php\/panel.php": {
         "Rechercher": "Rechercher",
-        "Statut de la caméra Activée": "Statut de la caméra Activée",
-        "Statut de la caméra Désactivée": "Statut de la caméra Désactivée",
-        "Détection de mouvement est Désactivée": "Détection de mouvement est Désactivée",
-        "Détection de mouvement est Activée": "Détection de mouvement est Activée",
-        "active ou désactive la caméra": "active ou désactive la caméra",
-        "Lance enregistrement": "Lance enregistrement",
-        "Arrête enregistrement": "Arrête enregistrement",
-        "Prend un instantané": "Prend un instantané",
-        "PTZ gauche": "PTZ gauche",
-        "PTZ haut": "PTZ haut",
-        "PTZ home": "PTZ home",
-        "PTZ stop": "PTZ stop",
-        "PTZ bas": "PTZ bas",
-        "PTZ droite": "PTZ droite",
         "Statut de la caméra": "Statut de la caméra",
         "Détection de mouvement": "Détection de mouvement"
     },
@@ -79,19 +63,11 @@
         "Tester": "Tester",
         "Synchronisation réussie": "Synchronisation réussie"
     },
-    "plugins\/surveillanceStation\/core\/class\/surveillanceStation.class.php": {
-        "Rafraîchir": "Rafraîchir",
-        "Activée": "Activée",
-        "Activée (par caméra)": "Activée (par caméra)",
-        "Activée (par SS)": "Activée (par SS)",
-        "Désactivée": "Désactivée",
-        "Permission denied or Camera disabled or IO module disabled": "Permission denied or Camera disabled or IO module disabled",
-        "Appel api : ": "Appel api : ",
-        ",url : ": ",url : ",
-        ",code erreur : ": ",code erreur : ",
-        "Parameter invalid or Guest or disabled account": "Parameter invalid or Guest or disabled account",
-        "Invalid password or Execution failed": "Invalid password or Execution failed",
-        "Mise à jour des API SYNO.API.Auth en erreur, url : ": "Mise à jour des API SYNO.API.Auth en erreur, url : ",
-        "Commande impossible, caméra est désactivée": "Commande impossible, caméra est désactivée"
+    "plugins\/surveillanceStation\/plugin_info\/configuration.php": {
+        "Adresse DNS de votre Synolgy": "Adresse DNS de votre Synolgy",
+        "N° de Port": "N° de Port",
+        "Connexion sécurisée": "Connexion sécurisée",
+        "Identifiant Surveillance Station": "Identifiant Surveillance Station",
+        "Mot de passe Surveillance Station": "Mot de passe Surveillance Station"
     }
 }

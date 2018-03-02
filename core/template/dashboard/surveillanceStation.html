@@ -1,21 +1,29 @@
+<style>
+#surveillanceStationmouv.jeedom-mouvement::before {
+    font-size: 15px;
+}
+#surveillanceStationcam.fa-camera::before {
+    font-size: 12px;
+}
+</style>
 <div id="plugin_container" class="eqLogic-widget eqLogic allowResize" style="width:#width#;height:#height#;border:#border#;border-radius:#border-radius#;background-color: #background-color#;color: #color#; #style#" data-category="" data-eqLogic_id="#id#" data-version="#version#" >
   <center>
     <span style="font-size: 1.2em;#hideEqLogicName#"><a href="#eqLink#">#name_display# <span style="font-size: 0.85em;">#object_name#</span></a></span>
     <span style="float: right;width:80px;">
-      <i class="fa fa-camera" title="{{Statut de la caméra}}"> <span id="statecam#id#"></span></i>
-      <i class="icon jeedom-mouvement" title="{{Détection de mouvement}}"><span id="motionstatus#id#"></span></i>
+      <i id="surveillanceStationcam" class="fa fa-camera" title="Statut de la caméra"> <span id="statecam#id#"></span></i>
+      <i id="surveillanceStationmouv" class="icon jeedom-mouvement" title="Détection de mouvement"><span id="motionstatus#id#"></span></i>
       <script>
         if ('#statecam#' == 'Activée') {
-          $('#statecam#id#').append('<i title="{{Statut de la caméra Activée}}" class="fa fa-check tooltips" style="font-size : 1.1em;color: #00FF00;" ></i>');
+          $('#statecam#id#').append('<i title="La caméra est activée" class="fa fa-check tooltips" style="font-size : 1.1em;color: #00FF00;" ></i>');
         }
         else if ('#statecam#' != 'Activée') {
-          $('#statecam#id#').append('<i title="{{Statut de la caméra Désactivée}}" class="fa fa-times tooltips" style="font-size : 1.1em;color: #FF0000;"></i>');
+          $('#statecam#id#').append('<i title="La caméra est Désactivée" class="fa fa-times tooltips" style="font-size : 1.1em;color: #FF0000;"></i>');
         }
         if ('#motionstatus#' == 'Désactivée') {
-          $('#motionstatus#id#').append('<i title="{{Détection de mouvement est Désactivée}}" class="fa fa-times tooltips" style="font-size : 1.1em;color: #FF0000;" ></i>');
+          $('#motionstatus#id#').append('<i title="Détection de mouvement est désactivée" class="fa fa-times tooltips" style="font-size : 1.1em;color: #FF0000;" ></i>');
         }
         else if ('#motionstatus#' != 'Désactivée') {
-          $('#motionstatus#id#').append('<i title="{{Détection de mouvement est Activée}}" class="fa fa-check tooltips" style="font-size : 1.1em;color: #00FF00;"></i>');
+          $('#motionstatus#id#').append('<i title="Détection de mouvement est activée" class="fa fa-check tooltips" style="font-size : 1.1em;color: #00FF00;"></i>');
         }
       </script>
     </span>

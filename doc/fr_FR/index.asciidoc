@@ -56,6 +56,14 @@ Puis définir pour chaque caméra :
 - Activer (Oui, sinon l’équipement ne sera pas utilisable)
 - Visible (optionnel si vous ne désirez pas le rendre visible sur le Dashboard. Toutefois, il sera utilisable dans un scénario)
 
+=== Astuce
+====Alerter Jeedom d'une détection de Surveillance Station
+Il est possible de paramètrer dans Surveillance Station de Synology l'appel d'une url externet (votre Jeedom) en cas d'alerter détection de mouvement. Pour se faire, il faut se rendre dans Surveillance Station, et ajouter une régle d'action.
+
+image::../images/ss10.png[align="center"]
+
+Puis de renseigner l'url de la commande que vous voulez lancer en cas de détection (exemple pour commande avec l'id 915 : http://dns_de_votre_jeedom/core/api/jeeApi.php?apikey=b8F......Hb7&type=cmd&id=915
+
 '''
 === FAQ
 include::faq.asciidoc[]

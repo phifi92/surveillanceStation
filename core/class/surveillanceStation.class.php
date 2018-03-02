@@ -60,6 +60,7 @@ class surveillanceStation extends eqLogic {
 				self::deleteSid();
 				self::updateAPI();
 				return self::callUrl($_parameters, $_recall + 1);
+				log::add('surveillanceStation', 'error', 'callURL retour code -> ' .print_r(self::convertCodeErreur($result['error']['code']), true));
 			}
 			if (($result['error']['code'] != 105)) {
 				log::add('surveillanceStation', 'error', 'callURL retour code -> ' .print_r(self::convertCodeErreur($result['error']['code']), true));
@@ -282,7 +283,7 @@ class surveillanceStation extends eqLogic {
 			}
 		}
 	}
-
+/* pas fiable, des coupures de flux de temps en temps
 	public static function GetUrlLive() {
 		foreach (eqLogic::byType('surveillanceStation', true) as $eqLogic) {
 			$statutcam = $eqLogic->getCmd(null,'state')->execCmd();
@@ -294,6 +295,28 @@ class surveillanceStation extends eqLogic {
 				$StmKey2 = str_replace('"', '', $StmKey);
 				$urlLive = $eqLogic->getUrl() . '/webapi/entry.cgi?api=SYNO.SurveillanceStation.Stream.VideoStreaming&version='.$version."&method=".$method."&format=".$format."&StmKey=".$StmKey2."&cameraId=".$cameraId;
 				log::add('surveillanceStation', 'debug', 'URL Live final '.$eqLogic->getName(). '(id:'.$eqLogic->getConfiguration('id').') -> ' .print_r($urlLive, true));
+				$eqLogic->checkAndUpdateCmd('path_url_live', $urlLive);
+				$eqLogic->refreshWidget();
+			}
+			else if ($eqLogic->getConfiguration('choixlive') == '0'){
+				$eqLogic->checkAndUpdateCmd('path_url_live', '');
+				log::add('surveillanceStation', 'debug', 'URL Live final : aucune, live désactivé dans la config');
+				$eqLogic->refreshWidget();
+			}
+			else if ($statutcam == 'Désactivée' || $statutcam == 'Déconnectée'){
+				$eqLogic->checkAndUpdateCmd('path_url_live', 'plugins/surveillanceStation/core/img/cameramini_off.png');
+				log::add('surveillanceStation', 'debug', 'URL Live final : aucune, caméra désactivée');
+				$eqLogic->refreshWidget();
+			}
+		}
+	}
+*/
+	public static function GetUrlLive() {
+		foreach (eqLogic::byType('surveillanceStation', true) as $eqLogic) {
+			$statutcam = $eqLogic->getCmd(null,'state')->execCmd();
+			if($eqLogic->getConfiguration('choixlive') == '1' && $statutcam == 'Activée'){
+				$urlLive = $eqLogic->getUrl() . '/webapi/SurveillanceStation/videoStreaming.cgi?api=SYNO.SurveillanceStation.VideoStream&version=1&method=Stream&format=mjpeg&cameraId='.$eqLogic->getConfiguration('id').'&_sid='.$eqLogic->getSid();
+				log::add('surveillanceStation', 'debug', 'résultat URL Live '.$eqLogic->getName(). '(id:'.$eqLogic->getConfiguration('id').') -> ' .print_r($urlLive, true));
 				$eqLogic->checkAndUpdateCmd('path_url_live', $urlLive);
 				$eqLogic->refreshWidget();
 			}
@@ -792,7 +815,7 @@ class surveillanceStationCmd extends cmd {
 		}
 		$eqLogic = $this->getEqLogic();
 		$statecam = $eqLogic->getCmd(null,'state')->execCmd();
-		
+
 		if ($this->getLogicalId() == 'enable') {
 			log::add('surveillanceStation', 'debug', 'lancement de l\'action  enable caméra '.$eqLogic->getName(). '(id:'.$eqLogic->getConfiguration('id').')');
 			$eqLogic->callUrl(array('api' => 'SYNO.SurveillanceStation.Camera', 'method' => 'Enable', 'idList' => $eqLogic->getConfiguration('id')));
