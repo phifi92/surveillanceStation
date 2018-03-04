@@ -11,6 +11,30 @@ Le plugin actualise les informations toutes les 5 minutes (modifiable dans le "M
 --
 
 [panel,primary]
+.J’obtiens un code erreur 105 :
+--
+- l'identifiant n'a pas les droits pour utiliser l'application Surveillance Station (panneau de config / Utilisateur / modifier l'utilisateur / onglet Application / cocher Surveillance Station)
+--
+
+[panel,primary]
+.J’obtiens un code erreur 401 :
+--
+- l'identifiant est sûrement désactivé dans Surveillance Station. Je vous conseil d'utiliser un identifiant unique avec les droits : dossier "surveillance" dans "permissions", "Surveillance Station" dans "Applications" et un privilège directeur dans Surveillance Station
+--
+
+[panel,primary]
+.J’obtiens un code erreur 407 :
+--
+- l'identifiant est bloqué (panneau de config / Sécurité / onglet compte / Autoriser/Bloquer la liste / onglet Liste des blogages)
+--
+
+[panel,primary]
+.J’obtiens une erreur : Connection refused
+--
+- Vérifiez bien que l'adresse et le port correspondent bien à votre Synology, et non à Surveillance Station
+--
+
+[panel,primary]
 .L’affiche du Live déborde du widget (ou trop grand/petit), je désire redimensionner la taille. Comment faire ?
 --
 Vous pouvez redimensionner la taille du widget avec le crayon en haut à droite sur le Dashboard.

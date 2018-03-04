@@ -8,10 +8,11 @@
 </style>
 <div id="plugin_container" class="eqLogic-widget eqLogic allowResize" style="width:#width#;height:#height#;border:#border#;border-radius:#border-radius#;background-color: #background-color#;color: #color#; #style#" data-category="" data-eqLogic_id="#id#" data-version="#version#" >
   <center>
-    <span style="font-size: 1.2em;#hideEqLogicName#"><a href="#eqLink#">#name_display# <span style="font-size: 0.85em;">#object_name#</span></a></span>
-    <span style="float: right;width:80px;">
+    <span style="padding-left: 110px;font-size: 1.2em;#hideEqLogicName#"><a href="#eqLink#">#name_display# <span style="font-size: 0.85em;">#object_name#</span></a></span>
+    <span style="float: right;width:110px;">
       <i id="surveillanceStationcam" class="fa fa-camera" title="Statut de la caméra"> <span id="statecam#id#"></span></i>
-      <i id="surveillanceStationmouv" class="icon jeedom-mouvement" title="Détection de mouvement"><span id="motionstatus#id#"></span></i>
+      <i id="surveillanceStationmouv" class="icon jeedom-mouvement" title="Détection de mouvement" style="display:#motion_display#;"><span id="motionstatus#id#"></span></i>
+      <i id="surveillanceStationhm" class="fa fa-home" title="Home mode global" style="display: #homemode_display#;"> <span id="homemodestatus#id#" style="display: #homemode_display#;"></span></i>
       <script>
         if ('#statecam#' == 'Activée') {
           $('#statecam#id#').append('<i title="La caméra est activée" class="fa fa-check tooltips" style="font-size : 1.1em;color: #00FF00;" ></i>');
@@ -25,11 +26,17 @@
         else if ('#motionstatus#' != 'Désactivée') {
           $('#motionstatus#id#').append('<i title="Détection de mouvement est activée" class="fa fa-check tooltips" style="font-size : 1.1em;color: #00FF00;"></i>');
         }
+        if ('#homemodestatus#' == 'Désactivé') {
+          $('#homemodestatus#id#').append('<i title="Home mode global est désactivé" class="fa fa-times tooltips" style="font-size : 1.1em;color: #FF0000;" ></i>');
+        }
+        else if ('#homemodestatus#' != 'Désactivé') {
+          $('#homemodestatus#id#').append('<i title="Home mode global est activé" class="fa fa-check tooltips" style="font-size : 1.1em;color: #00FF00;"></i>');
+        }
       </script>
     </span>
   </center>
   <center>
-      <span class="directDisplay zoom cursor" style="width : 90%;max-height:90%;"><img src='#urllive#' alt='' class="img-responsive" data-eqLogic_id="#id#"/></span>
+      <span class="directDisplay zoom cursor" style="width : 90%;max-height:90%;" style="display: #urllive_display#;"><img src='#urllive#' alt='' class="img-responsive" data-eqLogic_id="#id#"/></span>
   </center>
   <div class="md_cameraZoom" data-eqLogic_id="#id#" title="#name_display#">
       <center>

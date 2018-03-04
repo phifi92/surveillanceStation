@@ -36,7 +36,7 @@ function addCmdToTable(_cmd) {
     tr += '<span class="subType" subType="' + init(_cmd.subType) + '"></span>';
     tr += '</td>';
     tr += '<td>';
-    if (_cmd.logicalId != 'motion_start_ss' && _cmd.logicalId != 'enable' && _cmd.logicalId != 'disable' && _cmd.logicalId != 'motion_stop' && _cmd.logicalId != 'motion_status' && _cmd.logicalId != 'motion_start_cam' && _cmd.logicalId != 'ptz_preset_start' && _cmd.logicalId != 'ptz_patrol_start' && _cmd.logicalId != 'refresh' && _cmd.logicalId != 'state' && _cmd.logicalId != 'path_url_live' && _cmd.logicalId != 'homemode_start' && _cmd.logicalId != 'homemode_stop') {
+    if (_cmd.logicalId != 'motion_start_ss' && _cmd.logicalId != 'enable' && _cmd.logicalId != 'disable' && _cmd.logicalId != 'motion_stop' && _cmd.logicalId != 'motion_status' && _cmd.logicalId != 'motion_start_cam' && _cmd.logicalId != 'ptz_preset_start' && _cmd.logicalId != 'ptz_patrol_start' && _cmd.logicalId != 'refresh' && _cmd.logicalId != 'state' && _cmd.logicalId != 'path_url_live' && _cmd.logicalId != 'homemode_start' && _cmd.logicalId != 'homemode_stop' && _cmd.logicalId != 'homemode_status') {
       tr += '<span><label class="checkbox-inline"><input type="checkbox" class="cmdAttr checkbox-inline" data-l1key="isVisible" checked/>{{Afficher}}</label><span> ';
     } else {
       tr += '<span><label class="checkbox-inline"><input type="checkbox" disabled="disabled">{{Afficher}}</label><span> ';

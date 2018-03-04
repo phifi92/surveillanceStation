@@ -16,6 +16,16 @@
  * along with Jeedom. If not, see <http://www.gnu.org/licenses/>.
  */
 
+/*
+SYNO.SurveillanceStation.Camera							: Surveillance Station 6.0-2337
+SYNO.SurveillanceStation.SnapShot						: Surveillance Station 6.0-2337
+SYNO.SurveillanceStation.PTZ								: Surveillance Station 6.0-2337
+SYNO.SurveillanceStation.ExternalRecording	: Surveillance Station 6.0-2337
+SYNO.SurveillanceStation.VideoStream				: Surveillance Station 6.3
+SYNO.Surveillance.Camera.Event							: Surveillance Station 7.0
+SYNO.SurveillanceStation.HomeMode						: Surveillance Station 8.1.0
+*/
+
 /* * ***************************Includes********************************* */
 require_once dirname(__FILE__) . '/../../../../core/php/core.inc.php';
 
@@ -30,6 +40,7 @@ class surveillanceStation extends eqLogic {
 	public static function cron5() {
 		self::GetStatusCam();
 		self::GetStatusDetecMouv();
+		self::GetStatusHomeMode();
 		self::GetUrlLive();
 	}
 
@@ -52,6 +63,7 @@ class surveillanceStation extends eqLogic {
 				$url .= '&' . $key . '=' . urlencode($value);
 			}
 		}
+		//log::add('surveillanceStation', 'debug', 'callURL URL -> ' .print_r($url, true));
 		$url .= '&_sid=' . self::getSid();
 		$http = new com_http($url);
 		$result = json_decode($http->exec(15), true);
@@ -126,6 +138,7 @@ class surveillanceStation extends eqLogic {
 	public static function updateAPI() {
 		$list_API = array(
 			'SYNO.API.Auth',
+			'SYNO.SurveillanceStation.Info',
 			'SYNO.SurveillanceStation.Camera',
 			'SYNO.SurveillanceStation.Camera.Event',
 			'SYNO.SurveillanceStation.SnapShot',
@@ -180,6 +193,9 @@ class surveillanceStation extends eqLogic {
 			$eqLogic->setConfiguration('model', $camera['model']);
 			$eqLogic->setConfiguration('vendor', $camera['vendor']);
 			$eqLogic->setConfiguration('ip', $camera['ip']);
+			$data = self::callUrl(array('api' => 'SYNO.SurveillanceStation.Info', 'method' => 'GetInfo'));
+			$eqLogic->setConfiguration('versionSS', $data['data']['CMSMinVersion']);
+			log::add('surveillanceStation', 'debug', 'Version SS '.$eqLogic->getConfiguration('versionSS'));
 			$url = self::getUrl() . '/webapi/entry.cgi?api=SYNO.SurveillanceStation.Camera&version=8&method=GetCapabilityByCamId&cameraId='.$camera['id'].'&_sid='.$eqLogic->getSid();
 			$http = new com_http($url);
 			$data = json_decode($http->exec(15), true);
@@ -225,9 +241,22 @@ class surveillanceStation extends eqLogic {
 
 	public static function GetStatusDetecMouv() {
 		foreach (eqLogic::byType('surveillanceStation', true) as $eqLogic) {
-		$data = self::callUrl(array('api' => 'SYNO.SurveillanceStation.Camera.Event', 'method' => 'MotionEnum', 'camId' => $eqLogic->getConfiguration('id')));
-		log::add('surveillanceStation', 'debug', 'résultat API Statut Detection Mouvement '.$eqLogic->getName(). '(id:'.$eqLogic->getConfiguration('id').') -> ' .print_r($data['data'], true));
-		$eqLogic->checkAndUpdateCmd('motion_status', self::convertStatusDetecMouv($data['data']['MDParam']['source']));
+			if ($eqLogic->getConfiguration('versionSS') >= '7.0'){
+				$data = self::callUrl(array('api' => 'SYNO.SurveillanceStation.Camera.Event', 'method' => 'MotionEnum', 'camId' => $eqLogic->getConfiguration('id')));
+				log::add('surveillanceStation', 'debug', 'résultat API Statut Detection Mouvement '.$eqLogic->getName(). '(id:'.$eqLogic->getConfiguration('id').') -> ' .print_r($data['data'], true));
+				$eqLogic->checkAndUpdateCmd('motion_status', self::convertStatusDetecMouv($data['data']['MDParam']['source']));
+			}
+		}
+	}
+
+	public static function GetStatusHomeMode() {
+		foreach (eqLogic::byType('surveillanceStation', true) as $eqLogic) {
+			if ($eqLogic->getConfiguration('versionSS') >= '8.1'){
+				$data = self::callUrl(array('api' => 'SYNO.SurveillanceStation.HomeMode', 'method' => 'GetInfo'));
+				log::add('surveillanceStation', 'debug', 'résultat API Home Mode : '.print_r(self::convertStatusHomeMode($data['data']['on']), true));
+				$eqLogic->checkAndUpdateCmd('homemode_status', self::convertStatusHomeMode($data['data']['on']));
+				$eqLogic->refreshWidget();
+			}
 		}
 	}
 
@@ -314,24 +343,38 @@ class surveillanceStation extends eqLogic {
 */
 	public static function GetUrlLive() {
 		foreach (eqLogic::byType('surveillanceStation', true) as $eqLogic) {
-			$statutcam = $eqLogic->getCmd(null,'state')->execCmd();
-			if($eqLogic->getConfiguration('choixlive') == '1' && $statutcam == 'Activée'){
-				$urlLive = $eqLogic->getUrl() . '/webapi/SurveillanceStation/videoStreaming.cgi?api=SYNO.SurveillanceStation.VideoStream&version=1&method=Stream&format=mjpeg&cameraId='.$eqLogic->getConfiguration('id').'&_sid='.$eqLogic->getSid();
-				log::add('surveillanceStation', 'debug', 'résultat URL Live '.$eqLogic->getName(). '(id:'.$eqLogic->getConfiguration('id').') -> ' .print_r($urlLive, true));
-				$eqLogic->checkAndUpdateCmd('path_url_live', $urlLive);
-				$eqLogic->refreshWidget();
-			}
-			else if ($eqLogic->getConfiguration('choixlive') == '0'){
-				$eqLogic->checkAndUpdateCmd('path_url_live', '');
-				log::add('surveillanceStation', 'debug', 'URL Live final : aucune, live désactivé dans la config');
-				$eqLogic->refreshWidget();
-			}
-			else if ($statutcam == 'Désactivée' || $statutcam == 'Déconnectée'){
-				$eqLogic->checkAndUpdateCmd('path_url_live', 'plugins/surveillanceStation/core/img/cameramini_off.png');
-				log::add('surveillanceStation', 'debug', 'URL Live final : aucune, caméra désactivée');
-				$eqLogic->refreshWidget();
+			if ($eqLogic->getConfiguration('versionSS') >= '6.3'){
+				$statutcam = $eqLogic->getCmd(null,'state')->execCmd();
+				if($eqLogic->getConfiguration('choixlive') == '1' && $statutcam == 'Activée'){
+					$urlLive = $eqLogic->getUrl() . '/webapi/SurveillanceStation/videoStreaming.cgi?api=SYNO.SurveillanceStation.VideoStream&version=1&method=Stream&format=mjpeg&cameraId='.$eqLogic->getConfiguration('id').'&_sid='.$eqLogic->getSid();
+					log::add('surveillanceStation', 'debug', 'résultat URL Live '.$eqLogic->getName(). '(id:'.$eqLogic->getConfiguration('id').') -> ' .print_r($urlLive, true));
+					$eqLogic->checkAndUpdateCmd('path_url_live', $urlLive);
+					$eqLogic->refreshWidget();
+				}
+				else if ($eqLogic->getConfiguration('choixlive') == '0'){
+					$eqLogic->checkAndUpdateCmd('path_url_live', '');
+					log::add('surveillanceStation', 'debug', 'URL Live final : aucune, live désactivé dans la config');
+					$eqLogic->refreshWidget();
+				}
+				else if ($statutcam == 'Désactivée' || $statutcam == 'Déconnectée'){
+					$eqLogic->checkAndUpdateCmd('path_url_live', 'plugins/surveillanceStation/core/img/cameramini_off.png');
+					log::add('surveillanceStation', 'debug', 'URL Live final : aucune, caméra désactivée');
+					$eqLogic->refreshWidget();
+				}
 			}
 		}
+	}
+
+	public static function convertStatusHomeMode($_state) {
+		switch ($_state) {
+			case 0:
+				return __('Désactivé', __FILE__);
+			case '':
+				return __('Désactivé', __FILE__);
+			case 1:
+				return __('Activé', __FILE__);
+		}
+		return __('Inconnu', __FILE__);
 	}
 
 	public static function convertStatusDetecMouv($_state) {
@@ -527,10 +570,17 @@ class surveillanceStation extends eqLogic {
 			$motionstatus = $this->getCmd(null, 'motion_status');
 			$replace['#motionstatus#'] = (is_object($motionstatus)) ? $motionstatus->execCmd() : '';
 			$replace['#motionstatusid#'] = is_object($motionstatus) ? $motionstatus->getId() : '';
+			$replace['#motion_display#'] = is_object($motionstatus) ? "#motion_display#" : "none";
+
+			$homemodestatus = $this->getCmd(null, 'homemode_status');
+			$replace['#homemodestatus#'] = (is_object($homemodestatus)) ? $homemodestatus->execCmd() : '';
+			$replace['#homemodestatusid#'] = is_object($homemodestatus) ? $homemodestatus->getId() : '';
+			$replace['#homemode_display#'] = is_object($homemodestatus) ? "#homemode_display#" : "none";
 
 			$urllive = $this->getCmd(null, 'path_url_live');
 			$replace['#urllive#'] = (is_object($urllive)) ? $urllive->execCmd() : '';
 			$replace['#urlliveid#'] = is_object($urllive) ? $urllive->getId() : '';
+			$replace['#urllive_display#'] = (is_object($urllive) && $urllive->getIsVisible()) ? "#urllive_display#" : "none";
 
 			$replace['#ptz_display#'] = ($this->getConfiguration('ptzdirection') == 'Oui') ? "#ptz_display#" : "none";
 
@@ -614,44 +664,60 @@ class surveillanceStation extends eqLogic {
 		$cmd->setIsVisible(1);
 		$cmd->save();
 
-		$cmd = $this->getCmd('action', 'motion_start_ss');
-		if (!is_object($cmd)) {
-			$cmd = new surveillanceStationCmd();
-			$cmd->setName(__('Détection mouvement start par SS', __FILE__));
-			$cmd->setOrder(6);
-		}
-		$cmd->setEqLogic_id($this->getId());
-		$cmd->setLogicalId('motion_start_ss');
-		$cmd->setType('action');
-		$cmd->setSubtype('other');
-		$cmd->setIsVisible(0);
-		$cmd->save();
+		if ($this->getConfiguration('versionSS') >= '7.0'){
+			$cmd = $this->getCmd('action', 'motion_start_ss');
+			if (!is_object($cmd)) {
+				$cmd = new surveillanceStationCmd();
+				$cmd->setName(__('Détection mouvement start par SS', __FILE__));
+				$cmd->setOrder(6);
+			}
+			$cmd->setEqLogic_id($this->getId());
+			$cmd->setLogicalId('motion_start_ss');
+			$cmd->setType('action');
+			$cmd->setSubtype('other');
+			$cmd->setIsVisible(0);
+			$cmd->save();
 
-		$cmd = $this->getCmd('action', 'motion_start_cam');
-		if (!is_object($cmd)) {
-			$cmd = new surveillanceStationCmd();
-			$cmd->setName(__('Détection mouvement start par Caméra', __FILE__));
-			$cmd->setOrder(7);
-		}
-		$cmd->setEqLogic_id($this->getId());
-		$cmd->setLogicalId('motion_start_cam');
-		$cmd->setType('action');
-		$cmd->setSubtype('other');
-		$cmd->setIsVisible(0);
-		$cmd->save();
+			$cmd = $this->getCmd('action', 'motion_start_cam');
+			if (!is_object($cmd)) {
+				$cmd = new surveillanceStationCmd();
+				$cmd->setName(__('Détection mouvement start par Caméra', __FILE__));
+				$cmd->setOrder(7);
+			}
+			$cmd->setEqLogic_id($this->getId());
+			$cmd->setLogicalId('motion_start_cam');
+			$cmd->setType('action');
+			$cmd->setSubtype('other');
+			$cmd->setIsVisible(0);
+			$cmd->save();
 
-		$cmd = $this->getCmd('action', 'motion_stop');
-		if (!is_object($cmd)) {
-			$cmd = new surveillanceStationCmd();
-			$cmd->setName(__('Détection mouvement stop', __FILE__));
-			$cmd->setOrder(8);
+			$cmd = $this->getCmd('action', 'motion_stop');
+			if (!is_object($cmd)) {
+				$cmd = new surveillanceStationCmd();
+				$cmd->setName(__('Détection mouvement stop', __FILE__));
+				$cmd->setOrder(8);
+			}
+			$cmd->setEqLogic_id($this->getId());
+			$cmd->setLogicalId('motion_stop');
+			$cmd->setType('action');
+			$cmd->setSubtype('other');
+			$cmd->setIsVisible(0);
+			$cmd->save();
+
+			$cmd = $this->getCmd(null, 'motion_status');
+			if (!is_object($cmd)) {
+				$cmd = new surveillanceStationCmd();
+				$cmd->setLogicalId('motion_status');
+				$cmd->setName(__('Détection mouvement', __FILE__));
+				$cmd->setOrder(9);
+			}
+			$cmd->setType('info');
+			$cmd->setSubType('string');
+			$cmd->setEqLogic_id($this->getId());
+			$cmd->setIsVisible(0);
+			$cmd->save();
+			$motion_status_id = $cmd->getId();
 		}
-		$cmd->setEqLogic_id($this->getId());
-		$cmd->setLogicalId('motion_stop');
-		$cmd->setType('action');
-		$cmd->setSubtype('other');
-		$cmd->setIsVisible(0);
-		$cmd->save();
 
 		if($this->getConfiguration('ptzdirection') == 'Oui'){
 			if($this->getConfiguration('ptzHome') == 'Oui'){
@@ -748,59 +814,63 @@ class surveillanceStation extends eqLogic {
 		$cmd->setIsVisible(1);
 		$cmd->save();
 
-		$cmd = $this->getCmd('action', 'homemode_start');
-		if (!is_object($cmd)) {
-			$cmd = new surveillanceStationCmd();
-			$cmd->setName(__('Active Home Mode', __FILE__));
-			$cmd->setOrder(17);
-		}
-		$cmd->setEqLogic_id($this->getId());
-		$cmd->setLogicalId('homemode_start');
-		$cmd->setType('action');
-		$cmd->setSubtype('other');
-		$cmd->setIsVisible(0);
-		$cmd->save();
+		if ($this->getConfiguration('versionSS') >= '8.1'){
+			$cmd = $this->getCmd('action', 'homemode_start');
+			if (!is_object($cmd)) {
+				$cmd = new surveillanceStationCmd();
+				$cmd->setName(__('Active Home Mode', __FILE__));
+				$cmd->setOrder(17);
+			}
+			$cmd->setEqLogic_id($this->getId());
+			$cmd->setLogicalId('homemode_start');
+			$cmd->setType('action');
+			$cmd->setSubtype('other');
+			$cmd->setIsVisible(0);
+			$cmd->save();
 
-		$cmd = $this->getCmd('action', 'homemode_stop');
-		if (!is_object($cmd)) {
-			$cmd = new surveillanceStationCmd();
-			$cmd->setName(__('Désactive Home Mode', __FILE__));
-			$cmd->setOrder(18);
-		}
-		$cmd->setEqLogic_id($this->getId());
-		$cmd->setLogicalId('homemode_stop');
-		$cmd->setType('action');
-		$cmd->setSubtype('other');
-		$cmd->setIsVisible(0);
-		$cmd->save();
+			$cmd = $this->getCmd('action', 'homemode_stop');
+			if (!is_object($cmd)) {
+				$cmd = new surveillanceStationCmd();
+				$cmd->setName(__('Désactive Home Mode', __FILE__));
+				$cmd->setOrder(18);
+			}
+			$cmd->setEqLogic_id($this->getId());
+			$cmd->setLogicalId('homemode_stop');
+			$cmd->setType('action');
+			$cmd->setSubtype('other');
+			$cmd->setIsVisible(0);
+			$cmd->save();
 
-		$cmd = $this->getCmd(null, 'motion_status');
-		if (!is_object($cmd)) {
-			$cmd = new surveillanceStationCmd();
-			$cmd->setLogicalId('motion_status');
-			$cmd->setName(__('Détection mouvement', __FILE__));
-			$cmd->setOrder(9);
+			$cmd = $this->getCmd(null, 'homemode_status');
+			if (!is_object($cmd)) {
+				$cmd = new surveillanceStationCmd();
+				$cmd->setLogicalId('homemode_status');
+				$cmd->setName(__('Home Mode', __FILE__));
+				$cmd->setOrder(19);
+			}
+			$cmd->setType('info');
+			$cmd->setSubType('string');
+			$cmd->setEqLogic_id($this->getId());
+			$cmd->setIsVisible(0);
+			$cmd->save();
+			$motion_status_id = $cmd->getId();
 		}
-		$cmd->setType('info');
-		$cmd->setSubType('string');
-		$cmd->setEqLogic_id($this->getId());
-		$cmd->setIsVisible(0);
-		$cmd->save();
-		$motion_status_id = $cmd->getId();
 
-		$cmd = $this->getCmd(null, 'path_url_live');
-		if (!is_object($cmd)) {
-			$cmd = new surveillanceStationCmd();
-			$cmd->setLogicalId('path_url_live');
-			$cmd->setName(__('URL Live', __FILE__));
-			$cmd->setOrder(1);
+		if ($this->getConfiguration('versionSS') >= '6.3'){
+			$cmd = $this->getCmd(null, 'path_url_live');
+			if (!is_object($cmd)) {
+				$cmd = new surveillanceStationCmd();
+				$cmd->setLogicalId('path_url_live');
+				$cmd->setName(__('URL Live', __FILE__));
+				$cmd->setOrder(1);
+			}
+			$cmd->setType('info');
+			$cmd->setSubType('string');
+			$cmd->setEqLogic_id($this->getId());
+			$cmd->setIsVisible(0);
+			$cmd->save();
+			$path_url_live = $cmd->getId();
 		}
-		$cmd->setType('info');
-		$cmd->setSubType('string');
-		$cmd->setEqLogic_id($this->getId());
-		$cmd->setIsVisible(0);
-		$cmd->save();
-		$path_url_live = $cmd->getId();
 
 		$refresh = $this->getCmd(null, 'refresh');
 		if (!is_object($refresh)) {
@@ -978,16 +1048,20 @@ class surveillanceStationCmd extends cmd {
 			}
 		}
 		if ($this->getLogicalId() == 'homemode_start') {
-				log::add('surveillanceStation', 'debug', 'lancement de l\'action Home Mode');
+				log::add('surveillanceStation', 'debug', 'lancement de l\'action active Home Mode');
 				$eqLogic->callUrl(array('api' => 'SYNO.SurveillanceStation.HomeMode', 'method' => 'Switch', 'on' => 'true'));
+				$eqLogic->GetStatusHomeMode();
+				$eqLogic->refreshWidget();
 		}
 		if ($this->getLogicalId() == 'homemode_stop') {
-				log::add('surveillanceStation', 'debug', 'lancement de l\'action Home Mode');
+				log::add('surveillanceStation', 'debug', 'lancement de l\'action désactive Home Mode');
 				$eqLogic->callUrl(array('api' => 'SYNO.SurveillanceStation.HomeMode', 'method' => 'Switch', 'on' => 'false'));
+				$eqLogic->GetStatusHomeMode();
 		}
 		if ($this->getLogicalId() == 'refresh') {
 			$eqLogic->GetStatusCam();
 			$eqLogic->GetStatusDetecMouv();
+			$eqLogic->GetStatusHomeMode();
 			$eqLogic->GetUrlLive();
 		}
 	}

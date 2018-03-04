@@ -9,7 +9,13 @@ image::../images/ss2.png[align="center"]
 ==== Compatibilité :
 
 - DSM 5 et ultérieur
-- Surveillance Station 6.2 et ultérieur
+- Surveillance Station :
+[horizontal]
+- *Camera, SnapShot, PTZ, Enregistrment* : Surveillance Station 6.0-2337 et ultérieur
+- *Live* : Surveillance Station 6.3 et ultérieur
+- *Détection de mouvement* : Surveillance Station 7.0 et ultérieur
+- *Home Mode* : Surveillance Station 8.1.0DSM 5 et ultérieur et ultérieur
+
 
 ==== Données visibles sur le Dashboard :
 [horizontal]
@@ -20,7 +26,7 @@ image::../images/ss2.png[align="center"]
 - *instantané (Snapshot)* : permet de prendre une capture de la caméra au moment de la demande (automatiquement stocker dans Surveillance Station)
 - *Activer ou Désactiver la détection de mouvement* : permet d’activer ou de désactiver la détection de mouvement par scénario (par Surveillance Station ou par Caméra) SEULEMENT quand la caméra est activée
 - *PTZ* : permet de contrôler la caméra si celle-ci est compatible. "Patrouille" et "Position prédéfinie" sont aussi disponiblent par scénario
-- *Home Mode* : permet d'activer ou de désactiver le Home Mode (mode Accueil) par scénario
+- *Home Mode* : permet d'afficher le statut, d'activer ou de désactiver le Home Mode (mode Accueil) par scénario (commande rattachée à une caméra, mais il s'agit bien d'une activation/désactivation globale)
 
 ==== Scénario :
 Les commandes sont disponibles lors de la création d’un scénario. Voici des exemples d’utilisations :
@@ -58,13 +64,18 @@ Puis définir pour chaque caméra :
 - Activer (Oui, sinon l’équipement ne sera pas utilisable)
 - Visible (optionnel si vous ne désirez pas le rendre visible sur le Dashboard. Toutefois, il sera utilisable dans un scénario et visible dans le panel)
 
-=== Astuce
+=== Astuces
 ==== Alerter Jeedom d'une détection provenant Surveillance Station
 Il est possible de paramètrer dans Surveillance Station de Synology l'appel d'une url externet (votre Jeedom) en cas d'alerter détection de mouvement. Pour se faire, il faut se rendre dans Surveillance Station, et ajouter une régle d'action.
 
 image::../images/ss10.png[align="center"]
 
 Puis de renseigner l'url de la commande que vous voulez lancer en cas de détection (exemple pour une commande avec l'id 915 : http://dns_de_votre_jeedom/core/api/jeeApi.php?apikey=b8F......Hb7&type=cmd&id=915
+
+==== Alerter Jeedom de l'activation et la désactivation du Home Mode (mode accueil)
+Il est possible de demander à Surveillance Station d'alerte Jeedom lors d'un changement de statut de Home Mode à l'aide du règle dans Surveillance Station.
+
+A faire...
 
 '''
 === FAQ
