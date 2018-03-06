@@ -6,5 +6,6 @@
 	"author" : "Phifi",
 	"require" : "3.0",
 	"category" : "security",
-	"display" : "panel"
+	"display" : "panel",
+	"documentation" : "https://surveillancestation.github.io/surveillancestation/"
 }
