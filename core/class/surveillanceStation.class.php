@@ -245,7 +245,7 @@ class surveillanceStation extends eqLogic {
 			self::GetStatusDetecMouv();
 			self::GetUrlLive();
 		} else {
-			log::add('surveillanceStation', 'error', 'Votre version de Surveillance Station n\'est pas compatible avec ce plugin. Compatible à partir de la version : 8.0');
+			log::add('surveillanceStation', 'error', 'Votre version de Surveillance Station n\'est pas compatible avec ce plugin. Compatible à partir de la version : 8.0. Ancien plugin, sans maintenance et assistance, disponible ici : https://github.com/surveillancestation/surveillancestation. Merci d\'ouvrir un sujet dédié sur le forum');
 		}
 	}
 
