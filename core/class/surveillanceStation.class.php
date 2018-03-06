@@ -82,6 +82,26 @@ class surveillanceStation extends eqLogic {
 		return $result;
 	}
 
+	public static function callUrlNoVersion($_parameters = null, $_recall = 0) {
+		$url = self::getUrl() . '/webapi/' . $_parameters;
+		log::add('surveillanceStation', 'debug', 'callURL URL -> ' .print_r($url, true));
+		$http = new com_http($url);
+		$result = json_decode($http->exec(15), true);
+		if ($result['success'] != true) {
+			if (($result['error']['code'] == 105) && $_recall < 3) {
+				self::deleteSid();
+				self::updateAPI();
+				return self::callUrlNoVersion($_parameters, $_recall + 1);
+				log::add('surveillanceStation', 'error', 'callURL retour code -> ' .print_r(self::convertCodeErreur($result['error']['code']), true));
+			}
+			if (($result['error']['code'] != 105)) {
+				log::add('surveillanceStation', 'error', 'callURL retour code -> ' .print_r(self::convertCodeErreur($result['error']['code']), true));
+			}
+			throw new Exception(__('Appel api : ', __FILE__) . print_r($_parameters, true) . __(',url : ', __FILE__) . $url . ' => ' . print_r($result, true) . __(',code erreur : ', __FILE__) . ' => ' . print_r($result['error']['code'], true));
+		}
+		return $result;
+	}
+
 	public static function getSid() {
 		if (self::$_sid !== null) {
 			return self::$_sid;
@@ -178,50 +198,55 @@ class surveillanceStation extends eqLogic {
 	public static function discover() {
 		self::deleteSid();
 		self::updateAPI();
-		$data = self::callUrl(array('api' => 'SYNO.SurveillanceStation.Camera', 'method' => 'List'));
-		foreach ($data['data']['cameras'] as $camera) {
-			$eqLogic = self::byLogicalId('camera' . $camera['id'], 'surveillanceStation');
-			if (!is_object($eqLogic)) {
-				$eqLogic = new self();
-				$eqLogic->setLogicalId('camera' . $camera['id']);
-				$eqLogic->setName($camera['newName']);
-				$eqLogic->setEqType_name('surveillanceStation');
-				$eqLogic->setIsVisible(0);
-				$eqLogic->setIsEnable(1);
+		$data = self::callUrl(array('api' => 'SYNO.SurveillanceStation.Info', 'method' => 'GetInfo'));
+		if ($data['data']['version']['major'] >= '8'){
+			$data = self::callUrl(array('api' => 'SYNO.SurveillanceStation.Camera', 'method' => 'List'));
+			foreach ($data['data']['cameras'] as $camera) {
+				$eqLogic = self::byLogicalId('camera' . $camera['id'], 'surveillanceStation');
+				if (!is_object($eqLogic)) {
+					$eqLogic = new self();
+					$eqLogic->setLogicalId('camera' . $camera['id']);
+					$eqLogic->setName($camera['newName']);
+					$eqLogic->setEqType_name('surveillanceStation');
+					$eqLogic->setIsVisible(0);
+					$eqLogic->setIsEnable(1);
+				}
+				$eqLogic->setConfiguration('id', $camera['id']);
+				$eqLogic->setConfiguration('model', $camera['model']);
+				$eqLogic->setConfiguration('vendor', $camera['vendor']);
+				$eqLogic->setConfiguration('ip', $camera['ip']);
+				$data = self::callUrl(array('api' => 'SYNO.SurveillanceStation.Info', 'method' => 'GetInfo'));
+				$eqLogic->setConfiguration('versionSS', $data['data']['CMSMinVersion']);
+				log::add('surveillanceStation', 'debug', 'Version SS '.$eqLogic->getConfiguration('versionSS'));
+				$url = self::getUrl() . '/webapi/entry.cgi?api=SYNO.SurveillanceStation.Camera&version=8&method=GetCapabilityByCamId&cameraId='.$camera['id'].'&_sid='.$eqLogic->getSid();
+				$http = new com_http($url);
+				$data = json_decode($http->exec(15), true);
+				log::add('surveillanceStation', 'debug', 'résultat PTZ Compatible direction '.$eqLogic->getName(). '(id:'.$eqLogic->getConfiguration('id').') -> ' .$data['data']['ptzDirection']);
+				log::add('surveillanceStation', 'debug', 'résultat PTZ Compatible Home '.$eqLogic->getName(). '(id:'.$eqLogic->getConfiguration('id').') -> ' .$data['data']['ptzHome']);
+				log::add('surveillanceStation', 'debug', 'résultat PTZ Compatible Speed '.$eqLogic->getName(). '(id:'.$eqLogic->getConfiguration('id').') -> ' .$data['data']['ptzSpeed']);
+				log::add('surveillanceStation', 'debug', 'résultat PTZ Compatible Pan '.$eqLogic->getName(). '(id:'.$eqLogic->getConfiguration('id').') -> ' .$data['data']['ptzPan']);
+				log::add('surveillanceStation', 'debug', 'résultat PTZ Compatible Tilt '.$eqLogic->getName(). '(id:'.$eqLogic->getConfiguration('id').') -> ' .$data['data']['ptzTilt']);
+				log::add('surveillanceStation', 'debug', 'résultat PTZ Compatible Zoom '.$eqLogic->getName(). '(id:'.$eqLogic->getConfiguration('id').') -> ' .$data['data']['ptzZoom']);
+				log::add('surveillanceStation', 'debug', 'résultat PTZ Compatible Abs '.$eqLogic->getName(). '(id:'.$eqLogic->getConfiguration('id').') -> ' .$data['data']['ptzAbs']);
+				log::add('surveillanceStation', 'debug', 'résultat PTZ Compatible AutoFocus '.$eqLogic->getName(). '(id:'.$eqLogic->getConfiguration('id').') -> ' .$data['data']['ptzAutoFocus']);
+				if ($data['data']['ptzDirection'] > '0'){$eqLogic->setConfiguration('ptzdirection', 'Oui');} else {$eqLogic->setConfiguration('ptzdirection', 'Non');}
+				if ($data['data']['ptzHome'] > '0'){$eqLogic->setConfiguration('ptzHome', 'Oui');} else {$eqLogic->setConfiguration('ptzHome', 'Non');}
+				if ($data['data']['ptzSpeed'] > '0'){$eqLogic->setConfiguration('ptzSpeed', 'Oui');} else {$eqLogic->setConfiguration('ptzSpeed', 'Non');}
+				if ($data['data']['ptzPan'] > '0'){$eqLogic->setConfiguration('ptzPan', 'Oui');} else {$eqLogic->setConfiguration('ptzPan', 'Non');}
+				if ($data['data']['ptzTilt'] > '0'){$eqLogic->setConfiguration('ptzTilt', 'Oui');} else {$eqLogic->setConfiguration('ptzTilt', 'Non');}
+				if ($data['data']['ptzZoom'] > '0'){$eqLogic->setConfiguration('ptzZoom', 'Oui');} else {$eqLogic->setConfiguration('ptzZoom', 'Non');}
+				if ($data['data']['ptzAbs'] > '0'){$eqLogic->setConfiguration('ptzAbs', 'Oui');} else {$eqLogic->setConfiguration('ptzAbs', 'Non');}
+				if ($data['data']['ptzAutoFocus'] > '0'){$eqLogic->setConfiguration('ptzAutoFocus', 'Oui');} else {$eqLogic->setConfiguration('ptzAutoFocus', 'Non');}
+				$eqLogic->save();
 			}
-			$eqLogic->setConfiguration('id', $camera['id']);
-			$eqLogic->setConfiguration('model', $camera['model']);
-			$eqLogic->setConfiguration('vendor', $camera['vendor']);
-			$eqLogic->setConfiguration('ip', $camera['ip']);
-			$data = self::callUrl(array('api' => 'SYNO.SurveillanceStation.Info', 'method' => 'GetInfo'));
-			$eqLogic->setConfiguration('versionSS', $data['data']['CMSMinVersion']);
-			log::add('surveillanceStation', 'debug', 'Version SS '.$eqLogic->getConfiguration('versionSS'));
-			$url = self::getUrl() . '/webapi/entry.cgi?api=SYNO.SurveillanceStation.Camera&version=8&method=GetCapabilityByCamId&cameraId='.$camera['id'].'&_sid='.$eqLogic->getSid();
-			$http = new com_http($url);
-			$data = json_decode($http->exec(15), true);
-			log::add('surveillanceStation', 'debug', 'résultat PTZ Compatible direction '.$eqLogic->getName(). '(id:'.$eqLogic->getConfiguration('id').') -> ' .$data['data']['ptzDirection']);
-			log::add('surveillanceStation', 'debug', 'résultat PTZ Compatible Home '.$eqLogic->getName(). '(id:'.$eqLogic->getConfiguration('id').') -> ' .$data['data']['ptzHome']);
-			log::add('surveillanceStation', 'debug', 'résultat PTZ Compatible Speed '.$eqLogic->getName(). '(id:'.$eqLogic->getConfiguration('id').') -> ' .$data['data']['ptzSpeed']);
-			log::add('surveillanceStation', 'debug', 'résultat PTZ Compatible Pan '.$eqLogic->getName(). '(id:'.$eqLogic->getConfiguration('id').') -> ' .$data['data']['ptzPan']);
-			log::add('surveillanceStation', 'debug', 'résultat PTZ Compatible Tilt '.$eqLogic->getName(). '(id:'.$eqLogic->getConfiguration('id').') -> ' .$data['data']['ptzTilt']);
-			log::add('surveillanceStation', 'debug', 'résultat PTZ Compatible Zoom '.$eqLogic->getName(). '(id:'.$eqLogic->getConfiguration('id').') -> ' .$data['data']['ptzZoom']);
-			log::add('surveillanceStation', 'debug', 'résultat PTZ Compatible Abs '.$eqLogic->getName(). '(id:'.$eqLogic->getConfiguration('id').') -> ' .$data['data']['ptzAbs']);
-			log::add('surveillanceStation', 'debug', 'résultat PTZ Compatible AutoFocus '.$eqLogic->getName(). '(id:'.$eqLogic->getConfiguration('id').') -> ' .$data['data']['ptzAutoFocus']);
-			if ($data['data']['ptzDirection'] > '0'){$eqLogic->setConfiguration('ptzdirection', 'Oui');} else {$eqLogic->setConfiguration('ptzdirection', 'Non');}
-			if ($data['data']['ptzHome'] > '0'){$eqLogic->setConfiguration('ptzHome', 'Oui');} else {$eqLogic->setConfiguration('ptzHome', 'Non');}
-			if ($data['data']['ptzSpeed'] > '0'){$eqLogic->setConfiguration('ptzSpeed', 'Oui');} else {$eqLogic->setConfiguration('ptzSpeed', 'Non');}
-			if ($data['data']['ptzPan'] > '0'){$eqLogic->setConfiguration('ptzPan', 'Oui');} else {$eqLogic->setConfiguration('ptzPan', 'Non');}
-			if ($data['data']['ptzTilt'] > '0'){$eqLogic->setConfiguration('ptzTilt', 'Oui');} else {$eqLogic->setConfiguration('ptzTilt', 'Non');}
-			if ($data['data']['ptzZoom'] > '0'){$eqLogic->setConfiguration('ptzZoom', 'Oui');} else {$eqLogic->setConfiguration('ptzZoom', 'Non');}
-			if ($data['data']['ptzAbs'] > '0'){$eqLogic->setConfiguration('ptzAbs', 'Oui');} else {$eqLogic->setConfiguration('ptzAbs', 'Non');}
-			if ($data['data']['ptzAutoFocus'] > '0'){$eqLogic->setConfiguration('ptzAutoFocus', 'Oui');} else {$eqLogic->setConfiguration('ptzAutoFocus', 'Non');}
-			$eqLogic->save();
+			self::GetListPreset();
+			self::GetListPatrol();
+			self::GetStatusCam();
+			self::GetStatusDetecMouv();
+			self::GetUrlLive();
+		} else {
+			log::add('surveillanceStation', 'error', 'Votre version de Surveillance Station n\'est pas compatible avec ce plugin. Compatible à partir de la version : 8.0');
 		}
-		self::GetListPreset();
-		self::GetListPatrol();
-		self::GetStatusCam();
-		self::GetStatusDetecMouv();
-		self::GetUrlLive();
 	}
 
 	public static function GetStatusCam() {
@@ -511,82 +536,80 @@ class surveillanceStation extends eqLogic {
 		$version = jeedom::versionAlias($_version);
 		$replace = $this->preToHtml($_version, array(), true);
 
-		if ($this->getIsVisible() == 1) {
-			$statecam = $this->getCmd(null,'state');
-			$replace['#statecam#'] = (is_object($statecam)) ? $statecam->execCmd() : '';
-			$replace['#statecamid#'] = is_object($statecam) ? $statecam->getId() : '';
+		$statecam = $this->getCmd(null,'state');
+		$replace['#statecam#'] = (is_object($statecam)) ? $statecam->execCmd() : '';
+		$replace['#statecamid#'] = is_object($statecam) ? $statecam->getId() : '';
 
-			$activecam = $this->getCmd('action', 'enable');
-			$replace['#activecamid#'] = is_object($activecam) ? $activecam->getId() : '';
+		$activecam = $this->getCmd('action', 'enable');
+		$replace['#activecamid#'] = is_object($activecam) ? $activecam->getId() : '';
 
-			$desactivecam = $this->getCmd('action', 'disable');
-			$replace['#desactivecamid#'] = is_object($desactivecam) ? $desactivecam->getId() : '';
+		$desactivecam = $this->getCmd('action', 'disable');
+		$replace['#desactivecamid#'] = is_object($desactivecam) ? $desactivecam->getId() : '';
 
-			$recordstart = $this->getCmd('action', 'record_start');
-			$replace['#recordstartid#'] = is_object($recordstart) ? $recordstart->getId() : '';
-			$replace['#recordstart_display#'] = (is_object($recordstart) && $recordstart->getIsVisible()) ? "#recordstart_display#" : "none";
+		$recordstart = $this->getCmd('action', 'record_start');
+		$replace['#recordstartid#'] = is_object($recordstart) ? $recordstart->getId() : '';
+		$replace['#recordstart_display#'] = (is_object($recordstart) && $recordstart->getIsVisible()) ? "#recordstart_display#" : "none";
 
-			$recordstop = $this->getCmd('action', 'record_stop');
-			$replace['#recordstopid#'] = is_object($recordstop) ? $recordstop->getId() : '';
-			$replace['#recordstop_display#'] = (is_object($recordstop) && $recordstop->getIsVisible()) ? "#recordstop_display#" : "none";
+		$recordstop = $this->getCmd('action', 'record_stop');
+		$replace['#recordstopid#'] = is_object($recordstop) ? $recordstop->getId() : '';
+		$replace['#recordstop_display#'] = (is_object($recordstop) && $recordstop->getIsVisible()) ? "#recordstop_display#" : "none";
 
-			$motionstartss = $this->getCmd('action', 'motion_start_ss');
-			$replace['#motionstartssid#'] = is_object($motionstartss) ? $motionstartss->getId() : '';
+		$motionstartss = $this->getCmd('action', 'motion_start_ss');
+		$replace['#motionstartssid#'] = is_object($motionstartss) ? $motionstartss->getId() : '';
 
-			$motionstartcam = $this->getCmd('action', 'motion_start_cam');
-			$replace['#motionstartcamid#'] = is_object($motionstartcam) ? $motionstartcam->getId() : '';
+		$motionstartcam = $this->getCmd('action', 'motion_start_cam');
+		$replace['#motionstartcamid#'] = is_object($motionstartcam) ? $motionstartcam->getId() : '';
 
-			$motionstop = $this->getCmd('action', 'motion_stop');
-			$replace['#motionstopid#'] = is_object($motionstop) ? $motionstop->getId() : '';
+		$motionstop = $this->getCmd('action', 'motion_stop');
+		$replace['#motionstopid#'] = is_object($motionstop) ? $motionstop->getId() : '';
 
-			$snapshot = $this->getCmd('action', 'snapshot');
-			$replace['#snapshotid#'] = is_object($snapshot) ? $snapshot->getId() : '';
-			$replace['#snapshot_display#'] = (is_object($snapshot) && $snapshot->getIsVisible()) ? "#snapshot_display#" : "none";
+		$snapshot = $this->getCmd('action', 'snapshot');
+		$replace['#snapshotid#'] = is_object($snapshot) ? $snapshot->getId() : '';
+		$replace['#snapshot_display#'] = (is_object($snapshot) && $snapshot->getIsVisible()) ? "#snapshot_display#" : "none";
 
-			$ptzright = $this->getCmd('action', 'ptz_right');
-			$replace['#ptzrightid#'] = is_object($ptzright) ? $ptzright->getId() : '';
-			$replace['#ptzright_display#'] = (is_object($ptzright) && $ptzright->getIsVisible()) ? "#ptzright_display#" : "none";
+		$ptzright = $this->getCmd('action', 'ptz_right');
+		$replace['#ptzrightid#'] = is_object($ptzright) ? $ptzright->getId() : '';
+		$replace['#ptzright_display#'] = (is_object($ptzright) && $ptzright->getIsVisible()) ? "#ptzright_display#" : "none";
 
-			$ptzdown = $this->getCmd('action', 'ptz_down');
-			$replace['#ptzdownid#'] = is_object($ptzdown) ? $ptzdown->getId() : '';
-			$replace['#ptzdown_display#'] = (is_object($ptzdown) && $ptzdown->getIsVisible()) ? "#ptzdown_display#" : "none";
+		$ptzdown = $this->getCmd('action', 'ptz_down');
+		$replace['#ptzdownid#'] = is_object($ptzdown) ? $ptzdown->getId() : '';
+		$replace['#ptzdown_display#'] = (is_object($ptzdown) && $ptzdown->getIsVisible()) ? "#ptzdown_display#" : "none";
 
-			$ptzup = $this->getCmd('action', 'ptz_up');
-			$replace['#ptzupid#'] = is_object($ptzup) ? $ptzup->getId() : '';
-			$replace['#ptzup_display#'] = (is_object($ptzup) && $ptzup->getIsVisible()) ? "#ptzup_display#" : "none";
+		$ptzup = $this->getCmd('action', 'ptz_up');
+		$replace['#ptzupid#'] = is_object($ptzup) ? $ptzup->getId() : '';
+		$replace['#ptzup_display#'] = (is_object($ptzup) && $ptzup->getIsVisible()) ? "#ptzup_display#" : "none";
 
-			$ptzleft = $this->getCmd('action', 'ptz_left');
-			$replace['#ptzleftid#'] = is_object($ptzleft) ? $ptzleft->getId() : '';
-			$replace['#ptzleft_display#'] = (is_object($ptzleft) && $ptzleft->getIsVisible()) ? "#ptzleft_display#" : "none";
+		$ptzleft = $this->getCmd('action', 'ptz_left');
+		$replace['#ptzleftid#'] = is_object($ptzleft) ? $ptzleft->getId() : '';
+		$replace['#ptzleft_display#'] = (is_object($ptzleft) && $ptzleft->getIsVisible()) ? "#ptzleft_display#" : "none";
 
-			$ptzhome = $this->getCmd('action', 'ptz_home');
-			$replace['#ptzhomeid#'] = is_object($ptzhome) ? $ptzhome->getId() : '';
-			$replace['#ptzhome_display#'] = (is_object($ptzhome) && $ptzhome->getIsVisible()) ? "#ptzhome_display#" : "none";
+		$ptzhome = $this->getCmd('action', 'ptz_home');
+		$replace['#ptzhomeid#'] = is_object($ptzhome) ? $ptzhome->getId() : '';
+		$replace['#ptzhome_display#'] = (is_object($ptzhome) && $ptzhome->getIsVisible()) ? "#ptzhome_display#" : "none";
 
-			$ptzstop = $this->getCmd('action', 'ptz_stop');
-			$replace['#ptzstopid#'] = is_object($ptzstop) ? $ptzstop->getId() : '';
-			$replace['#ptzstop_display#'] = (is_object($ptzstop) && $ptzstop->getIsVisible()) ? "#ptzstop_display#" : "none";
+		$ptzstop = $this->getCmd('action', 'ptz_stop');
+		$replace['#ptzstopid#'] = is_object($ptzstop) ? $ptzstop->getId() : '';
+		$replace['#ptzstop_display#'] = (is_object($ptzstop) && $ptzstop->getIsVisible()) ? "#ptzstop_display#" : "none";
 
-			$motionstatus = $this->getCmd(null, 'motion_status');
-			$replace['#motionstatus#'] = (is_object($motionstatus)) ? $motionstatus->execCmd() : '';
-			$replace['#motionstatusid#'] = is_object($motionstatus) ? $motionstatus->getId() : '';
-			$replace['#motion_display#'] = is_object($motionstatus) ? "#motion_display#" : "none";
+		$motionstatus = $this->getCmd(null, 'motion_status');
+		$replace['#motionstatus#'] = (is_object($motionstatus)) ? $motionstatus->execCmd() : '';
+		$replace['#motionstatusid#'] = is_object($motionstatus) ? $motionstatus->getId() : '';
+		$replace['#motion_display#'] = is_object($motionstatus) ? "#motion_display#" : "none";
 
-			$homemodestatus = $this->getCmd(null, 'homemode_status');
-			$replace['#homemodestatus#'] = (is_object($homemodestatus)) ? $homemodestatus->execCmd() : '';
-			$replace['#homemodestatusid#'] = is_object($homemodestatus) ? $homemodestatus->getId() : '';
-			$replace['#homemode_display#'] = is_object($homemodestatus) ? "#homemode_display#" : "none";
+		$homemodestatus = $this->getCmd(null, 'homemode_status');
+		$replace['#homemodestatus#'] = (is_object($homemodestatus)) ? $homemodestatus->execCmd() : '';
+		$replace['#homemodestatusid#'] = is_object($homemodestatus) ? $homemodestatus->getId() : '';
+		$replace['#homemode_display#'] = is_object($homemodestatus) ? "#homemode_display#" : "none";
 
-			$urllive = $this->getCmd(null, 'path_url_live');
-			$replace['#urllive#'] = (is_object($urllive)) ? $urllive->execCmd() : '';
-			$replace['#urlliveid#'] = is_object($urllive) ? $urllive->getId() : '';
-			$replace['#urllive_display#'] = (is_object($urllive) && $urllive->getIsVisible()) ? "#urllive_display#" : "none";
+		$urllive = $this->getCmd(null, 'path_url_live');
+		$replace['#urllive#'] = (is_object($urllive)) ? $urllive->execCmd() : '';
+		$replace['#urlliveid#'] = is_object($urllive) ? $urllive->getId() : '';
+		$replace['#urllive_display#'] = (is_object($urllive) && $urllive->getIsVisible()) ? "#urllive_display#" : "none";
 
-			$replace['#ptz_display#'] = ($this->getConfiguration('ptzdirection') == 'Oui') ? "#ptz_display#" : "none";
+		$replace['#ptz_display#'] = ($this->getConfiguration('ptzdirection') == 'Oui') ? "#ptz_display#" : "none";
 
-			$commandes .= template_replace($replace, getTemplate('core', jeedom::versionAlias($version), 'surveillanceStation_action', 'surveillanceStation'));
-			$replace['#action#'] = $commandes;
-		}
+		$commandes .= template_replace($replace, getTemplate('core', jeedom::versionAlias($version), 'surveillanceStation_action', 'surveillanceStation'));
+		$replace['#action#'] = $commandes;
 		return $this->postToHtml($version, template_replace($replace, getTemplate('core', jeedom::versionAlias($version), 'surveillanceStation', 'surveillanceStation')));
 	}
 
@@ -978,7 +1001,7 @@ class surveillanceStationCmd extends cmd {
 		if ($this->getLogicalId() == 'ptz_home') {
 			if ($statecam == 'Activée'){
 				log::add('surveillanceStation', 'debug', 'lancement de l\'action  PTZ Home caméra '.$eqLogic->getName(). '(id:'.$eqLogic->getConfiguration('id').') -> speed -> ' .$eqLogic->getConfiguration('speedptz'));
-				$eqLogic->callUrl(array('api' => 'SYNO.SurveillanceStation.PTZ', 'method' => 'Home', 'cameraId' => $eqLogic->getConfiguration('id')));
+				$eqLogic->callUrlNoVersion('entry.cgi?version=5&api=SYNO.SurveillanceStation.PTZ&method=Home&speed='.$eqLogic->getConfiguration('speedptz').'&cameraId='.$eqLogic->getConfiguration('id').'&_sid='.$eqLogic->getSid());
 			} else {
 				throw new Exception('Commande impossible, la caméra est désactivée');
 			}

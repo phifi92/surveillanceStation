@@ -9,13 +9,7 @@ image::../images/ss2.png[align="center"]
 ==== Compatibilité :
 
 - DSM 5 et ultérieur
-- Surveillance Station :
-[horizontal]
-- *Camera, SnapShot, PTZ, Enregistrment* : Surveillance Station 6.0-2337 et ultérieur
-- *Live* : Surveillance Station 6.3 et ultérieur
-- *Détection de mouvement* : Surveillance Station 7.0 et ultérieur
-- *Home Mode* : Surveillance Station 8.1.0DSM 5 et ultérieur et ultérieur
-
+- Surveillance Station version 8.0 minimum (Home Mode à partir de la version 8.1)
 
 ==== Données visibles sur le Dashboard :
 [horizontal]
@@ -73,9 +67,67 @@ image::../images/ss10.png[align="center"]
 Puis de renseigner l'url de la commande que vous voulez lancer en cas de détection (exemple pour une commande avec l'id 915 : http://dns_de_votre_jeedom/core/api/jeeApi.php?apikey=b8F......Hb7&type=cmd&id=915
 
 ==== Alerter Jeedom de l'activation et la désactivation du Home Mode (mode accueil)
-Il est possible de demander à Surveillance Station d'alerte Jeedom lors d'un changement de statut de Home Mode à l'aide du règle dans Surveillance Station.
+Il est possible de demander à Surveillance Station d'alerter Jeedom lors d'un changement de statut de Home Mode, à l'aide du règle, dans Surveillance Station.
+Et donc, de faire cohabiter les deux applications :
 
-A faire...
+- d'alerter Jeedom en cas de changement manuel réalisé directement dans Surveillance Station
+- d'alerter Jeedom lors de l'activation ou la désactivation de Home Mode par Geofence
+- de commander Surveillance Station par Jeedom
+
+Pour commencer, on va récupérer les 2 URL API de Jeedom permettant de lancer les commandes activer/désactiver Home Mode. Il suffit de :
+
+- se rendre dans la configuration d'une de vos caméras
+- se rendre sur l'onglet "Commandes"
+- cliquer sur l'engrenage pour les 2 commandes "Active Home Mode" et "Désactive Home Mode"
+- copier les "URL Direct", et de les coller dans un bloc note par exemple
+
+Nous avons fini côté Jeedom. A noter, que vous pouvez aussi utiliser un virtuel pour récupérer l'information qui proviendra de Surveillance Station
+
+Nous allons maintenant configurer Surveillance Station en ajoutant deux "Règle d'action".
+
+Voici l'explication pour la commande Jeedom "Active Home Mode" (à renouveler pour la désactivation)
+
+- lancer "Règle d'action"
+- cliquer sur ajouter
+- saisir un nom (par exemple : push activation Home Mode), ne pas modifier le reste, et cliquer sur Suivant
+- Source d'évènement, choisir : Surveillance Station
+- Évènement : sélectionner "Accéder au mode Accueil", puis cliquer sur Suivant
+- Périphérique d'action : choisir "Périphérique externe"
+- Url : coller l'URL de la commande Jeedom "Active Home Mode", puis cliquer sur Suivant
+- Programmer : personnellement, je laisse Actif partout vu que j'utilise la domotique ou Geofense pour la gestion.
+
+==== Recevoir un SMS provenant de DSM/SS en utilisant le plugin SMS de Jeedom
+Il est possible de configurer DSM et SS pour lancer des notifications par SMS en utilisant Jeedom avec le plugin SMS.
+Il suffit d'ajouter Jeedom comme fournisseur de service SMS.
+
+Avant de commencer la config de DSM, nous allons préparer une URL :
+
+- récupèrons l'URL de la commande correspondante : config plugin SMS, onglet "Commandes", cliquer sur l'engrenage, et copier l'URL directe
+- Vous devez mettre de côté les infos suivantes qui sont contenu dans l'URL : apikey et id
+
+
+- dans DSM (la configuration pourra donc être reprise automatiquement dans SS)
+- se rendre dans "Panneau de configuration"
+- puis "Notification"
+- cocher "Activer les notifications par SMS"
+- cliquer sur "Ajouter un fournisseur de service SMS"
+- saisir un nom, exemple : Jeedom
+- coller l'URL en modifiant seulement l'IP de votre Jeedom : http://10.73.73.100/core/api/jeeApi.php?apikey=&type=cmd&id=&title=Synology&junk=junk&message=Hello+world
+- cliquer sur suivant
+- Pour apikey= : sélectionner Mot de passe
+- Pour type=cmd= : laisser Autre
+- Pour id= : sélectionner Nom d'utilisateur
+- Pour title= : laisser autre
+- Pour junk=junk : sélectionner Numéro de téléphone
+- Pour message=Hello+world : sélectionner Contenu du message
+- Et cliquer sur Terminer/Appliquer
+- Nom utilisateur, saisir l'id de la commande récupéré précédemment (id)
+- Mot de passe, saisir la clef API récupérée précédemment (apikey)
+- Appliquer les changements, et cliquer sur "Envoyer un message SMS de test"
+
+image::../images/ss7.png[align="center"]
+image::../images/ss8.png[align="center"]
+image::../images/ss9.png[align="center"]
 
 '''
 === FAQ

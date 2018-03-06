@@ -5,6 +5,12 @@ Le plugin actualise les informations toutes les 5 minutes (modifiable dans le "M
 --
 
 [panel,primary]
+.Je ne vois pas mes positions prédéfinies, et mes patrouilles lors de la création d'un scénario :
+--
+- dès que vous créez une nouvelle position ou patrouille, il faut relancer une synchronisation via le plugin. Permet de remettre à jour la liste dans vos scénarios.
+--
+
+[panel,primary]
 .J’obtiens une erreur quand je demande l'activation ou la désactivation de la caméra ou un code erreur 117 :
 --
 - l'identifiant n'a certainement pas les bons privilèges dans Surveillance Station. Modifier le privilège de spectateur à directeur
