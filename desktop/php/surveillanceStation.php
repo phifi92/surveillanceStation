@@ -209,13 +209,25 @@ $eqLogics = eqLogic::byType($plugin->getId());
 							<fieldset>
 								<legend>{{Configurations}}</legend>
 								<div class="form-group">
-									<label class="col-sm-2 control-label">{{Activation du Live}}</label>
+									<label class="col-sm-3 control-label">{{Activation du Live}}</label>
 									<div class="col-sm-3">
 										<input type="checkbox" class="eqLogicAttr" data-l1key="configuration" data-l2key="choixlive" checked/>
 									</div>
 								</div>
 								<div class="form-group">
-									<label class="col-sm-2 control-label">{{Vitesse PTZ}}</label>
+									<label class="col-sm-3 control-label">{{Affiche les boutons de commandes}}</label>
+									<div class="col-sm-3">
+										<input type="checkbox" class="eqLogicAttr" data-l1key="configuration" data-l2key="choixactions" checked/>
+									</div>
+								</div>
+								<div class="form-group">
+									<label class="col-sm-3 control-label">{{Affiche les statuts}}</label>
+									<div class="col-sm-3">
+										<input type="checkbox" class="eqLogicAttr" data-l1key="configuration" data-l2key="choixstatuts" checked/>
+									</div>
+								</div>
+								<div class="form-group">
+									<label class="col-sm-3 control-label">{{Vitesse PTZ}}</label>
 									<div class="col-sm-3">
 										<select class="eqLogicAttr form-control" data-l1key="configuration" data-l2key="speedptz">
 											<option value="1" selected>{{1 (Défaut)}}</option>

@@ -24,6 +24,7 @@ SYNO.SurveillanceStation.ExternalRecording	: Surveillance Station 6.0-2337
 SYNO.SurveillanceStation.VideoStream				: Surveillance Station 6.3
 SYNO.Surveillance.Camera.Event							: Surveillance Station 7.0
 SYNO.SurveillanceStation.HomeMode						: Surveillance Station 8.1.0
+
 */
 
 /* * ***************************Includes********************************* */
@@ -63,7 +64,7 @@ class surveillanceStation extends eqLogic {
 				$url .= '&' . $key . '=' . urlencode($value);
 			}
 		}
-		//log::add('surveillanceStation', 'debug', 'callURL URL -> ' .print_r($url, true));
+		log::add('surveillanceStation', 'debug', 'callURL URL -> ' .print_r($url, true));
 		$url .= '&_sid=' . self::getSid();
 		$http = new com_http($url);
 		$result = json_decode($http->exec(15), true);
@@ -390,6 +391,16 @@ class surveillanceStation extends eqLogic {
 		}
 	}
 
+	public function SnapshotSend() {
+					$urlSnapshot = $this->getUrl() . '/webapi/entry.cgi?api=SYNO.SurveillanceStation.SnapShot&version=1&method=TakeSnapshot&dsId=0&camId='.$this->getConfiguration('id').'&_sid='.$this->getSid();
+					$data = file_get_contents($urlSnapshot);
+					$dataSnapShot = json_decode($data, true);
+					$idSnapShot = $dataSnapShot['data']['id'];
+					log::add('surveillanceStation', 'debug', 'résultat ID Snapshot '.$this->getName(). '(id:'.$this->getConfiguration('id').') -> ' .print_r($idSnapShot, true));
+					$urlRecupSnapshot = $this->getUrl() . '/webapi/entry.cgi?api=SYNO.SurveillanceStation.SnapShot&version=1&method=LoadSnapshot&id='.$idSnapShot.'&imgSize=2&_sid='.$this->getSid();
+					log::add('surveillanceStation', 'debug', 'résultat URL du Snapshot '.$this->getName(). '(id:'.$this->getConfiguration('id').') -> ' .print_r($urlRecupSnapshot, true));
+	}
+
 	public static function convertStatusHomeMode($_state) {
 		switch ($_state) {
 			case 0:
@@ -542,9 +553,11 @@ class surveillanceStation extends eqLogic {
 
 		$activecam = $this->getCmd('action', 'enable');
 		$replace['#activecamid#'] = is_object($activecam) ? $activecam->getId() : '';
+		$replace['#activecam_display#'] = (is_object($activecam) && $activecam->getIsVisible()) ? "#activecam_display#" : "none";
 
 		$desactivecam = $this->getCmd('action', 'disable');
 		$replace['#desactivecamid#'] = is_object($desactivecam) ? $desactivecam->getId() : '';
+		$replace['#desactivecam_display#'] = (is_object($desactivecam) && $desactivecam->getIsVisible()) ? "#desactivecam_display#" : "none";
 
 		$recordstart = $this->getCmd('action', 'record_start');
 		$replace['#recordstartid#'] = is_object($recordstart) ? $recordstart->getId() : '';
@@ -607,6 +620,15 @@ class surveillanceStation extends eqLogic {
 		$replace['#urllive_display#'] = (is_object($urllive) && $urllive->getIsVisible()) ? "#urllive_display#" : "none";
 
 		$replace['#ptz_display#'] = ($this->getConfiguration('ptzdirection') == 'Oui') ? "#ptz_display#" : "none";
+		$replace['#actions_display#'] = ($this->getConfiguration('choixactions') == '1') ? "#actions_display#" : "none";
+		$replace['#statuts_display#'] = ($this->getConfiguration('choixstatuts') == '1') ? "#statuts_display#" : "none";
+
+		$parameters = $this->getDisplay('parameters');
+		if (is_array($parameters)) {
+		    foreach ($parameters as $key => $value) {
+		        $replace['#' . $key . '#'] = $value;
+		    }
+		}
 
 		$commandes .= template_replace($replace, getTemplate('core', jeedom::versionAlias($version), 'surveillanceStation_action', 'surveillanceStation'));
 		$replace['#action#'] = $commandes;
@@ -835,6 +857,22 @@ class surveillanceStation extends eqLogic {
 		$cmd->setType('action');
 		$cmd->setSubtype('other');
 		$cmd->setIsVisible(1);
+		$cmd->save();
+
+		$cmd = $this->getCmd('action', 'snapshotsend');
+		if (!is_object($cmd)) {
+			$cmd = new surveillanceStationCmd();
+			$cmd->setName(__('Envoi Instantané', __FILE__));
+			$cmd->setOrder(20);
+		}
+		$cmd->setEqLogic_id($this->getId());
+		$cmd->setLogicalId('snapshotsend');
+		$cmd->setType('action');
+		$cmd->setSubtype('message');
+		$cmd->setDisplay('message_placeholder', __('Commande pour l\'envoi de la capture', __FILE__));
+		$cmd->setDisplay('message_cmd_type', 'action');
+		$cmd->setDisplay('message_cmd_subtype', 'message');
+		$cmd->setIsVisible(0);
 		$cmd->save();
 
 		if ($this->getConfiguration('versionSS') >= '8.1'){
@@ -1066,6 +1104,14 @@ class surveillanceStationCmd extends cmd {
 			if ($statecam == 'Activée'){
 				log::add('surveillanceStation', 'debug', 'lancement de l\'action Instantané caméra '.$eqLogic->getName(). '(id:'.$eqLogic->getConfiguration('id').')');
 				$eqLogic->callUrl(array('api' => 'SYNO.SurveillanceStation.SnapShot', 'method' => 'TakeSnapshot', 'dsId' => '0', 'camId' => $eqLogic->getConfiguration('id')));
+			} else {
+				throw new Exception('Commande impossible, la caméra est désactivée');
+			}
+		}
+		if ($this->getLogicalId() == 'snapshotsend') {
+			if ($statecam == 'Activée'){
+				log::add('surveillanceStation', 'debug', 'lancement de l\'action Envoi Instantané '.$eqLogic->getName(). '(id:'.$eqLogic->getConfiguration('id').')');
+				$eqLogic->SnapshotSend();
 			} else {
 				throw new Exception('Commande impossible, la caméra est désactivée');
 			}
