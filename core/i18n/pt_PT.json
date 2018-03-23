@@ -34,7 +34,14 @@
         "PTZ Patrouille": "PTZ Patrouille",
         "This API version is not supported": "This API version is not supported",
         "Inconnu": "Inconnu",
-        "Vérifier vos droits, certaines fonctions demandent le privilège Directeur": "Vérifier vos droits, certaines fonctions demandent le privilège Directeur"
+        "Vérifier vos droits, certaines fonctions demandent le privilège Directeur": "Vérifier vos droits, certaines fonctions demandent le privilège Directeur",
+        "Déconnectée": "Déconnectée",
+        "Aucune video": "Aucune video",
+        "Historique de connexion échoué": "Historique de connexion échoué",
+        "Envoi Instantané": "Envoi Instantané",
+        "Message d'envoi de la capture": "Message d'envoi de la capture",
+        "Commande pour l'envoi de la capture": "Commande pour l'envoi de la capture",
+        "Parametrage": "Parametrage"
     },
     "plugins\/surveillanceStation\/desktop\/php\/panel.php": {
         "Rechercher": "Rechercher",
@@ -88,7 +95,10 @@
         "3": "3",
         "4": "4",
         "5": "5",
-        "Version Surveillance Station": "Version Surveillance Station"
+        "Version Surveillance Station": "Version Surveillance Station",
+        "Affiche les boutons commandes": "Affiche les boutons commandes",
+        "Affiche les boutons de commandes": "Affiche les boutons de commandes",
+        "Affiche les statuts": "Affiche les statuts"
     },
     "plugins\/surveillanceStation\/desktop\/js\/surveillanceStation.js": {
         "Nom": "Nom",

@@ -1,3 +1,5 @@
+- 2018-03-22 : Attention, il faut re-sauvegarder vos équipements post mise à jour. Ajouts possibilité de masquer la barre des actions et des statuts
+- 2018-03-07 : Doc OK en passant par Jeedom / Correction PTZ Home / Ajout d’une info pour l’incompatibilité SS inférieur à 8.0
 - 02-2018 : réécriture/refonte complète du plugin
 - 09-2017 : info.xml gelöscht
 - 05-2017 : ajout du fichier plugin info en json
