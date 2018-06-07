@@ -390,7 +390,7 @@ class surveillanceStation extends eqLogic {
 			}
 		}
 	}
-
+/*
 	public function SnapshotSend() {
 					$urlSnapshot = $this->getUrl() . '/webapi/entry.cgi?api=SYNO.SurveillanceStation.SnapShot&version=1&method=TakeSnapshot&dsId=0&camId='.$this->getConfiguration('id').'&_sid='.$this->getSid();
 					$data = file_get_contents($urlSnapshot);
@@ -400,7 +400,7 @@ class surveillanceStation extends eqLogic {
 					$urlRecupSnapshot = $this->getUrl() . '/webapi/entry.cgi?api=SYNO.SurveillanceStation.SnapShot&version=1&method=LoadSnapshot&id='.$idSnapShot.'&imgSize=2&_sid='.$this->getSid();
 					log::add('surveillanceStation', 'debug', 'résultat URL du Snapshot '.$this->getName(). '(id:'.$this->getConfiguration('id').') -> ' .print_r($urlRecupSnapshot, true));
 	}
-
+*/
 	public static function convertStatusHomeMode($_state) {
 		switch ($_state) {
 			case 0:
@@ -858,7 +858,7 @@ class surveillanceStation extends eqLogic {
 		$cmd->setSubtype('other');
 		$cmd->setIsVisible(1);
 		$cmd->save();
-
+/*
 		$cmd = $this->getCmd('action', 'snapshotsend');
 		if (!is_object($cmd)) {
 			$cmd = new surveillanceStationCmd();
@@ -874,7 +874,7 @@ class surveillanceStation extends eqLogic {
 		$cmd->setDisplay('message_cmd_subtype', 'message');
 		$cmd->setIsVisible(0);
 		$cmd->save();
-
+*/
 		if ($this->getConfiguration('versionSS') >= '8.1'){
 			$cmd = $this->getCmd('action', 'homemode_start');
 			if (!is_object($cmd)) {
@@ -1108,7 +1108,7 @@ class surveillanceStationCmd extends cmd {
 				throw new Exception('Commande impossible, la caméra est désactivée');
 			}
 		}
-		if ($this->getLogicalId() == 'snapshotsend') {
+/*		if ($this->getLogicalId() == 'snapshotsend') {
 			if ($statecam == 'Activée'){
 				log::add('surveillanceStation', 'debug', 'lancement de l\'action Envoi Instantané '.$eqLogic->getName(). '(id:'.$eqLogic->getConfiguration('id').')');
 				$eqLogic->SnapshotSend();
@@ -1116,7 +1116,7 @@ class surveillanceStationCmd extends cmd {
 				throw new Exception('Commande impossible, la caméra est désactivée');
 			}
 		}
-		if ($this->getLogicalId() == 'homemode_start') {
+*/		if ($this->getLogicalId() == 'homemode_start') {
 				log::add('surveillanceStation', 'debug', 'lancement de l\'action active Home Mode');
 				$eqLogic->callUrl(array('api' => 'SYNO.SurveillanceStation.HomeMode', 'method' => 'Switch', 'on' => 'true'));
 				$eqLogic->GetStatusHomeMode();
