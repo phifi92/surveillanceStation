@@ -41,7 +41,8 @@
         "Envoi Instantané": "Envoi Instantané",
         "Message d'envoi de la capture": "Message d'envoi de la capture",
         "Commande pour l'envoi de la capture": "Commande pour l'envoi de la capture",
-        "Parametrage": "Parametrage"
+        "Parametrage": "Parametrage",
+        "Permission denied or Camera disabled or IO module disabled": "Permission denied or Camera disabled or IO module disabled"
     },
     "plugins\/surveillanceStation\/desktop\/php\/panel.php": {
         "Rechercher": "Rechercher",
