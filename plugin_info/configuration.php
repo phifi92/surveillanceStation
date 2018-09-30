@@ -58,5 +58,11 @@ if (!isConnect()) {
 				<input type="password" class="configKey form-control" data-l1key="password" placeholder="Mot de passe de l'utilisateur"/>
 			</div>
 		</div>
+		<div class="form-group">
+			<label class="col-sm-4 control-label">{{Vérification en 2 étapes (optionnelle)}}</label>
+			<div class="col-sm-3">
+				<input type="text" class="configKey form-control" data-l1key="oauth" placeholder=""/>
+			</div>
+		</div>
 	</fieldset>
 </form>

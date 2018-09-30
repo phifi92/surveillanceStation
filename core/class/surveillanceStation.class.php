@@ -111,7 +111,8 @@ class surveillanceStation extends eqLogic {
 			self::$_sid = config::byKey('SYNO.SID.Session', 'surveillancestation');
 			return self::$_sid;
 		}
-		$url = self::getUrl() . '/webapi/' . self::getApi('SYNO.API.Auth', 'path') . '?api=SYNO.API.Auth&method=Login&version=' . self::getApi('SYNO.API.Auth', 'version') . '&account=' . urlencode(config::byKey('user', 'surveillanceStation')) . '&passwd=' . urlencode(config::byKey('password', 'surveillanceStation')) . '&session=SurveillanceStation&format=sid';
+		//$url = self::getUrl() . '/webapi/' . self::getApi('SYNO.API.Auth', 'path') . '?api=SYNO.API.Auth&method=Login&version=' . self::getApi('SYNO.API.Auth', 'version') . '&account=' . urlencode(config::byKey('user', 'surveillanceStation')) . '&passwd=' . urlencode(config::byKey('password', 'surveillanceStation')) . '&session=SurveillanceStation&format=sid';
+		$url = self::getUrl() . '/webapi/' . self::getApi('SYNO.API.Auth', 'path') . '?api=SYNO.API.Auth&method=Login&version=' . self::getApi('SYNO.API.Auth', 'version') . '&account=' . urlencode(config::byKey('user', 'surveillanceStation')) . '&passwd=' . urlencode(config::byKey('password', 'surveillanceStation')) . '&session=SurveillanceStation&format=sid' . '&otp_code=' . urlencode(config::byKey('oauth', 'surveillanceStation')) . '&&enable_device_token=yes';
 		$http = new com_http($url);
 		$data = json_decode($http->exec(15), true);
 		if ($data['success'] != true) {
