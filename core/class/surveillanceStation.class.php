@@ -116,7 +116,7 @@ class surveillanceStation extends eqLogic {
 		$http = new com_http($url);
 		$data = json_decode($http->exec(15), true);
 		if ($data['success'] != true) {
-			throw new Exception(__('Mise à jour des API SYNO.API.Auth en erreur, url : ', __FILE__) . $url . ' => ' . print_r($data, true));
+			throw new Exception(__('Mise à jour des API SYNO.API.Auth en erreur : ', __FILE__) . print_r($data, true));
 		}
 		config::save('SYNO.SID.Session', $data['data']['sid'], 'surveillancestation');
 		self::$_sid = $data['data']['sid'];
@@ -532,17 +532,7 @@ class surveillanceStation extends eqLogic {
 		return __('Inconnu', __FILE__);
 	}
 
-	public static $_widgetPossibility = array('custom' => array(
-		'visibility' => false,
-		'displayName' => true,
-		'displayObjectName' => true,
-		'optionalParameters' => false,
-		'background-color' => true,
-		'text-color' => true,
-		'border' => true,
-		'border-radius' => true,
-		'background-opacity' => true,
-	));
+	public static $_widgetPossibility = array('custom' => true);
 
 	public function toHtml($_version = 'dashboard') {
 		$version = jeedom::versionAlias($_version);
