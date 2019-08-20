@@ -112,6 +112,7 @@
         "N° de Port": "N° de Port",
         "Connexion sécurisée": "Connexion sécurisée",
         "Identifiant Surveillance Station": "Identifiant Surveillance Station",
-        "Mot de passe Surveillance Station": "Mot de passe Surveillance Station"
+        "Mot de passe Surveillance Station": "Mot de passe Surveillance Station",
+        "Vérification en 2 étapes (optionnelle)": "Vérification en 2 étapes (optionnelle)"
     }
 }
