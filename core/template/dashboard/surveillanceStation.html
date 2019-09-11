@@ -7,30 +7,30 @@
 }
 </style>
 <div id="plugin_container" class="eqLogic-widget eqLogic allowResize" style="width:#width#;height:#height#;border:#border#;border-radius:#border-radius#;background-color: #background-color#;color: #color#; #style#" data-category="" data-eqLogic_id="#id#" data-version="#version#" >
-  <center>
-    <span style="padding-left: 30px;font-size: 1.2em;#hideEqLogicName#"><a href="#eqLink#">#name_display# <span style="font-size: 0.85em;display:none;">#object_name#</span></a></span>
+  <center class="widget-name" style="padding-right: 0px;">
+    <span style="padding-left: 30px;#hideEqLogicName#"><a href="#eqLink#">#name_display# <span style="font-size: 0.85em;display:none;">#object_name#</span></a></span>
     <span style="float: right;width:110px;display: #statuts_display#;">
-      <i id="surveillanceStationcam" class="fa fa-camera" title="Statut de la caméra"> <span id="statecam#id#"></span></i>
-      <i id="surveillanceStationmouv" class="icon jeedom-mouvement" title="Détection de mouvement" style="display:#motion_display#;"><span id="motionstatus#id#"></span></i>
-      <i id="surveillanceStationhm" class="fa fa-home" title="Home mode global" style="display: #homemode_display#;"> <span id="homemodestatus#id#" style="display: #homemode_display#;"></span></i>
+      <i id="surveillanceStationcam" class="fa fa-camera"> <span id="statecam#id#"></span></i>
+      <i id="surveillanceStationmouv" class="icon jeedom-mouvement" style="display:#motion_display#;"><span id="motionstatus#id#"></span></i>
+      <i id="surveillanceStationhm" class="fa fa-home" style="display: #homemode_display#;"> <span id="homemodestatus#id#" style="display: #homemode_display#;"></span></i>
       <script>
         if ('#statecam#' == 'Activée') {
-          $('#statecam#id#').append('<i title="La caméra est activée" class="fa fa-check tooltips" style="font-size : 1.1em;color: #00FF00;" ></i>');
+          $('#statecam#id#').append('<i title="La caméra est activée" class="fa fa-check tooltips" style="color: #00FF00;" ></i>');
         }
         else if ('#statecam#' != 'Activée') {
-          $('#statecam#id#').append('<i title="La caméra est Désactivée" class="fa fa-times tooltips" style="font-size : 1.1em;color: #FF0000;"></i>');
+          $('#statecam#id#').append('<i title="La caméra est Désactivée" class="fa fa-times tooltips" style="color: #FF0000;"></i>');
         }
         if ('#motionstatus#' == 'Désactivée') {
-          $('#motionstatus#id#').append('<i title="Détection de mouvement est désactivée" class="fa fa-times tooltips" style="font-size : 1.1em;color: #FF0000;" ></i>');
+          $('#motionstatus#id#').append('<i title="Détection de mouvement est désactivée" class="fa fa-times tooltips" style="color: #FF0000;" ></i>');
         }
         else if ('#motionstatus#' != 'Désactivée') {
-          $('#motionstatus#id#').append('<i title="Détection de mouvement est activée" class="fa fa-check tooltips" style="font-size : 1.1em;color: #00FF00;"></i>');
+          $('#motionstatus#id#').append('<i title="Détection de mouvement est activée" class="fa fa-check tooltips" style="color: #00FF00;"></i>');
         }
         if ('#homemodestatus#' == 'Désactivé') {
-          $('#homemodestatus#id#').append('<i title="Home mode global est désactivé" class="fa fa-times tooltips" style="font-size : 1.1em;color: #FF0000;" ></i>');
+          $('#homemodestatus#id#').append('<i title="Home mode global est désactivé" class="fa fa-times tooltips" style="color: #FF0000;" ></i>');
         }
         else if ('#homemodestatus#' != 'Désactivé') {
-          $('#homemodestatus#id#').append('<i title="Home mode global est activé" class="fa fa-check tooltips" style="font-size : 1.1em;color: #00FF00;"></i>');
+          $('#homemodestatus#id#').append('<i title="Home mode global est activé" class="fa fa-check tooltips" style="color: #00FF00;"></i>');
         }
       </script>
     </span>
