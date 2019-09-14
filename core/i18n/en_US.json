@@ -99,7 +99,9 @@
         "Version Surveillance Station": "Version Surveillance Station",
         "Affiche les boutons commandes": "Affiche les boutons commandes",
         "Affiche les boutons de commandes": "Affiche les boutons de commandes",
-        "Affiche les statuts": "Affiche les statuts"
+        "Affiche les statuts": "Affiche les statuts",
+        "Ajouter": "Ajouter",
+        "Catégorie": "Catégorie"
     },
     "plugins\/surveillanceStation\/desktop\/js\/surveillanceStation.js": {
         "Nom": "Name",
