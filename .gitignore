@@ -1,0 +1,12 @@
+
+core/i18n/fr_FR.json
+*.json
+core/i18n/tr.json
+core/i18n/ru_RU.json
+core/i18n/pt_PT.json
+core/i18n/ja_JP.json
+core/i18n/it_IT.json
+core/i18n/id_ID.json
+core/i18n/es_ES.json
+core/i18n/en_US.json
+core/i18n/de_DE.json

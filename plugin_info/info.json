@@ -6,5 +6,8 @@
 	"author" : "Phifi",
 	"require" : "3.0",
 	"category" : "security",
-	"display" : "panel"
+	"compatibility" : ["Jeedomboard","Smart","miniplus","rpi","docker","diy"],
+	"display" : "panel",
+	"changelog" : "https://surveillancestation.github.io/surveillancestation/surveillancestation/fr_FR/#tocAnchor-1-13",
+	"documentation" : "https://surveillancestation.github.io/surveillancestation/surveillancestation/fr_FR/"
 }
