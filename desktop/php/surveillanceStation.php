@@ -76,7 +76,7 @@ $eqLogics = eqLogic::byType($plugin->getId());
 									<option value="">{{Aucun}}</option>
 									<?php
 									foreach (jeeObject::all() as $jeeObject) {
-										echo '<option value="' . $jeeObject->getId() . '">' . $object->getName() . '</option>';
+										echo '<option value="' . $jeeObject->getId() . '">' . $jeeObject->getName() . '</option>';
 									}
 									?>
 								</select>
