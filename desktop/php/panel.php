@@ -58,13 +58,13 @@ if ($_SESSION['user']->getOptions('displayObjetByDefault') == 1 && init('report'
 <?php
 echo '<div class="div_displayEquipement" style="width: 100%;">';
 if (init('object_id') == '') {
-	foreach ($allObject as $object) {
-		foreach ($object->getEqLogic(true, false, 'surveillanceStation') as $surveillanceStation) {
+	foreach ($allObject as $jeeObject) {
+		foreach ($jeeObject->getEqLogic(true, false, 'surveillanceStation') as $surveillanceStation) {
 			echo $surveillanceStation->toHtml('dview');
 		}
 	}
 } else {
-	foreach ($object->getEqLogic(true, false, 'surveillanceStation') as $surveillanceStation) {
+	foreach ($jeeObject->getEqLogic(true, false, 'surveillanceStation') as $surveillanceStation) {
 		echo $surveillanceStation->toHtml('dview');
 	}
 	foreach ($child_object as $child) {
