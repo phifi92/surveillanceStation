@@ -75,8 +75,8 @@ $eqLogics = eqLogic::byType($plugin->getId());
 								<select id="sel_object" class="eqLogicAttr form-control" data-l1key="object_id">
 									<option value="">{{Aucun}}</option>
 									<?php
-									foreach (jeeObject::all() as $jeeObject) {
-										echo '<option value="' . $jeeObject->getId() . '">' . $jeeObject->getName() . '</option>';
+									foreach (jeeObject::all() as $Object) {
+										echo '<option value="' . $Object->getId() . '">' . $jeeObject->getName() . '</option>';
 									}
 									?>
 								</select>
