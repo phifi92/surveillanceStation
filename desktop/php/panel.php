@@ -6,14 +6,14 @@ if (!isConnect()) {
 sendVarToJs('jeedomBackgroundImg', 'plugins/surveillanceStation/core/img/panel.jpg');
 
 if (init('object_id') == '') {
-	$jeeObject = jeeObject::byId($_SESSION['user']->getOptions('defaultDashboardObject'));
+	$object = jeeObject::byId($_SESSION['user']->getOptions('defaultDashboardObject'));
 } else {
-	$jeeObject = jeeObject::byId(init('object_id'));
+	$object = jeeObject::byId(init('object_id'));
 }
-if (!is_object($jeeObject)) {
-	$jeeObject = jeeObject::rootObject();
+if (!is_object($object)) {
+	$object = jeeObject::rootObject();
 }
-if (!is_object($jeeObject)) {
+if (!is_object($object)) {
 	throw new Exception('{{Aucun objet racine trouvé. Pour en créer un, allez dans Générale -> Objet.<br/> Si vous ne savez pas quoi faire ou que c\'est la premiere fois que vous utilisez Jeedom n\'hésitez pas a consulter cette <a href="http://jeedom.fr/premier_pas.php" target="_blank">page</a>}}');
 }
 $child_object = jeeObject::buildTree($jeeObject);
