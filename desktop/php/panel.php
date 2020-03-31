@@ -6,14 +6,14 @@ if (!isConnect()) {
 sendVarToJs('jeedomBackgroundImg', 'plugins/surveillanceStation/core/img/panel.jpg');
 
 if (init('object_id') == '') {
-	$jeeObject = jeeObject::byId($_SESSION['user']->getOptions('defaultDashboardObject'));
+	$object = jeeObject::byId($_SESSION['user']->getOptions('defaultDashboardObject'));
 } else {
-	$jeeObject = jeeObject::byId(init('object_id'));
+	$object = jeeObject::byId(init('object_id'));
 }
-if (!is_object($jeeObject)) {
-	$jeeObject = jeeObject::rootObject();
+if (!is_object($object)) {
+	$object = jeeObject::rootObject();
 }
-if (!is_object($jeeObject)) {
+if (!is_object($object)) {
 	throw new Exception('{{Aucun objet racine trouvé. Pour en créer un, allez dans Générale -> Objet.<br/> Si vous ne savez pas quoi faire ou que c\'est la premiere fois que vous utilisez Jeedom n\'hésitez pas a consulter cette <a href="http://jeedom.fr/premier_pas.php" target="_blank">page</a>}}');
 }
 $child_object = jeeObject::buildTree($jeeObject);
@@ -35,7 +35,7 @@ if ($_SESSION['user']->getOptions('displayObjetByDefault') == 1 && init('report'
 				$allObject = jeeObject::buildTree(null, true);
 				foreach ($allObject as $object_li) {
 					$margin = 5 * $object_li->getConfiguration('parentNumber');
-					if ($object_li->getId() == $jeeObject->getId()) {
+					if ($object_li->getId() == $object->getId()) {
 						echo '<li class="cursor li_object active" ><a data-object_id="' . $object_li->getId() . '" href="index.php?v=d&p=panel&m=surveillanceStation&object_id=' . $object_li->getId() . '" style="padding: 2px 0px;"><span style="position:relative;left:' . $margin . 'px;">' . $object_li->getHumanName(true) . '</span><span style="font-size : 0.65em;float:right;position:relative;top:7px;">' . $object_li->getHtmlSummary() . '</span></a></li>';
 					} else {
 						echo '<li class="cursor li_object" ><a data-object_id="' . $object_li->getId() . '" href="index.php?v=d&p=panel&m=surveillanceStation&object_id=' . $object_li->getId() . '" style="padding: 2px 0px;"><span style="position:relative;left:' . $margin . 'px;">' . $object_li->getHumanName(true) . '</span><span style="font-size : 0.65em;float:right;position:relative;top:7px;">' . $object_li->getHtmlSummary() . '</span></a></li>';
@@ -58,13 +58,13 @@ if ($_SESSION['user']->getOptions('displayObjetByDefault') == 1 && init('report'
 <?php
 echo '<div class="div_displayEquipement" style="width: 100%;">';
 if (init('object_id') == '') {
-	foreach ($allObject as $jeeObject) {
-		foreach ($jeeObject->getEqLogic(true, false, 'surveillanceStation') as $surveillanceStation) {
+	foreach ($allObject as $object) {
+		foreach ($object->getEqLogic(true, false, 'surveillanceStation') as $surveillanceStation) {
 			echo $surveillanceStation->toHtml('dview');
 		}
 	}
 } else {
-	foreach ($jeeObject->getEqLogic(true, false, 'surveillanceStation') as $surveillanceStation) {
+	foreach ($object->getEqLogic(true, false, 'surveillanceStation') as $surveillanceStation) {
 		echo $surveillanceStation->toHtml('dview');
 	}
 	foreach ($child_object as $child) {
