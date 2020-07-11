@@ -376,21 +376,31 @@ class surveillanceStation extends eqLogic {
 					$urlLive = $eqLogic->getUrl() . '/webapi/SurveillanceStation/videoStreaming.cgi?api=SYNO.SurveillanceStation.VideoStream&version=1&method=Stream&format=mjpeg&cameraId='.$eqLogic->getConfiguration('id').'&_sid='.$eqLogic->getSid();
 					log::add('surveillanceStation', 'debug', 'résultat URL Live '.$eqLogic->getName(). '(id:'.$eqLogic->getConfiguration('id').') -> ' .print_r($urlLive, true));
 					$eqLogic->checkAndUpdateCmd('path_url_live', $urlLive);
+					// Get RTSP LiveURL
+					$response = self::callUrl(array('api' => 'SYNO.SurveillanceStation.Camera', 'method' => 'GetLiveViewPath', 'idList' => $eqLogic->getConfiguration('id')));
+					log::add('surveillanceStation', 'debug', 'API Response '.$eqLogic->getName(). '(id:'.$eqLogic->getConfiguration('id').') -> ' .var_export($response, TRUE));
+					$urlLive = $response['data']['0']['rtspPath'];
+					log::add('surveillanceStation', 'debug', 'résultat URL Live RTSP '.$urlLive);
+					$eqLogic->checkAndUpdateCmd('path_url_live_rtsp', $urlLive);
+					// End RTSP LiveURL
 					$eqLogic->refreshWidget();
 				}
 				else if ($eqLogic->getConfiguration('choixlive') == '0'){
 					$eqLogic->checkAndUpdateCmd('path_url_live', '');
+					$eqLogic->checkAndUpdateCmd('path_url_live_rtsp', '');
 					log::add('surveillanceStation', 'debug', 'URL Live final : aucune, live désactivé dans la config');
 					$eqLogic->refreshWidget();
 				}
 				else if ($statutcam == 'Désactivée' || $statutcam == 'Déconnectée'){
 					$eqLogic->checkAndUpdateCmd('path_url_live', 'plugins/surveillanceStation/core/img/cameramini_off.png');
+					$eqLogic->checkAndUpdateCmd('path_url_live_rtsp', 'plugins/surveillanceStation/core/img/cameramini_off.png');
 					log::add('surveillanceStation', 'debug', 'URL Live final : aucune, caméra désactivée');
 					$eqLogic->refreshWidget();
 				}
 			}
 		}
 	}
+
 /*
 	public function SnapshotSend() {
 					$urlSnapshot = $this->getUrl() . '/webapi/entry.cgi?api=SYNO.SurveillanceStation.SnapShot&version=1&method=TakeSnapshot&dsId=0&camId='.$this->getConfiguration('id').'&_sid='.$this->getSid();
@@ -922,6 +932,22 @@ class surveillanceStation extends eqLogic {
 			$cmd->setIsVisible(0);
 			$cmd->save();
 			$path_url_live = $cmd->getId();
+		}
+
+		if ($this->getConfiguration('versionSS') >= '6.3'){
+			$cmd = $this->getCmd(null, 'path_url_live_rtsp');
+			if (!is_object($cmd)) {
+				$cmd = new surveillanceStationCmd();
+				$cmd->setLogicalId('path_url_live_rtsp');
+				$cmd->setName(__('URL Live RTSP', __FILE__));
+				$cmd->setOrder(1);
+			}
+			$cmd->setType('info');
+			$cmd->setSubType('string');
+			$cmd->setEqLogic_id($this->getId());
+			$cmd->setIsVisible(0);
+			$cmd->save();
+			$path_url_live_rtsp = $cmd->getId();
 		}
 
 		$refresh = $this->getCmd(null, 'refresh');
