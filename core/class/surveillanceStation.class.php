@@ -845,49 +845,49 @@ class surveillanceStation extends eqLogic {
 			$cmd->setSubtype('other');
 			$cmd->setIsVisible(1);
 			$cmd->save();
-		}
+			}
 
-		$cmd = $this->getCmd('action', 'snapshot');
-		if (!is_object($cmd)) {
-			$cmd = new surveillanceStationCmd();
-			$cmd->setName(__('Instantané', __FILE__));
-			$cmd->setOrder(16);
-		}
-		$cmd->setEqLogic_id($this->getId());
-		$cmd->setLogicalId('snapshot');
-		$cmd->setType('action');
-		$cmd->setSubtype('other');
-		$cmd->setIsVisible(1);
-		$cmd->save();
+			$cmd = $this->getCmd('action', 'snapshot');
+			if (!is_object($cmd)) {
+				$cmd = new surveillanceStationCmd();
+				$cmd->setName(__('Instantané', __FILE__));
+				$cmd->setOrder(16);
+			}
+			$cmd->setEqLogic_id($this->getId());
+			$cmd->setLogicalId('snapshot');
+			$cmd->setType('action');
+			$cmd->setSubtype('other');
+			$cmd->setIsVisible(1);
+			$cmd->save();
 
-		/* Code ajouté par Rémy JACOB le 25/12/2020 à partir des infos de https://community.jeedom.com/t/surveillance-station-telegram/31050/4 */
-		$cmd = $this->getCmd(null, 'snapshotsend');
-		if (!is_object($cmd)) {
-			$cmd = new surveillanceStationCmd();
-           	$cmd->setEqLogic_id($this->getId());
-			$cmd->setLogicalId('snapshotsend');
-			$cmd->setName(__('Envoi Instantané', __FILE__));
-			$cmd->setOrder(20);
-		}     
-       		$cmd->setType('action');
-		$cmd->setSubtype('other');
-		$cmd->setIsVisible(0);
-		$cmd->save();
-      
-      		$cmd = $this->getCmd(null, 'snapshotsendURL');
-		if (!is_object($cmd)) {
-			$cmd = new surveillanceStationCmd();
-          	$cmd->setEqLogic_id($this->getId());
-			$cmd->setLogicalId('snapshotsendURL');
-			$cmd->setName(__('URL instantané', __FILE__));
-			$cmd->setOrder(21);
-		}
-		$cmd->setType('info');
-		$cmd->setSubType('string');
-		$cmd->setEqLogic_id($this->getId());
-		$cmd->setIsVisible(0);
-		$cmd->save();
-      		/* Fin du code ajouté */
+			/* Code ajouté par Rémy JACOB le 25/12/2020 à partir des infos de https://community.jeedom.com/t/surveillance-station-telegram/31050/4 */
+			$cmd = $this->getCmd(null, 'snapshotsend');
+			if (!is_object($cmd)) {
+				$cmd = new surveillanceStationCmd();
+			$cmd->setEqLogic_id($this->getId());
+				$cmd->setLogicalId('snapshotsend');
+				$cmd->setName(__('Envoi Instantané', __FILE__));
+				$cmd->setOrder(20);
+			}     
+			$cmd->setType('action');
+			$cmd->setSubtype('other');
+			$cmd->setIsVisible(0);
+			$cmd->save();
+
+			$cmd = $this->getCmd(null, 'snapshotsendURL');
+			if (!is_object($cmd)) {
+				$cmd = new surveillanceStationCmd();
+			$cmd->setEqLogic_id($this->getId());
+				$cmd->setLogicalId('snapshotsendURL');
+				$cmd->setName(__('URL instantané', __FILE__));
+				$cmd->setOrder(21);
+			}
+			$cmd->setType('info');
+			$cmd->setSubType('string');
+			$cmd->setEqLogic_id($this->getId());
+			$cmd->setIsVisible(0);
+			$cmd->save();
+			/* Fin du code ajouté */
 		
 		if ($this->getConfiguration('versionSS') >= '8.1'){
 			$cmd = $this->getCmd('action', 'homemode_start');
@@ -1126,14 +1126,6 @@ class surveillanceStationCmd extends cmd {
 			if ($statecam == 'Activée'){
 				log::add('surveillanceStation', 'debug', 'lancement de l\'action  Position prédéfinie caméra '.$eqLogic->getName(). '(id:'.$eqLogic->getConfiguration('id').') -> preset ID -> ' .$_options['select']);
 				$eqLogic->callUrl(array('api' => 'SYNO.SurveillanceStation.PTZ', 'method' => 'GoPreset', 'presetId' => $_options['select'], 'cameraId' => $eqLogic->getConfiguration('id')));
-			} else {
-				throw new Exception('Commande impossible, la caméra est désactivée');
-			}
-		}
-		if ($this->getLogicalId() == 'snapshot') {
-			if ($statecam == 'Activée'){
-				log::add('surveillanceStation', 'debug', 'lancement de l\'action Instantané caméra '.$eqLogic->getName(). '(id:'.$eqLogic->getConfiguration('id').')');
-				$eqLogic->callUrl(array('api' => 'SYNO.SurveillanceStation.SnapShot', 'method' => 'TakeSnapshot', 'dsId' => '0', 'camId' => $eqLogic->getConfiguration('id')));
 			} else {
 				throw new Exception('Commande impossible, la caméra est désactivée');
 			}
