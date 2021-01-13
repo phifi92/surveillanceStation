@@ -859,23 +859,36 @@ class surveillanceStation extends eqLogic {
 		$cmd->setSubtype('other');
 		$cmd->setIsVisible(1);
 		$cmd->save();
-/*
-		$cmd = $this->getCmd('action', 'snapshotsend');
+
+		/* Code ajouté par Rémy JACOB le 25/12/2020 à partir des infos de https://community.jeedom.com/t/surveillance-station-telegram/31050/4 */
+		$cmd = $this->getCmd(null, 'snapshotsend');
 		if (!is_object($cmd)) {
 			$cmd = new surveillanceStationCmd();
+           	$cmd->setEqLogic_id($this->getId());
+			$cmd->setLogicalId('snapshotsend');
 			$cmd->setName(__('Envoi Instantané', __FILE__));
 			$cmd->setOrder(20);
-		}
-		$cmd->setEqLogic_id($this->getId());
-		$cmd->setLogicalId('snapshotsend');
-		$cmd->setType('action');
-		$cmd->setSubtype('message');
-		$cmd->setDisplay('message_placeholder', __('Commande pour l\'envoi de la capture', __FILE__));
-		$cmd->setDisplay('message_cmd_type', 'action');
-		$cmd->setDisplay('message_cmd_subtype', 'message');
+		}     
+       		$cmd->setType('action');
+		$cmd->setSubtype('other');
 		$cmd->setIsVisible(0);
 		$cmd->save();
-*/
+      
+      		$cmd = $this->getCmd(null, 'snapshotsendURL');
+		if (!is_object($cmd)) {
+			$cmd = new surveillanceStationCmd();
+          	$cmd->setEqLogic_id($this->getId());
+			$cmd->setLogicalId('snapshotsendURL');
+			$cmd->setName(__('URL instantané', __FILE__));
+			$cmd->setOrder(21);
+		}
+		$cmd->setType('info');
+		$cmd->setSubType('string');
+		$cmd->setEqLogic_id($this->getId());
+		$cmd->setIsVisible(0);
+		$cmd->save();
+      		/* Fin du code ajouté */
+		
 		if ($this->getConfiguration('versionSS') >= '8.1'){
 			$cmd = $this->getCmd('action', 'homemode_start');
 			if (!is_object($cmd)) {
@@ -1125,15 +1138,30 @@ class surveillanceStationCmd extends cmd {
 				throw new Exception('Commande impossible, la caméra est désactivée');
 			}
 		}
-/*		if ($this->getLogicalId() == 'snapshotsend') {
+      		/* Code ajouté par Rémy JACOB le 25/12/2020 à partir des infos de https://community.jeedom.com/t/surveillance-station-telegram/31050/4 */
+      		if ($this->getLogicalId() == 'snapshot') {
 			if ($statecam == 'Activée'){
-				log::add('surveillanceStation', 'debug', 'lancement de l\'action Envoi Instantané '.$eqLogic->getName(). '(id:'.$eqLogic->getConfiguration('id').')');
-				$eqLogic->SnapshotSend();
+				log::add('surveillanceStation', 'debug', 'lancement de l\'action Instantané caméra '.$eqLogic->getName(). '(id:'.$eqLogic->getConfiguration('id').')');
+				$eqLogic->callUrl(array('api' => 'SYNO.SurveillanceStation.SnapShot', 'method' => 'TakeSnapshot', 'dsId' => '0', 'camId' => $eqLogic->getConfiguration('id')));
 			} else {
 				throw new Exception('Commande impossible, la caméra est désactivée');
 			}
 		}
-*/		if ($this->getLogicalId() == 'homemode_start') {
+		if ($this->getLogicalId() == 'snapshotsend') {
+			if ($statecam == 'Activée'){
+				log::add('surveillanceStation', 'debug', 'lancement de l\'action Envoi Instantané '.$eqLogic->getName(). '(id:'.$eqLogic->getConfiguration('id').')');
+                $urlSnapshot = $eqLogic->callUrl(array('api' => 'SYNO.SurveillanceStation.SnapShot', 'method' => 'TakeSnapshot', 'dsId' => '0', 'camId' => $eqLogic->getConfiguration('id')));     			
+              	$idSnapShot = $urlSnapshot['data']['id'];
+				log::add('surveillanceStation', 'debug', 'résultat ID Snapshot '.$this->getName(). '(id:'.$eqLogic->getConfiguration('id').') -> ' .print_r($idSnapShot, true));      			
+				$urlRecupSnapshot = $eqLogic->getUrl() . '/webapi/entry.cgi?api=SYNO.SurveillanceStation.SnapShot&version=1&method=LoadSnapshot&id='.$idSnapShot.'&imgSize=2&_sid='.$eqLogic->getSid();
+                $eqLogic->checkAndUpdateCmd('snapshotsendURL', $urlRecupSnapshot);              
+				log::add('surveillanceStation', 'debug', 'résultat URL du Snapshot '.$this->getName(). '(id:'.$this->getConfiguration('id').') -> ' .print_r($urlRecupSnapshot, true));
+			} else {
+				throw new Exception('Commande impossible, la caméra est désactivée');
+			}
+		}
+      		/* Fin du code ajouté */
+		if ($this->getLogicalId() == 'homemode_start') {
 				log::add('surveillanceStation', 'debug', 'lancement de l\'action active Home Mode');
 				$eqLogic->callUrl(array('api' => 'SYNO.SurveillanceStation.HomeMode', 'method' => 'Switch', 'on' => 'true'));
 				$eqLogic->GetStatusHomeMode();
