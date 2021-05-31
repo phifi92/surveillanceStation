@@ -345,6 +345,7 @@ class surveillanceStation extends eqLogic {
 				$url = $eqLogic->getUrl() . '/webapi/entry.cgi?api=SYNO.SurveillanceStation.PTZ&version=1&method=ListPreset&cameraId='.$eqLogic->getConfiguration('id').'&_sid='.$eqLogic->getSid();
 				$data = file_get_contents($url);
 				$presets = json_decode($data, true);
+				$listselectpreset = '';
 				foreach ($presets['data']['presets'] as $preset) {
 					$listselectpreset .= $preset['id']."|".$preset['name'].";";
 				}
@@ -372,6 +373,7 @@ class surveillanceStation extends eqLogic {
 				$url = $eqLogic->getUrl() . '/webapi/entry.cgi?api=SYNO.SurveillanceStation.PTZ&version=1&method=ListPatrol&cameraId='.$eqLogic->getConfiguration('id').'&_sid='.$eqLogic->getSid();
 				$data = file_get_contents($url);
 				$patrouilles = json_decode($data, true);
+				$listselectpatrol = '';
 				foreach ($patrouilles['data']['patrols'] as $patrouille) {
 					$listselectpatrol .= $patrouille['id']."|".$patrouille['name'].";";
 				}
@@ -683,7 +685,7 @@ class surveillanceStation extends eqLogic {
 		    }
 		}
 
-		$commandes .= template_replace($replace, getTemplate('core', jeedom::versionAlias($version), 'surveillanceStation_action', 'surveillanceStation'));
+		$commandes = template_replace($replace, getTemplate('core', jeedom::versionAlias($version), 'surveillanceStation_action', 'surveillanceStation'));
 		$replace['#action#'] = $commandes;
 		return $this->postToHtml($version, template_replace($replace, getTemplate('core', jeedom::versionAlias($version), 'surveillanceStation', 'surveillanceStation')));
 	}
