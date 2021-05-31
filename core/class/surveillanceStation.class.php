@@ -57,6 +57,58 @@ class surveillanceStation extends eqLogic {
 		}
 	}
 
+
+	/**
+     * Verification des configurations du plugins
+     */
+    public static function checkConfig() {
+		log::add('surveillanceStation', 'debug', ' ┌──── Verification des configurations du plugin');
+		// Checking snapLocation
+		if (config::byKey('snapLocation', 'surveillanceStation') == 'synology') {
+			foreach (array('snapPreEventDelay', 'snapPostEventDelay', 'snapRetention') as $field) {
+				config::save($field, '', 'surveillanceStation');
+				log::add('surveillanceStation', 'debug', ' │  checkConfig::'.$field.' Nettoyage des valeurs');
+			}
+		}
+		// Checking Integer fields
+		foreach (array('port', 'snapPreEventDelay', 'snapPostEventDelay', 'snapRetention') as $field) {
+			if ( ! empty(config::byKey($field, 'surveillanceStation'))) {
+				switch($field) {
+					case 'port':
+						$min_range = 1;
+						$max_range = 65535;
+					case 'snapPreEventDelay':
+						if (config::byKey('snapLocation', 'surveillanceStation') == 'synology') {
+							continue 2;
+						}
+						break;
+					case 'snapPostEventDelay':
+						if (config::byKey('snapLocation', 'surveillanceStation') == 'synology') {
+							continue 2;
+						}
+						break;
+						case 'snapRetention':
+						if (config::byKey('snapLocation', 'surveillanceStation') == 'synology') {
+							continue 2;
+						}
+						break;
+					default:
+						$min_range = 0;
+						$max_range = 9999;
+				}
+				if(!filter_var(config::byKey($field, 'surveillanceStation'), FILTER_VALIDATE_INT, array('options' => array('min_range' => $min_range, 'max_range' => $max_range)))){
+					log::add('surveillanceStation', 'debug', ' │  ERROR : checkConfig::'.$field.' est invalide. La configuration doit être un nombre (entier) compris entre '.$min_range.' et '.$max_range);
+					log::add('surveillanceStation', 'debug', ' └────────────');
+					throw new Exception(__($field.' est invalide. La configuration doit être un nombre (entier) compris entre '.$min_range.' et '.$max_range, __FILE__));
+				} else {
+					log::add('surveillanceStation', 'debug', ' │  checkConfig::'.$field.' OK with value ' . config::byKey($field, 'surveillanceStation'));
+				}
+			}
+		}
+		log::add('surveillanceStation', 'debug', ' └────────────');
+    }
+
+
 	public static function callUrl($_parameters = null, $_recall = 0) {
 		$url = self::getUrl() . '/webapi/' . self::getApi($_parameters['api'], 'path') . '?version=' . self::getApi($_parameters['api'], 'version');
 		if ($_parameters !== null && is_array($_parameters)) {

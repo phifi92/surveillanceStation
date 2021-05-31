@@ -24,6 +24,46 @@ try {
         throw new Exception(__('401 - Accès non autorisé', __FILE__));
     }
 
+    ajax::init();
+
+    // Execution PostSave
+    if (init('action') == 'postSave') {
+        //Called after a plugin configuration save
+        // Let's first check new configuration values
+        try {
+            // Default Value
+            if (config::byKey('snapLocation', 'surveillanceStation') == 'jeedom') {
+                if (empty(config::byKey('snapPreEventDelay', 'surveillanceStation'))) {
+                    config::save('snapPreEventDelay', init('default_snapPreEventDelay'), 'surveillanceStation');
+                }
+                if (empty(config::byKey('snapPostEventDelay', 'surveillanceStation'))) {
+                    config::save('snapPostEventDelay', init('default_snapPostEventDelay'), 'surveillanceStation');
+                }
+                if (empty(config::byKey('snapRetention', 'surveillanceStation'))) {
+                        config::save('snapRetention', init('default_snapRetention'), 'surveillanceStation');
+                }
+            }
+            surveillanceStation::checkConfig();
+        } catch (Exception $e) {
+            //Invalid configuration.
+            //Let's first set back the old values
+            config::save('ip', init('ip'), 'surveillanceStation');
+            config::save('port', init('port'), 'surveillanceStation');
+            config::save('https', init('https'), 'surveillanceStation');
+            config::save('user', init('user'), 'surveillanceStation');
+            config::save('password', init('password'), 'surveillanceStation');
+            config::save('oauth', init('oauth'), 'surveillanceStation');
+            config::save('snapLocation', init('snapLocation'), 'surveillanceStation');
+            config::save('snapPreEventDelay', init('snapPreEventDelay'), 'surveillanceStation');
+            config::save('snapPostEventDelay', init('snapPostEventDelay'), 'surveillanceStation');
+            config::save('snapRetention', init('snapRetention'), 'surveillanceStation');
+            //Let's then the error details
+            ajax::error(displayExeption($e), $e->getCode());
+        }
+
+        ajax::success();
+    }
+
     if (init('action') == 'discover') {
       ajax::success(surveillanceStation::discover());
     }

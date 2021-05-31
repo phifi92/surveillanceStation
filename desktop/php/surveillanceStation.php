@@ -43,202 +43,234 @@ $eqLogics = eqLogic::byType($plugin->getId());
 		</div>
 	</div>
 
-  <div class="col-xs-12 eqLogic" style="display: none;">
-			<div class="input-group pull-right" style="display:inline-flex">
-				<span class="input-group-btn">
-					<a class="btn btn-default btn-sm eqLogicAction roundedLeft" data-action="configure"><i class="fa fa-cogs"></i> {{Configuration avancée}}</a>
-					<a class="btn btn-sm btn-success eqLogicAction" data-action="save"><i class="fas fa-check-circle"></i> {{Sauvegarder}}</a>
-					<a class="btn btn-danger btn-sm eqLogicAction roundedRight" data-action="remove"><i class="fas fa-minus-circle"></i> {{Supprimer}}</a>
-				</span>
-			</div>
-			<ul class="nav nav-tabs" role="tablist">
-				<li role="presentation"><a href="#" class="eqLogicAction" aria-controls="home" role="tab" data-toggle="tab" data-action="returnToThumbnailDisplay"><i class="fa fa-arrow-circle-left"></i></a></li>
-				<li role="presentation" class="active"><a href="#eqlogictab" aria-controls="home" role="tab" data-toggle="tab"><i class="fa fa-tachometer"></i> {{Equipement}}</a></li>
-				<li role="presentation"><a href="#commandtab" aria-controls="profile" role="tab" data-toggle="tab"><i class="fa fa-list-alt"></i> {{Commandes}}</a></li>
-				<li role="presentation"><a href="#infoconfigtab" aria-controls="profile" role="tab" data-toggle="tab"><i class="fa fa-list-alt"></i> {{Informations et configurations}}</a></li>
-			</ul>
-		<div class="tab-content" style="height:calc(100% - 50px);overflow:auto;overflow-x: hidden;">
-			<div role="tabpanel" class="tab-pane active" id="eqlogictab">
-				<br>
-				<form class="form-horizontal">
-					<fieldset>
-						<div class="form-group">
-							<label class="col-sm-3 control-label">{{Nom de l'équipement template}}</label>
-							<div class="col-sm-3">
-								<input type="text" class="eqLogicAttr form-control" data-l1key="id" style="display : none;" />
-								<input type="text" class="eqLogicAttr form-control" data-l1key="name" placeholder="{{Nom de l'équipement template}}"/>
-							</div>
-						</div>
-						<div class="form-group">
-							<label class="col-sm-3 control-label" >{{Objet parent}}</label>
-							<div class="col-sm-3">
-								<select id="sel_object" class="eqLogicAttr form-control" data-l1key="object_id">
-									<option value="">{{Aucun}}</option>
-									<?php
-									foreach (jeeObject::all() as $object) {
-										echo '<option value="' . $object->getId() . '">' . $object->getName() . '</option>';
-									}
-									?>
-								</select>
-							</div>
-						</div>
-						<div class="form-group">
-							<label class="col-sm-3 control-label"></label>
-							<div class="col-sm-9">
-								<label class="checkbox-inline"><input type="checkbox" class="eqLogicAttr" data-l1key="isEnable" checked/>{{Activer}}</label>
-								<label class="checkbox-inline"><input type="checkbox" class="eqLogicAttr" data-l1key="isVisible" checked/>{{Visible}}</label>
-							</div>
-						</div>
-					</fieldset>
-				</form>
-			</div>
-			<div role="tabpanel" class="tab-pane" id="commandtab"><br>
-				<div class="alert alert-info">Exemple d’URL à appeler : <?php echo network::getNetworkAccess('external') ?>/core/api/jeeApi.php?api=<?php echo jeedom::getApiKey('surveillanceStation'); ?>&type=surveillancestation&type=cmd&id=#ID_CMD</div>
-				<table id="table_cmd" class="table table-bordered table-condensed">
-					<thead>
-						<tr>
-							<th>#</th>
-							<th>{{Nom}}</th>
-							<th>{{Type}}</th>
-							<th>{{Options}}</th>
-							<th>{{Action}}</th>
-						</tr>
-					</thead>
-					<tbody>
-					</tbody>
-				</table>
-			</div>
-			<div role="tabpanel" class="tab-pane" id="infoconfigtab"><br/>
-				<div class="row">
-					<div class="col-sm-6">
-						<form class="form-horizontal">
-							<fieldset>
-								<legend>{{Informations de la caméra}}</legend>
-								<div class="form-group">
-									<label class="col-sm-4 control-label" style="padding-top: 0px;">{{adresse IP}}</label>
-									<div class="col-sm-2">
-										<span class="eqLogicAttr" data-l1key="configuration" data-l2key="ip" style="font-size : 1em"></span>
-									</div>
-								</div>
-								<div class="form-group">
-									<label class="col-sm-4 control-label" style="padding-top: 0px;">{{ID Surveillance Station}}</label>
-									<div class="col-sm-2">
-										<span class="eqLogicAttr" data-l1key="configuration" data-l2key="id" style="font-size : 1em"></span>
-									</div>
-								</div>
-								<div class="form-group">
-									<label class="col-sm-4 control-label" style="padding-top: 0px;">{{Fabricant}}</label>
-									<div class="col-sm-2">
-										<span class="eqLogicAttr" data-l1key="configuration" data-l2key="vendor" style="font-size : 1em"></span>
-									</div>
-								</div>
-								<div class="form-group">
-									<label class="col-sm-4 control-label" style="padding-top: 0px;">{{Modele}}</label>
-									<div class="col-sm-2">
-										<span class="eqLogicAttr" data-l1key="configuration" data-l2key="model" style="font-size : 1em"></span>
-									</div>
-								</div>
-							</fieldset>
-						</form>
-					</div>
-				<div class="col-sm-6">
-					<form class="form-horizontal">
-						<fieldset>
-							<legend>{{Compatibilités PTZ de la caméra}}</legend>
-								<div class="form-group">
-									<label class="col-sm-4 control-label" style="padding-top: 0px;">{{Direction}}</label>
-									<div class="col-sm-2">
-										<span class="eqLogicAttr" data-l1key="configuration" data-l2key="ptzdirection" style="font-size : 1em"></span>
-									</div>
-								</div>
-								<div class="form-group">
-									<label class="col-sm-4 control-label" style="padding-top: 0px;">{{Home}}</label>
-									<div class="col-sm-2">
-										<span class="eqLogicAttr" data-l1key="configuration" data-l2key="ptzHome" style="font-size : 1em"></span>
-									</div>
-								</div>
-								<div class="form-group">
-									<label class="col-sm-4 control-label" style="padding-top: 0px;">{{Vitesse (Speed)}}</label>
-									<div class="col-sm-2">
-										<span class="eqLogicAttr" data-l1key="configuration" data-l2key="ptzSpeed" style="font-size : 1em"></span>
-									</div>
-								</div>
-								<div class="form-group">
-									<label class="col-sm-4 control-label" style="padding-top: 0px;">{{Panoramique}}</label>
-									<div class="col-sm-2">
-										<span class="eqLogicAttr" data-l1key="configuration" data-l2key="ptzPan" style="font-size : 1em"></span>
-									</div>
-								</div>
-								<div class="form-group">
-									<label class="col-sm-4 control-label" style="padding-top: 0px;">{{Inclinaison}}</label>
-									<div class="col-sm-2">
-										<span class="eqLogicAttr" data-l1key="configuration" data-l2key="ptzTilt" style="font-size : 1em"></span>
-									</div>
-								</div>
-								<div class="form-group">
-									<label class="col-sm-4 control-label" style="padding-top: 0px;">{{Zoom}}</label>
-									<div class="col-sm-2">
-										<span class="eqLogicAttr" data-l1key="configuration" data-l2key="ptzZoom" style="font-size : 1em"></span>
-									</div>
-								</div>
-								<div class="form-group">
-									<label class="col-sm-4 control-label" style="padding-top: 0px;">{{Absolute}}</label>
-									<div class="col-sm-2">
-										<span class="eqLogicAttr" data-l1key="configuration" data-l2key="ptzAbs" style="font-size : 1em"></span>
-									</div>
-								</div>
-								<div class="form-group">
-									<label class="col-sm-4 control-label" style="padding-top: 0px;">{{AutoFocus}}</label>
-									<div class="col-sm-2">
-										<span class="eqLogicAttr" data-l1key="configuration" data-l2key="ptzAutoFocus" style="font-size : 1em"></span>
-									</div>
-								</div>
-							</fieldset>
-						</form>
-					</div>
-				</div>
-				<div class="row">
-					<div class="col-lg-12">
-						<form class="form-horizontal">
-							<fieldset>
-								<legend>{{Configurations}}</legend>
-								<div class="form-group">
-									<label class="col-sm-3 control-label">{{Activation du Live}}</label>
-									<div class="col-sm-3">
-										<input type="checkbox" class="eqLogicAttr" data-l1key="configuration" data-l2key="choixlive" checked/>
-									</div>
-								</div>
-								<div class="form-group">
-									<label class="col-sm-3 control-label">{{Affiche les boutons de commandes}}</label>
-									<div class="col-sm-3">
-										<input type="checkbox" class="eqLogicAttr" data-l1key="configuration" data-l2key="choixactions" checked/>
-									</div>
-								</div>
-								<div class="form-group">
-									<label class="col-sm-3 control-label">{{Affiche les statuts}}</label>
-									<div class="col-sm-3">
-										<input type="checkbox" class="eqLogicAttr" data-l1key="configuration" data-l2key="choixstatuts" checked/>
-									</div>
-								</div>
-								<div class="form-group">
-									<label class="col-sm-3 control-label">{{Vitesse PTZ}}</label>
-									<div class="col-sm-3">
-										<select class="eqLogicAttr form-control" data-l1key="configuration" data-l2key="speedptz">
-											<option value="1" selected>{{1 (Défaut)}}</option>
-											<option value="2">{{2}}</option>
-											<option value="3">{{3}}</option>
-											<option value="4">{{4}}</option>
-											<option value="5">{{5}}</option>
-										</select>
-									</div>
-								</div>
-							</fieldset>
-						</form>
-					</div>
-				</div>
-			</div>
+	<!-- Page de présentation de l'équipement -->
+    <div class="col-xs-12 eqLogic" style="display: none;">
+        <!-- barre de gestion de l'équipement -->
+        <div class="input-group pull-right" style="display:inline-flex;">
+			<span class="input-group-btn">
+				<!-- Les balises <a></a> sont volontairement fermées à la ligne suivante pour éviter les espaces entre les boutons. Ne pas modifier -->
+				<a class="btn btn-sm btn-default eqLogicAction roundedLeft" data-action="configure"><i class="fas fa-cogs"></i><span class="hidden-xs"> {{Configuration avancée}}</span>
+				</a><a class="btn btn-sm btn-success eqLogicAction" data-action="save"><i class="fas fa-check-circle"></i> {{Sauvegarder}}
+				</a><a class="btn btn-sm btn-danger eqLogicAction roundedRight" data-action="remove"><i class="fas fa-minus-circle"></i> {{Supprimer}}
+				</a>
+			</span>
 		</div>
-	</div>
-</div>
+        <!-- Onglets -->
+        <ul class="nav nav-tabs" role="tablist">
+            <li role="presentation"><a href="#" class="eqLogicAction" aria-controls="home" role="tab" data-toggle="tab" data-action="returnToThumbnailDisplay"><i class="fa fa-arrow-circle-left"></i></a></li>
+            <li role="presentation" class="active"><a href="#eqlogictab" aria-controls="home" role="tab" data-toggle="tab"><i class="fas fa-tachometer-alt"></i> {{Equipement}}</a></li>
+            <li role="presentation"><a href="#commandtab" aria-controls="profile" role="tab" data-toggle="tab"><i class="fa fa-list-alt"></i> {{Commandes}}</a></li>
+        </ul>
+        <div class="tab-content">
+            <!-- Onglet de configuration de l'équipement -->
+            <div role="tabpanel" class="tab-pane active" id="eqlogictab">
+                <br/>
+                <div class="row">
+					<!-- Partie gauche de l'onglet "Equipements" -->
+					<!-- Paramètres généraux de l'équipement -->
+					<div class="col-lg-7">
+                        <form class="form-horizontal">
+                            <fieldset>
+                                <div class="form-group">
+                                    <label class="col-sm-3 control-label">{{Nom de l'équipement}}</label>
+                                    <div class="col-sm-3">
+                                        <input type="text" class="eqLogicAttr form-control" data-l1key="id" style="display : none;" />
+                                        <input type="text" class="eqLogicAttr form-control" data-l1key="name" placeholder="{{Nom de l'équipement}}"/>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-sm-3 control-label" >{{Objet parent}}</label>
+                                    <div class="col-sm-3">
+                                        <select id="sel_object" class="eqLogicAttr form-control" data-l1key="object_id">
+                                            <option value="">{{Aucun}}</option>
+                                            <?php
+                                            foreach (jeeObject::all() as $object) {
+                                                echo '<option value="' . $object->getId() . '">' . $object->getName() . '</option>';
+                                            }
+                                            ?>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-sm-3 control-label">{{Catégorie}}</label>
+                                    <div class="col-sm-9">
+                                        <?php
+                                            foreach (jeedom::getConfiguration('eqLogic:category') as $key => $value) {
+                                                echo '<label class="checkbox-inline">';
+                                                echo '<input type="checkbox" class="eqLogicAttr" data-l1key="category" data-l2key="' . $key . '" />' . $value['name'];
+                                                echo '</label>';
+                                            }
+                                        ?>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-sm-3 control-label"></label>
+                                    <div class="col-sm-9">
+                                        <label class="checkbox-inline"><input type="checkbox" class="eqLogicAttr" data-l1key="isEnable" checked/>{{Activer}}</label>
+                                        <label class="checkbox-inline"><input type="checkbox" class="eqLogicAttr" data-l1key="isVisible" checked/>{{Visible}}</label>
+                                    </div>
+                                </div>
+                                <br/>
+                                <div><legend><i class="fas fa-cog"></i> {{Configuration}}</legend></div>
+                                <!-- Template for Centrale -->
+                                <div>
+									<div class="form-group">
+                                        <label class="col-sm-3 control-label">{{Vitesse PTZ}}</label>
+                                        <div class="col-sm-3">
+											<select class="eqLogicAttr form-control" data-l1key="configuration" data-l2key="speedptz">
+												<option value="1" selected>{{1 (Défaut)}}</option>
+												<option value="2">{{2}}</option>
+												<option value="3">{{3}}</option>
+												<option value="4">{{4}}</option>
+												<option value="5">{{5}}</option>
+											</select>
+                                        </div>
+                                    </div>
+                                </div>
+								<br/>
+                                <div><legend><i class="fas fa-desktop"></i> {{Affichage}}</legend></div>
+                                <div>
+                                    <div class="form-group">
+                                        <label class="col-sm-3 control-label">{{Activation du Live}}</label>
+                                        <div class="col-sm-3">
+                                            <input type="checkbox" class="eqLogicAttr form-control" data-l1key="configuration" data-l2key="choixlive" checked/>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="col-sm-3 control-label">{{Affiche les boutons de commandes}}</label>
+                                        <div class="col-sm-3">
+											<input type="checkbox" class="eqLogicAttr form-control" data-l1key="configuration" data-l2key="choixactions" checked/>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="col-sm-3 control-label">{{Affiche les statuts}}</label>
+                                        <div class="col-sm-3">
+											<input type="checkbox" class="eqLogicAttr form-control" data-l1key="configuration" data-l2key="choixstatuts" checked/>
+                                        </div>
+                                    </div>
+                                </div>
+                            </fieldset>
+                        </form>
+                    </div>
+					<!-- Partie droite de l'onglet "Equipement" -->
+					<!-- Affiche l'icône du plugin par défaut mais vous pouvez y afficher les informations de votre choix -->
+					<div class="col-lg-5">
+						<form class="form-horizontal">
+							<fieldset>
+								<legend><i class="fas fa-info"></i> {{Informations}}</legend>
+								<div class="form-group">
+									<label class="col-sm-3"></label>
+									<div class="col-sm-7 text-center">
+										<img name="icon_visu" src="<?= $plugin->getPathImgIcon(); ?>" style="max-width:160px;"/>
+									</div>
+								</div>
+								<br/>
+								<div class="form-group">
+									<label class="col-sm-3 control-label">{{Adresse IP}}</label>
+									<div class="col-sm-7">
+										<span class="eqLogicAttr label label-default" data-l1key="configuration" data-l2key="ip"></span>
+									</div>
+								</div>
+								<div class="form-group">
+									<label class="col-sm-3 control-label">{{ID Surveillance Station}}</label>
+									<div class="col-sm-7">
+										<span class="eqLogicAttr label label-default" data-l1key="configuration" data-l2key="id"></span>
+									</div>
+								</div>
+								<div class="form-group">
+									<label class="col-sm-3 control-label">{{Fabricant}}</label>
+									<div class="col-sm-7">
+										<span class="eqLogicAttr label label-default" data-l1key="configuration" data-l2key="vendor"></span>
+									</div>
+								</div>
+								<div class="form-group">
+									<label class="col-sm-3 control-label">{{Modele}}</label>
+									<div class="col-sm-7">
+										<span class="eqLogicAttr label label-default" data-l1key="configuration" data-l2key="model"></span>
+									</div>
+								</div>
+								<br/>
+								<legend><i class="fas fa-video"></i> {{Compatibilités PTZ de la caméra}}</legend>
+								<div class="form-group">
+									<label class="col-sm-3 control-label">{{Direction}}</label>
+									<div class="col-sm-7">
+										<span class="eqLogicAttr label label-default" data-l1key="configuration" data-l2key="ptzdirection"></span>
+									</div>
+								</div>
+								<div class="form-group">
+									<label class="col-sm-3 control-label">{{Home}}</label>
+									<div class="col-sm-7">
+										<span class="eqLogicAttr label label-default" data-l1key="configuration" data-l2key="ptzHome"></span>
+									</div>
+								</div>
+								<div class="form-group">
+									<label class="col-sm-3 control-label">{{Vitesse (Speed)}}</label>
+									<div class="col-sm-7">
+										<span class="eqLogicAttr label label-default" data-l1key="configuration" data-l2key="ptzSpeed"></span>
+									</div>
+								</div>
+								<div class="form-group">
+									<label class="col-sm-3 control-label">{{Panoramique}}</label>
+									<div class="col-sm-7">
+										<span class="eqLogicAttr label label-default" data-l1key="configuration" data-l2key="ptzPan"></span>
+									</div>
+								</div>
+								<div class="form-group">
+									<label class="col-sm-3 control-label">{{Inclinaison}}</label>
+									<div class="col-sm-7">
+										<span class="eqLogicAttr label label-default" data-l1key="configuration" data-l2key="ptzTilt"></span>
+									</div>
+								</div>
+								<div class="form-group">
+									<label class="col-sm-3 control-label">{{Zoom}}</label>
+									<div class="col-sm-7">
+										<span class="eqLogicAttr label label-default" data-l1key="configuration" data-l2key="ptzZoom"></span>
+									</div>
+								</div>
+								<div class="form-group">
+									<label class="col-sm-3 control-label">{{Absolute}}</label>
+									<div class="col-sm-7">
+										<span class="eqLogicAttr label label-default" data-l1key="configuration" data-l2key="ptzAbs"></span>
+									</div>
+								</div>
+								<div class="form-group">
+									<label class="col-sm-3 control-label">{{AutoFocus}}</label>
+									<div class="col-sm-7">
+										<span class="eqLogicAttr label label-default" data-l1key="configuration" data-l2key="ptzAutoFocus"></span>
+									</div>
+								</div>
+							</fieldset>
+						</form>
+					</div>
+                </div><!-- /.row-->
+            </div>
+
+            <!-- Onglet des commandes de l'équipement -->
+			<div role="tabpanel" class="tab-pane" id="commandtab">
+				<a class="btn btn-default btn-sm pull-right cmdAction" data-action="add" style="margin-top:5px;"><i class="fas fa-plus-circle"></i> {{Ajouter une commande}}</a>
+				<br/><br/>
+				<div class="table-responsive">
+					<table id="table_cmd" class="table table-bordered table-condensed">
+						<thead>
+							<tr>
+								<th>{{Id}}</th>
+								<th>{{Nom}}</th>
+								<th>{{Type}}</th>
+								<th>{{Options}}</th>
+								<th>{{Action}}</th>
+							</tr>
+						</thead>
+						<tbody>
+						</tbody>
+					</table>
+				</div>
+			</div><!-- /.tabpanel #commandtab-->
+
+        </div><!-- /.tab-content -->
+	</div><!-- /.eqLogic -->
+</div><!-- /.row row-overflow -->
+
+<!-- Inclusion du fichier javascript du plugin (dossier, nom_du_fichier, extension_du_fichier, id_du_plugin) -->
 <?php include_file('desktop', 'surveillanceStation', 'js', 'surveillanceStation');?>
+<!-- Inclusion du fichier javascript du core - NE PAS MODIFIER NI SUPPRIMER -->
 <?php include_file('core', 'plugin.template', 'js');?>
