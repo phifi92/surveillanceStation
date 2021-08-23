@@ -33,12 +33,6 @@ try {
         try {
             // Default Value
             if (config::byKey('snapLocation', 'surveillanceStation') == 'jeedom') {
-                if (empty(config::byKey('snapPreEventDelay', 'surveillanceStation'))) {
-                    config::save('snapPreEventDelay', init('default_snapPreEventDelay'), 'surveillanceStation');
-                }
-                if (empty(config::byKey('snapPostEventDelay', 'surveillanceStation'))) {
-                    config::save('snapPostEventDelay', init('default_snapPostEventDelay'), 'surveillanceStation');
-                }
                 if (empty(config::byKey('snapRetention', 'surveillanceStation'))) {
                         config::save('snapRetention', init('default_snapRetention'), 'surveillanceStation');
                 }
@@ -54,8 +48,6 @@ try {
             config::save('password', init('password'), 'surveillanceStation');
             config::save('oauth', init('oauth'), 'surveillanceStation');
             config::save('snapLocation', init('snapLocation'), 'surveillanceStation');
-            config::save('snapPreEventDelay', init('snapPreEventDelay'), 'surveillanceStation');
-            config::save('snapPostEventDelay', init('snapPostEventDelay'), 'surveillanceStation');
             config::save('snapRetention', init('snapRetention'), 'surveillanceStation');
             //Let's then the error details
             ajax::error(displayExeption($e), $e->getCode());

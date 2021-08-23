@@ -29,6 +29,7 @@ SYNO.SurveillanceStation.HomeMode						: Surveillance Station 8.1.0
 
 /* * ***************************Includes********************************* */
 require_once dirname(__FILE__) . '/../../../../core/php/core.inc.php';
+define('__PLGBASE__', dirname(dirname(__DIR__)));
 
 class surveillanceStation extends eqLogic {
 	/*     * *************************Attributs****************************** */
@@ -65,33 +66,16 @@ class surveillanceStation extends eqLogic {
 		log::add('surveillanceStation', 'debug', ' ┌──── Verification des configurations du plugin');
 		// Checking snapLocation
 		if (config::byKey('snapLocation', 'surveillanceStation') == 'synology') {
-			foreach (array('snapPreEventDelay', 'snapPostEventDelay', 'snapRetention') as $field) {
-				config::save($field, '', 'surveillanceStation');
-				log::add('surveillanceStation', 'debug', ' │  checkConfig::'.$field.' Nettoyage des valeurs');
-			}
+			config::save('snapRetention', '', 'surveillanceStation');
+			log::add('surveillanceStation', 'debug', ' │  checkConfig::snapRetention Nettoyage des valeurs');
 		}
 		// Checking Integer fields
-		foreach (array('port', 'snapPreEventDelay', 'snapPostEventDelay', 'snapRetention') as $field) {
+		foreach (array('port', 'snapRetention') as $field) {
 			if ( ! empty(config::byKey($field, 'surveillanceStation'))) {
 				switch($field) {
 					case 'port':
 						$min_range = 1;
 						$max_range = 65535;
-					case 'snapPreEventDelay':
-						if (config::byKey('snapLocation', 'surveillanceStation') == 'synology') {
-							continue 2;
-						}
-						break;
-					case 'snapPostEventDelay':
-						if (config::byKey('snapLocation', 'surveillanceStation') == 'synology') {
-							continue 2;
-						}
-						break;
-						case 'snapRetention':
-						if (config::byKey('snapLocation', 'surveillanceStation') == 'synology') {
-							continue 2;
-						}
-						break;
 					default:
 						$min_range = 0;
 						$max_range = 9999;
@@ -216,6 +200,7 @@ class surveillanceStation extends eqLogic {
 			'SYNO.SurveillanceStation.Camera',
 			'SYNO.SurveillanceStation.Camera.Event',
 			'SYNO.SurveillanceStation.SnapShot',
+			'SYNO.SurveillanceStation.Recording',
 			'SYNO.SurveillanceStation.HomeMode'
 			//'SYNO.SurveillanceStation.PTZ', (retourne une mauvaise version de l'API : 5 au lieu de 4 qui bug), donc 3)
 			//'SYNO.SurveillanceStation.ExternalRecording', (retourne une mauvaise version de l'API : 3 au lieu de 2)
@@ -455,15 +440,79 @@ class surveillanceStation extends eqLogic {
 		}
 	}
 
+	public function getSnapshots($url, $filetype) {
+		// Define Timestamp NOW
+		$date = new \DateTime('now', new \DateTimeZone(config::byKey('timezone')));
+		// Create storage folders if don't exist
+		if (!is_dir(__PLGBASE__.'/data/captures/'.strval($this->getLogicalId()))) {
+			mkdir(__PLGBASE__.'/data/captures/'.strval($this->getLogicalId()), 0766, True);
+		}
+		// Purge Video up to the limit
+		self::purgeSnapshots();
+		// Define full storage path
+		$storePath = __PLGBASE__.'/data/captures/'.strval($this->getLogicalId()).'/'.$date->format('Y-m-d_His').'.'.$filetype;
+		// Store Snapshot or Video
+		$opts=array(
+			"ssl"=>array(
+				"verify_peer"=>false,
+				"verify_peer_name"=>false,
+			),
+		);
+		$content = file_get_contents($url, false, stream_context_create($opts));
+		$storage = fopen($storePath, "wb");
+		fwrite($storage, $content);
+		fclose($storage);
+		return $storePath;
+	}
+
+
+	private static function purgeSnapshots() {
+        $rii = new RecursiveIteratorIterator(new RecursiveDirectoryIterator(__PLGBASE__.'/data/captures/'));
+        $files = array();
+        foreach ($rii as $file) {
+            // Skip hidden files and directories.
+            if ($file->getFilename()[0] === '.') {
+                continue;
+            }
+            if ($file->isDir()){
+                continue;
+            }
+            $files[] = array(
+                'filefull' => $file->getPathname(),
+                'filename' => $file->getFilename(),
+                'ctime' => $file->getCTime(),
+                'mtime' => $file->getMTime(),
+                'size' => $file->getSize()
+            );
+        }
+        // Trie les fichiers du plus ancien au plus récent
+        usort($files, function ($item1, $item2) {
+            return $item1['ctime'] <=> $item2['ctime'];
+        });
+        log::add('surveillanceStation', 'debug', 'purgeVideos::ListAllVideos - ' . var_export($files, true));
+        $countArray = count($files);
+        log::add('surveillanceStation', 'debug', 'purgeVideos::CountVideos - Il y a actuellement ' . $countArray . ' vidéos sur '. config::byKey('video_retention', 'surveillanceStation') .' stockables (retention configuré dans le plugin)');
+        // Si il y a plus de videos stocké que la retention autorisée
+        if ($countArray > intval(config::byKey('video_retention', 'surveillanceStation', '10'))) {
+            $nbToDelete = $countArray - intval(config::byKey('snapRetention', 'surveillanceStation', '10'));
+            for ($entry = 0; $entry <= $nbToDelete - 1; $entry++) {
+                unlink($files[$entry]['filefull']);
+                log::add('surveillanceStation', 'info', 'purgeVideos::Delete Suppression du fichier ' . $files[$entry]['filefull']);
+            }
+        }
+    }
+
+
+
 /*
 	public function SnapshotSend() {
-					$urlSnapshot = $this->getUrl() . '/webapi/entry.cgi?api=SYNO.SurveillanceStation.SnapShot&version=1&method=TakeSnapshot&dsId=0&camId='.$this->getConfiguration('id').'&_sid='.$this->getSid();
-					$data = file_get_contents($urlSnapshot);
-					$dataSnapShot = json_decode($data, true);
-					$idSnapShot = $dataSnapShot['data']['id'];
-					log::add('surveillanceStation', 'debug', 'résultat ID Snapshot '.$this->getName(). '(id:'.$this->getConfiguration('id').') -> ' .print_r($idSnapShot, true));
-					$urlRecupSnapshot = $this->getUrl() . '/webapi/entry.cgi?api=SYNO.SurveillanceStation.SnapShot&version=1&method=LoadSnapshot&id='.$idSnapShot.'&imgSize=2&_sid='.$this->getSid();
-					log::add('surveillanceStation', 'debug', 'résultat URL du Snapshot '.$this->getName(). '(id:'.$this->getConfiguration('id').') -> ' .print_r($urlRecupSnapshot, true));
+		$urlSnapshot = $this->getUrl() . '/webapi/entry.cgi?api=SYNO.SurveillanceStation.SnapShot&version=1&method=TakeSnapshot&dsId=0&camId='.$this->getConfiguration('id').'&_sid='.$this->getSid();
+		$data = file_get_contents($urlSnapshot);
+		$dataSnapShot = json_decode($data, true);
+		$idSnapShot = $dataSnapShot['data']['id'];
+		log::add('surveillanceStation', 'debug', 'résultat ID Snapshot '.$this->getName(). '(id:'.$this->getConfiguration('id').') -> ' .print_r($idSnapShot, true));
+		$urlRecupSnapshot = $this->getUrl() . '/webapi/entry.cgi?api=SYNO.SurveillanceStation.SnapShot&version=1&method=LoadSnapshot&id='.$idSnapShot.'&imgSize=2&_sid='.$this->getSid();
+		log::add('surveillanceStation', 'debug', 'résultat URL du Snapshot '.$this->getName(). '(id:'.$this->getConfiguration('id').') -> ' .print_r($urlRecupSnapshot, true));
 	}
 */
 	public static function convertStatusHomeMode($_state) {
@@ -915,27 +964,14 @@ class surveillanceStation extends eqLogic {
 			$cmd->save();
 
 			/* Code ajouté par Rémy JACOB le 25/12/2020 à partir des infos de https://community.jeedom.com/t/surveillance-station-telegram/31050/4 */
-			$cmd = $this->getCmd(null, 'snapshotsend');
-			if (!is_object($cmd)) {
-				$cmd = new surveillanceStationCmd();
-			$cmd->setEqLogic_id($this->getId());
-				$cmd->setLogicalId('snapshotsend');
-				$cmd->setName(__('Envoi Instantané', __FILE__));
-				$cmd->setOrder(20);
-			}     
-			$cmd->setType('action');
-			$cmd->setSubtype('other');
-			$cmd->setIsVisible(0);
-			$cmd->save();
-
 			$cmd = $this->getCmd(null, 'snapshotsendURL');
 			if (!is_object($cmd)) {
 				$cmd = new surveillanceStationCmd();
-			$cmd->setEqLogic_id($this->getId());
+				$cmd->setEqLogic_id($this->getId());
 				$cmd->setLogicalId('snapshotsendURL');
-				$cmd->setName(__('URL instantané', __FILE__));
 				$cmd->setOrder(21);
 			}
+			$cmd->setName(__('URL instantané', __FILE__));
 			$cmd->setType('info');
 			$cmd->setSubType('string');
 			$cmd->setEqLogic_id($this->getId());
@@ -1184,29 +1220,35 @@ class surveillanceStationCmd extends cmd {
 				throw new Exception('Commande impossible, la caméra est désactivée');
 			}
 		}
-      		/* Code ajouté par Rémy JACOB le 25/12/2020 à partir des infos de https://community.jeedom.com/t/surveillance-station-telegram/31050/4 */
-      		if ($this->getLogicalId() == 'snapshot') {
+		/* Code ajouté par Rémy JACOB le 25/12/2020 à partir des infos de https://community.jeedom.com/t/surveillance-station-telegram/31050/4
+			2021/06/05 - Modify by Mguyard to generate snapshotsendURL directly with snapshot action and not need of command snapshotsend - More simple for users 
+			2021/06/05 - Modify by Mguyard to download snapshot file in Jeedom */
+		if ($this->getLogicalId() == 'snapshot') {
 			if ($statecam == 'Activée'){
+				// Generate snapshot
 				log::add('surveillanceStation', 'debug', 'lancement de l\'action Instantané caméra '.$eqLogic->getName(). '(id:'.$eqLogic->getConfiguration('id').')');
-				$eqLogic->callUrl(array('api' => 'SYNO.SurveillanceStation.SnapShot', 'method' => 'TakeSnapshot', 'dsId' => '0', 'camId' => $eqLogic->getConfiguration('id')));
-			} else {
-				throw new Exception('Commande impossible, la caméra est désactivée');
-			}
-		}
-		if ($this->getLogicalId() == 'snapshotsend') {
-			if ($statecam == 'Activée'){
-				log::add('surveillanceStation', 'debug', 'lancement de l\'action Envoi Instantané '.$eqLogic->getName(). '(id:'.$eqLogic->getConfiguration('id').')');
-                $urlSnapshot = $eqLogic->callUrl(array('api' => 'SYNO.SurveillanceStation.SnapShot', 'method' => 'TakeSnapshot', 'dsId' => '0', 'camId' => $eqLogic->getConfiguration('id')));     			
-              	$idSnapShot = $urlSnapshot['data']['id'];
-				log::add('surveillanceStation', 'debug', 'résultat ID Snapshot '.$this->getName(). '(id:'.$eqLogic->getConfiguration('id').') -> ' .print_r($idSnapShot, true));      			
+				$response = $eqLogic->callUrl(array('api' => 'SYNO.SurveillanceStation.SnapShot', 'method' => 'TakeSnapshot', 'dsId' => '0', 'camId' => $eqLogic->getConfiguration('id')));
+				// Get and store snapshot URL in Synology
+				$idSnapShot = $response['data']['id'];
+				log::add('surveillanceStation', 'debug', 'résultat ID Snapshot '.$this->getName(). '(id:'.$eqLogic->getConfiguration('id').') -> ' .var_export($idSnapShot, true));
 				$urlRecupSnapshot = $eqLogic->getUrl() . '/webapi/entry.cgi?api=SYNO.SurveillanceStation.SnapShot&version=1&method=LoadSnapshot&id='.$idSnapShot.'&imgSize=2&_sid='.$eqLogic->getSid();
-                $eqLogic->checkAndUpdateCmd('snapshotsendURL', $urlRecupSnapshot);              
-				log::add('surveillanceStation', 'debug', 'résultat URL du Snapshot '.$this->getName(). '(id:'.$this->getConfiguration('id').') -> ' .print_r($urlRecupSnapshot, true));
+				log::add('surveillanceStation', 'debug', 'résultat URL du Snapshot '.$this->getName(). '(id:'.$eqLogic->getConfiguration('id').') -> ' .var_export($urlRecupSnapshot, true));
+				switch (config::byKey('snapLocation', 'surveillanceStation')) {
+					case 'synology':
+						$eqLogic->checkAndUpdateCmd('snapshotsendURL', $urlRecupSnapshot);
+						break;
+					case 'jeedom':
+						$snapshotPath = $eqLogic->getSnapshots($urlRecupSnapshot, 'jpg');
+						$eqLogic->checkAndUpdateCmd('snapshotsendURL', $snapshotPath);
+						break;
+				}
 			} else {
 				throw new Exception('Commande impossible, la caméra est désactivée');
 			}
 		}
-      		/* Fin du code ajouté */
+		/* Fin du code ajouté */
+
+
 		if ($this->getLogicalId() == 'homemode_start') {
 				log::add('surveillanceStation', 'debug', 'lancement de l\'action active Home Mode');
 				$eqLogic->callUrl(array('api' => 'SYNO.SurveillanceStation.HomeMode', 'method' => 'Switch', 'on' => 'true'));

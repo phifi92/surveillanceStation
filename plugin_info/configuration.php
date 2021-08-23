@@ -91,22 +91,6 @@ if (!isConnect()) {
 			</div>
 		</div>
 		<div class="form-group snapOnJeedom">
-			<label class="col-sm-4 control-label">{{Durée pré-évènement}}
-				<sup><i class="fa fa-question-circle tooltips" title="Durée en secondes avant évènement qui sera inclus dans le snapshot video (par defaut 10 secondes)"></i></sup>
-			</label>
-			<div class="col-sm-3">
-				<input type="text" class="configKey form-control" data-l1key="snapPreEventDelay" type="number" min="0" placeholder="10"/>
-			</div>
-		</div>
-		<div class="form-group snapOnJeedom">
-			<label class="col-sm-4 control-label">{{Durée post-évènement}}
-				<sup><i class="fa fa-question-circle tooltips" title="Durée en secondes après évènement qui sera inclus dans le snapshot video (par defaut 10 secondes)"></i></sup>
-			</label>
-			<div class="col-sm-3">
-				<input type="text" class="configKey form-control" data-l1key="snapPostEventDelay" type="number" min="0" placeholder="10"/>
-			</div>
-		</div>
-		<div class="form-group snapOnJeedom">
 			<label class="col-sm-4 control-label">{{Nombre de Retention }}
 				<sup><i class="fa fa-question-circle tooltips" title="Nombre de snapshot conservée autorisée sur Jeedom. Au dela, les plus anciens seront supprimés"></i></sup>
 			</label>
@@ -153,10 +137,6 @@ if (!isConnect()) {
                 password: "<?php echo config::byKey('password', 'surveillanceStation'); ?>",
                 oauth: "<?php echo config::byKey('oauth', 'surveillanceStation'); ?>",
 				snapLocation: "<?php echo config::byKey('snapLocation', 'surveillanceStation'); ?>",
-				snapPreEventDelay: "<?php echo config::byKey('snapPreEventDelay', 'surveillanceStation'); ?>",
-				default_snapPreEventDelay: "10",
-				snapPostEventDelay: "<?php echo config::byKey('snapPostEventDelay', 'surveillanceStation'); ?>",
-				default_snapPostEventDelay: "10",
 				snapRetention: "<?php echo config::byKey('snapRetention', 'surveillanceStation'); ?>",
 				default_snapRetention: "10",
             },
