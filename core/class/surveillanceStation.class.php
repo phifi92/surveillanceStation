@@ -29,7 +29,7 @@ SYNO.SurveillanceStation.HomeMode						: Surveillance Station 8.1.0
 
 /* * ***************************Includes********************************* */
 require_once dirname(__FILE__) . '/../../../../core/php/core.inc.php';
-define('__PLGBASE__', dirname(dirname(__DIR__)));
+define('__SSPLGBASE__', dirname(dirname(__DIR__)));
 
 class surveillanceStation extends eqLogic {
 	/*     * *************************Attributs****************************** */
@@ -444,13 +444,13 @@ class surveillanceStation extends eqLogic {
 		// Define Timestamp NOW
 		$date = new \DateTime('now', new \DateTimeZone(config::byKey('timezone')));
 		// Create storage folders if don't exist
-		if (!is_dir(__PLGBASE__.'/data/captures/'.strval($this->getLogicalId()))) {
-			mkdir(__PLGBASE__.'/data/captures/'.strval($this->getLogicalId()), 0766, True);
+		if (!is_dir(__SSPLGBASE__.'/data/captures/'.strval($this->getLogicalId()))) {
+			mkdir(__SSPLGBASE__.'/data/captures/'.strval($this->getLogicalId()), 0766, True);
 		}
 		// Purge Video up to the limit
 		self::purgeSnapshots();
 		// Define full storage path
-		$storePath = __PLGBASE__.'/data/captures/'.strval($this->getLogicalId()).'/'.$date->format('Y-m-d_His').'.'.$filetype;
+		$storePath = __SSPLGBASE__.'/data/captures/'.strval($this->getLogicalId()).'/'.$date->format('Y-m-d_His').'.'.$filetype;
 		// Store Snapshot or Video
 		$opts=array(
 			"ssl"=>array(
@@ -467,7 +467,7 @@ class surveillanceStation extends eqLogic {
 
 
 	private static function purgeSnapshots() {
-        $rii = new RecursiveIteratorIterator(new RecursiveDirectoryIterator(__PLGBASE__.'/data/captures/'));
+        $rii = new RecursiveIteratorIterator(new RecursiveDirectoryIterator(__SSPLGBASE__.'/data/captures/'));
         $files = array();
         foreach ($rii as $file) {
             // Skip hidden files and directories.
