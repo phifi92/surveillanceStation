@@ -379,49 +379,28 @@ class surveillanceStation extends eqLogic {
 			}
 		}
 	}
-/* pas fiable, des coupures de flux de temps en temps
-	public static function GetUrlLive() {
-		foreach (eqLogic::byType('surveillanceStation', true) as $eqLogic) {
-			$statutcam = $eqLogic->getCmd(null,'state')->execCmd();
-			if($eqLogic->getConfiguration('choixlive') == '1' && $statutcam == 'Activée'){
-				$data = self::callUrl(array('api' => 'SYNO.SurveillanceStation.Camera', 'method' => 'GetLiveViewPath', 'idList' => $eqLogic->getConfiguration('id')));
-				log::add('surveillanceStation', 'debug', 'résultat API liste URL Live '.$eqLogic->getName(). '(id:'.$eqLogic->getConfiguration('id').') -> ' .print_r($data['data'], true));
-				$urlL = $data['data']['0']['mjpegHttpPath'].'&cameraId='.$eqLogic->getConfiguration('id');
-				parse_str($urlL);
-				$StmKey2 = str_replace('"', '', $StmKey);
-				$urlLive = $eqLogic->getUrl() . '/webapi/entry.cgi?api=SYNO.SurveillanceStation.Stream.VideoStreaming&version='.$version."&method=".$method."&format=".$format."&StmKey=".$StmKey2."&cameraId=".$cameraId;
-				log::add('surveillanceStation', 'debug', 'URL Live final '.$eqLogic->getName(). '(id:'.$eqLogic->getConfiguration('id').') -> ' .print_r($urlLive, true));
-				$eqLogic->checkAndUpdateCmd('path_url_live', $urlLive);
-				$eqLogic->refreshWidget();
-			}
-			else if ($eqLogic->getConfiguration('choixlive') == '0'){
-				$eqLogic->checkAndUpdateCmd('path_url_live', '');
-				log::add('surveillanceStation', 'debug', 'URL Live final : aucune, live désactivé dans la config');
-				$eqLogic->refreshWidget();
-			}
-			else if ($statutcam == 'Désactivée' || $statutcam == 'Déconnectée'){
-				$eqLogic->checkAndUpdateCmd('path_url_live', 'plugins/surveillanceStation/core/img/cameramini_off.png');
-				log::add('surveillanceStation', 'debug', 'URL Live final : aucune, caméra désactivée');
-				$eqLogic->refreshWidget();
-			}
-		}
-	}
-*/
+
+
+
 	public static function GetUrlLive() {
 		foreach (eqLogic::byType('surveillanceStation', true) as $eqLogic) {
 			if ($eqLogic->getConfiguration('versionSS') >= '6.3'){
 				$statutcam = $eqLogic->getCmd(null,'state')->execCmd();
 				if($eqLogic->getConfiguration('choixlive') == '1' && $statutcam == 'Activée'){
-					$urlLive = $eqLogic->getUrl() . '/webapi/SurveillanceStation/videoStreaming.cgi?api=SYNO.SurveillanceStation.VideoStream&version=1&method=Stream&format=mjpeg&cameraId='.$eqLogic->getConfiguration('id').'&_sid='.$eqLogic->getSid();
-					log::add('surveillanceStation', 'debug', 'résultat URL Live '.$eqLogic->getName(). '(id:'.$eqLogic->getConfiguration('id').') -> ' .print_r($urlLive, true));
-					$eqLogic->checkAndUpdateCmd('path_url_live', $urlLive);
+
 					// Get RTSP LiveURL
-					$response = self::callUrl(array('api' => 'SYNO.SurveillanceStation.Camera', 'method' => 'GetLiveViewPath', 'idList' => $eqLogic->getConfiguration('id')));
+					$response = self::callUrl(array('api' => 'SYNO.SurveillanceStation.Camera', 'method' => 'GetLiveViewPath', 'idList' => $eqLogic->getConfiguration('id'))); // Method available since v8.0 (2017)
 					log::add('surveillanceStation', 'debug', 'API Response '.$eqLogic->getName(). '(id:'.$eqLogic->getConfiguration('id').') -> ' .var_export($response, TRUE));
 					$urlLive = $response['data']['0']['rtspPath'];
 					log::add('surveillanceStation', 'debug', 'résultat URL Live RTSP '.$urlLive);
 					$eqLogic->checkAndUpdateCmd('path_url_live_rtsp', $urlLive);
 					// End RTSP LiveURL
+
+					// URL Live for Dashboard - Updated by Marc GUYARD (@mguyard)
+					$urlLive = surveillanceStation::forgeURLExternal($response['data']['0']['mjpegHttpPath']);
+					log::add('surveillanceStation', 'debug', 'résultat URL Live '.$eqLogic->getName(). '(id:'.$eqLogic->getConfiguration('id').') -> ' .print_r($urlLive, true));
+					$eqLogic->checkAndUpdateCmd('path_url_live', $urlLive);
+					
 					$eqLogic->refreshWidget();
 				}
 				else if ($eqLogic->getConfiguration('choixlive') == '0'){
@@ -438,6 +417,34 @@ class surveillanceStation extends eqLogic {
 				}
 			}
 		}
+	}
+
+	/**
+	 * Function to convert Synology URL received by a URL matching configuration (in case of external access for example)
+	 * Author : Marc GUYARD (@mguyard)
+	 * @param string $url
+	 * @return string
+	 */
+	private static function forgeURLExternal($url) {
+		log::add(__CLASS__, 'debug', 'URL received : ' . $url);
+		$urlUpdated = $url;
+		$urlParsed = parse_url($url);
+		// Replace Scheme
+		$configScheme = config::byKey('https', 'surveillanceStation') == 1 ? 'https' : 'http';
+		if ($configScheme != $urlParsed['scheme']) {
+			$urlUpdated = str_replace($urlParsed['scheme'], $configScheme, $urlUpdated);
+		}
+		// Replace host
+		if (config::byKey('ip', 'surveillanceStation') != $urlParsed['host']) {
+			$urlUpdated = str_replace($urlParsed['host'], config::byKey('ip', 'surveillanceStation'), $urlUpdated);
+		}
+		// Replace Port
+		$configPort = empty(config::byKey('port', 'surveillanceStation')) ? '443' : config::byKey('port', 'surveillanceStation');
+		if (intval($configPort) != $urlParsed['port']) {
+			$urlUpdated = str_replace($urlParsed['port'], $configPort, $urlUpdated);
+		}
+		log::add(__CLASS__, 'debug', 'URL modified based on configuration : ' . $urlUpdated);
+		return htmlentities($urlUpdated, ENT_COMPAT);
 	}
 
 	public function getSnapshots($url, $filetype) {
